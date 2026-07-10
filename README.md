@@ -2,7 +2,7 @@
 
 A personal operating system for college — a Telegram-driven automation layer that manages tasks, study, knowledge, projects, finances, and career prep through one connected pipeline instead of six disconnected apps.
 
-**[Live interactive overview →](https://yourusername.github.io/lifeos/)** *(enable GitHub Pages on `/docs` to activate this link)*
+**[Live interactive overview →](https://de9856.github.io/LifeOS/)**
 
 Built on **n8n**, **Supabase**, and the **Gemini API**, running 24/7 at zero ongoing cost.
 
