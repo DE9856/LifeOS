@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LifeOS — System Overview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#12151b;
+    --panel:#1a1e26;
+    --panel-alt:#20242e;
+    --border:#2a2f3a;
+    --border-light:#363c49;
+    --text:#e8eaed;
+    --text-dim:#8b93a1;
+    --text-faint:#5b6270;
+    --amber:#ffb454;
+    --amber-dim:#8a6a3d;
+    --cyan:#5eead4;
+    --violet:#b8a1ff;
+    --green:#6ee7a0;
+    --red:#ff6b6b;
+    --mono:'IBM Plex Mono',monospace;
+    --sans:'IBM Plex Sans',sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;overflow-x:hidden;}
+  ::selection{background:var(--amber);color:#14171c;}
+  a{color:var(--amber);text-decoration:none;}
+  code,.mono{font-family:var(--mono);}
+
+  /* ===== BOOT SCREEN ===== */
+  #boot{position:fixed;inset:0;background:#0a0c10;z-index:1000;display:flex;align-items:center;justify-content:center;transition:opacity .6s ease, visibility .6s ease;}
+  #boot.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+  #boot-log{font-family:var(--mono);color:var(--green);font-size:13px;width:min(560px,86vw);}
+  #boot-log .line{opacity:0;white-space:pre-wrap;margin-bottom:4px;}
+  #boot-log .line.show{opacity:1;}
+  #boot-log .ok{color:var(--green);}
+  #boot-log .tag{color:var(--text-faint);}
+  #boot-cursor{display:inline-block;width:8px;height:14px;background:var(--amber);animation:blink 1s step-end infinite;vertical-align:middle;}
+  #boot-skip{position:absolute;bottom:28px;right:28px;font-family:var(--mono);font-size:11px;color:var(--text-faint);border:1px solid var(--border-light);padding:6px 12px;border-radius:3px;cursor:pointer;letter-spacing:.05em;}
+  #boot-skip:hover{color:var(--amber);border-color:var(--amber-dim);}
+  @keyframes blink{50%{opacity:0;}}
+
+  /* ===== MENU BAR ===== */
+  #menubar{position:sticky;top:0;z-index:100;background:rgba(20,23,29,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:48px;}
+  #menubar .brand{font-family:var(--mono);font-weight:600;font-size:14px;color:var(--text);display:flex;align-items:center;gap:8px;flex-shrink:0;}
+  #menubar .brand .dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);}
+  #menubar nav{display:flex;gap:1px;overflow-x:auto;scrollbar-width:none;}
+  #menubar nav::-webkit-scrollbar{display:none;}
+  #menubar nav a{font-family:var(--mono);font-size:11.5px;color:var(--text-dim);padding:6px 10px;border-radius:4px;transition:.15s;letter-spacing:.02em;white-space:nowrap;}
+  #menubar nav a:hover{color:var(--text);background:var(--panel-alt);}
+  #clock{font-family:var(--mono);font-size:12px;color:var(--text-dim);letter-spacing:.03em;flex-shrink:0;margin-left:12px;}
+  @media (max-width:920px){ #menubar nav{display:none;} }
+
+  /* ===== SECTIONS SHARED ===== */
+  section{padding:90px 24px;max-width:1180px;margin:0 auto;}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+  .eyebrow::before{content:'';width:16px;height:1px;background:var(--amber);}
+  h2{font-family:var(--mono);font-size:clamp(24px,3.4vw,36px);font-weight:600;margin-bottom:16px;letter-spacing:-.01em;}
+  h3{font-family:var(--mono);}
+  .lede{color:var(--text-dim);max-width:680px;font-size:15.5px;margin-bottom:48px;}
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  /* ===== HERO ===== */
+  #hero{padding-top:70px;padding-bottom:60px;}
+  .hero-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:48px;align-items:center;}
+  @media (max-width:900px){.hero-grid{grid-template-columns:1fr;}}
+  #hero .prompt{font-family:var(--mono);color:var(--text-faint);font-size:13px;margin-bottom:18px;}
+  #hero .prompt span{color:var(--cyan);}
+  #hero h1{font-family:var(--mono);font-weight:700;font-size:clamp(34px,5.2vw,58px);line-height:1.05;letter-spacing:-.02em;margin-bottom:20px;}
+  #hero h1 .accent{color:var(--amber);}
+  #hero p.desc{color:var(--text-dim);font-size:16.5px;max-width:520px;margin-bottom:30px;}
+  .btn-row{display:flex;gap:12px;flex-wrap:wrap;}
+  .btn{font-family:var(--mono);font-size:13px;font-weight:600;padding:12px 22px;border-radius:6px;cursor:pointer;border:1px solid transparent;transition:.18s;letter-spacing:.02em;}
+  .btn-primary{background:var(--amber);color:#1a1206;}
+  .btn-primary:hover{background:#ffc574;transform:translateY(-1px);box-shadow:0 6px 20px -6px rgba(255,180,84,.5);}
+  .btn-ghost{border-color:var(--border-light);color:var(--text);background:transparent;}
+  .btn-ghost:hover{border-color:var(--amber-dim);color:var(--amber);}
+
+  .sysinfo{background:var(--panel);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+  .sysinfo-head{background:var(--panel-alt);padding:10px 16px;font-family:var(--mono);font-size:11.5px;color:var(--text-faint);border-bottom:1px solid var(--border);display:flex;gap:6px;align-items:center;}
+  .sysinfo-head .dots{display:flex;gap:6px;margin-right:8px;}
+  .sysinfo-head .dots span{width:9px;height:9px;border-radius:50%;}
+  .sysinfo-head .dots span:nth-child(1){background:#ff6159;}
+  .sysinfo-head .dots span:nth-child(2){background:#ffbd2e;}
+  .sysinfo-head .dots span:nth-child(3){background:#28c941;}
+  .sysinfo-body{padding:18px 20px;font-family:var(--mono);font-size:12.5px;}
+  .sysinfo-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px dashed var(--border);color:var(--text-dim);}
+  .sysinfo-row:last-child{border-bottom:none;}
+  .sysinfo-row b{color:var(--text);font-weight:500;}
+  .sysinfo-row .val{color:var(--cyan);}
+
+  /* ===== STACK ===== */
+  .stack-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-bottom:20px;}
+  .stack-card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:20px;transition:.2s;position:relative;overflow:hidden;}
+  .stack-card:hover{border-color:var(--border-light);transform:translateY(-3px);}
+  .stack-card .layer-tag{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-faint);margin-bottom:10px;}
+  .stack-card h3{font-size:16px;margin-bottom:8px;color:var(--text);}
+  .stack-card p{font-size:13px;color:var(--text-dim);margin-bottom:10px;}
+  .stack-card .alt{font-family:var(--mono);font-size:11px;color:var(--text-faint);border-top:1px dashed var(--border);padding-top:10px;}
+  .stack-card .alt b{color:var(--text-dim);}
+  .stack-card .bar{position:absolute;left:0;top:0;bottom:0;width:3px;}
+  .c-amber .bar{background:var(--amber);} .c-cyan .bar{background:var(--cyan);} .c-violet .bar{background:var(--violet);} .c-green .bar{background:var(--green);}
+
+  /* ===== COMPARE TABLE ===== */
+  .compare{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--border);border-radius:10px;overflow:hidden;font-size:13.5px;}
+  .compare th{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-faint);text-align:left;padding:12px 16px;background:var(--panel-alt);border-bottom:1px solid var(--border);}
+  .compare td{padding:12px 16px;border-bottom:1px solid var(--border);color:var(--text-dim);}
+  .compare tr:last-child td{border-bottom:none;}
+  .compare td.yes{color:var(--green);}
+  .compare td.no{color:var(--text-faint);}
+  .compare td b{color:var(--text);}
+
+  /* ===== SCHEMA ===== */
+  .schema-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;}
+  .schema-card{background:var(--panel);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+  .schema-head{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;background:var(--panel-alt);}
+  .schema-head .sw{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+  .schema-head span{font-family:var(--mono);font-size:12.5px;color:var(--text);}
+  .schema-body{padding:14px 16px;}
+  .table-row{font-family:var(--mono);font-size:11.5px;margin-bottom:10px;}
+  .table-row:last-child{margin-bottom:0;}
+  .table-row .tname{color:var(--cyan);}
+  .table-row .fields{color:var(--text-faint);display:block;margin-top:2px;padding-left:12px;line-height:1.6;}
+
+  /* ===== MODULES ===== */
+  .module{background:var(--panel);border:1px solid var(--border);border-radius:10px;margin-bottom:12px;overflow:hidden;}
+  .module-head{display:flex;align-items:center;gap:16px;padding:18px 20px;cursor:pointer;user-select:none;}
+  .module-pid{font-family:var(--mono);font-size:11px;color:var(--text-faint);width:44px;flex-shrink:0;}
+  .module-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+  .module-title{flex:1;}
+  .module-title h3{font-size:15.5px;font-weight:600;color:var(--text);}
+  .module-title span{font-size:12.5px;color:var(--text-dim);}
+  .module-status{font-family:var(--mono);font-size:10px;padding:3px 9px;border-radius:20px;letter-spacing:.05em;white-space:nowrap;}
+  .module-chev{color:var(--text-faint);transition:transform .25s;flex-shrink:0;}
+  .module.open .module-chev{transform:rotate(180deg);}
+  .module-body{max-height:0;overflow:hidden;transition:max-height .35s ease;}
+  .module-body-inner{padding:0 20px 22px 80px;}
+  .module-body-inner p{color:var(--text-dim);font-size:13.5px;margin-bottom:14px;}
+  .module-why{font-size:12.5px;color:var(--violet);margin-bottom:14px;font-style:italic;}
+  .module-feats{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+  .module-feats span{font-family:var(--mono);font-size:11px;background:var(--panel-alt);border:1px solid var(--border);padding:5px 10px;border-radius:5px;color:var(--text-dim);}
+  .module-sub-label{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-faint);margin-bottom:8px;margin-top:16px;}
+  .module-tables{font-family:var(--mono);font-size:11.5px;color:var(--text-faint);margin-bottom:14px;}
+  .module-tables b{color:var(--cyan);}
+  .module-cmd{font-family:var(--mono);font-size:12px;color:var(--green);background:#0f1319;padding:10px 14px;border-radius:6px;border:1px solid var(--border);margin-bottom:8px;}
+  .module-cmd:last-child{margin-bottom:0;}
+  .module-cmd .you{color:var(--text-dim);}
+
+  /* ===== WORKFLOWS ===== */
+  .flow-tabs{display:flex;gap:8px;margin-bottom:28px;flex-wrap:wrap;}
+  .flow-tab{font-family:var(--mono);font-size:12px;padding:9px 16px;border-radius:6px;border:1px solid var(--border);background:var(--panel);color:var(--text-dim);cursor:pointer;transition:.15s;}
+  .flow-tab.active{border-color:var(--amber-dim);color:var(--amber);background:rgba(255,180,84,.07);}
+  .flow-panel{display:none;}
+  .flow-panel.active{display:block;}
+  .flow-panel .flow-desc{font-size:13px;color:var(--text-dim);margin-bottom:18px;}
+  .flow-chain{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;}
+  .flow-node{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px 18px;min-width:150px;flex:1;position:relative;}
+  .flow-node .k{font-family:var(--mono);font-size:9.5px;color:var(--text-faint);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;}
+  .flow-node .v{font-family:var(--mono);font-size:12.5px;color:var(--text);line-height:1.4;}
+  .flow-arrow{display:flex;align-items:center;justify-content:center;width:36px;flex-shrink:0;color:var(--cyan);position:relative;}
+  .flow-arrow svg{width:100%;}
+  .flow-arrow .pulse{position:absolute;width:5px;height:5px;border-radius:50%;background:var(--cyan);top:50%;left:0;transform:translateY(-50%);box-shadow:0 0 6px var(--cyan);animation:travel 1.8s linear infinite;}
+  @keyframes travel{0%{left:0;opacity:0;}10%{opacity:1;}90%{opacity:1;}100%{left:100%;opacity:0;}}
+  @media (max-width:760px){.flow-chain{flex-direction:column;} .flow-arrow{width:100%;height:26px;} .flow-arrow svg{transform:rotate(90deg);width:20px;margin:0 auto;}}
+
+  /* ===== BUDGET ===== */
+  .budget-total{background:var(--panel);border:1px solid var(--green);border-radius:10px;padding:20px 24px;margin-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+  .budget-total .label{font-family:var(--mono);font-size:13px;color:var(--text-dim);}
+  .budget-total .amount{font-family:var(--mono);font-size:24px;color:var(--green);font-weight:700;}
+
+  /* ===== ROADMAP ===== */
+  .phase{display:flex;gap:20px;margin-bottom:6px;position:relative;}
+  .phase-rail{display:flex;flex-direction:column;align-items:center;width:32px;flex-shrink:0;}
+  .phase-dot{width:12px;height:12px;border-radius:50%;background:var(--panel-alt);border:2px solid var(--border-light);flex-shrink:0;margin-top:22px;transition:.2s;}
+  .phase.done .phase-dot{background:var(--green);border-color:var(--green);box-shadow:0 0 8px rgba(110,231,160,.5);}
+  .phase-line{width:2px;flex:1;background:var(--border);margin:4px 0;}
+  .phase-card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:18px 20px;flex:1;margin-bottom:24px;}
+  .phase-card-head{display:flex;justify-content:space-between;align-items:center;cursor:pointer;gap:12px;flex-wrap:wrap;}
+  .phase-card-head h3{font-size:15px;color:var(--text);}
+  .phase-card-head .num{font-family:var(--mono);color:var(--amber);font-size:12px;margin-right:8px;}
+  .phase-tag{font-family:var(--mono);font-size:10px;color:var(--text-faint);background:var(--panel-alt);padding:4px 10px;border-radius:20px;border:1px solid var(--border);white-space:nowrap;}
+  .phase-goal{font-size:13px;color:var(--text-dim);margin:10px 0 8px;}
+  .phase-stack{font-family:var(--mono);font-size:11px;color:var(--text-faint);margin-bottom:14px;}
+  .phase-stack b{color:var(--violet);}
+  .checklist{display:flex;flex-direction:column;gap:8px;}
+  .check-item{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:12.5px;color:var(--text-dim);cursor:pointer;}
+  .check-box{width:16px;height:16px;border:1.5px solid var(--border-light);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:.15s;}
+  .check-item.checked .check-box{background:var(--green);border-color:var(--green);}
+  .check-item.checked .check-box::after{content:'✓';font-size:11px;color:#0a0c10;font-weight:700;}
+  .check-item.checked span.label{color:var(--text-faint);text-decoration:line-through;}
+  .phase-progress{font-family:var(--mono);font-size:11px;color:var(--text-faint);margin-top:12px;}
+
+  /* ===== EXTENSIONS ===== */
+  .ext-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;}
+  .ext-card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:18px;transition:.2s;}
+  .ext-card:hover{border-color:var(--violet);background:rgba(184,161,255,.04);}
+  .ext-card .tag{font-family:var(--mono);font-size:10px;color:var(--violet);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;}
+  .ext-card h4{font-family:var(--mono);font-size:14px;margin-bottom:6px;}
+  .ext-card p{font-size:12.5px;color:var(--text-dim);}
+
+  /* ===== PITCH ===== */
+  .pitch-term{background:#0f1319;border:1px solid var(--border);border-radius:10px;padding:20px 22px;font-family:var(--mono);font-size:13px;}
+  .pitch-term .l{color:var(--text-dim);margin-bottom:10px;padding-left:18px;position:relative;}
+  .pitch-term .l::before{content:'$';position:absolute;left:0;color:var(--green);}
+  .pitch-term .l b{color:var(--text);}
+  .pitch-term .l:last-child{margin-bottom:0;}
+
+  /* ===== FAQ ===== */
+  .faq-item{background:var(--panel);border:1px solid var(--border);border-radius:10px;margin-bottom:10px;overflow:hidden;}
+  .faq-q{padding:16px 20px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;font-family:var(--mono);font-size:13.5px;color:var(--text);}
+  .faq-q .chev{color:var(--text-faint);transition:transform .25s;flex-shrink:0;}
+  .faq-item.open .faq-q .chev{transform:rotate(180deg);}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease;}
+  .faq-a-inner{padding:0 20px 18px;font-size:13px;color:var(--text-dim);}
+
+  footer{border-top:1px solid var(--border);padding:36px 24px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--text-faint);}
+  footer .cursor-blink{display:inline-block;width:7px;height:12px;background:var(--amber);animation:blink 1s step-end infinite;vertical-align:middle;margin-left:2px;}
+</style>
+</head>
+<body>
+
+<div id="boot">
+  <div id="boot-log"></div>
+  <div id="boot-skip">skip →</div>
+</div>
+
+<div id="menubar">
+  <div class="brand"><span class="dot"></span> LifeOS</div>
+  <nav>
+    <a href="#overview">overview</a>
+    <a href="#stack">stack</a>
+    <a href="#schema">schema</a>
+    <a href="#modules">modules</a>
+    <a href="#workflows">workflows</a>
+    <a href="#budget">budget</a>
+    <a href="#roadmap">build order</a>
+    <a href="#extensions">extensions</a>
+    <a href="#pitch">resume</a>
+    <a href="#faq">faq</a>
+  </nav>
+  <div id="clock">--:--:--</div>
+</div>
+
+<!-- HERO -->
+<section id="overview">
+  <div class="hero-grid">
+    <div>
+      <div class="prompt"><span>you@college</span>:~$ whoami --system</div>
+      <h1>Your life,<br>running as <span class="accent">one system.</span></h1>
+      <p class="desc">LifeOS is a personal operating system for college — a Telegram-driven automation layer that manages tasks, study, knowledge, projects, and career prep through one connected pipeline instead of six disconnected apps. Built on n8n, Supabase, and Gemini, at zero ongoing cost.</p>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="document.getElementById('roadmap').scrollIntoView({behavior:'smooth'})">View build order</button>
+        <button class="btn btn-ghost" onclick="document.getElementById('modules').scrollIntoView({behavior:'smooth'})">See modules</button>
+      </div>
+    </div>
+    <div class="sysinfo reveal">
+      <div class="sysinfo-head"><div class="dots"><span></span><span></span><span></span></div>system.status</div>
+      <div class="sysinfo-body">
+        <div class="sysinfo-row"><b>modules</b><span class="val">7 active</span></div>
+        <div class="sysinfo-row"><b>tables</b><span class="val">18 across schema</span></div>
+        <div class="sysinfo-row"><b>workflows</b><span class="val">6+ n8n pipelines</span></div>
+        <div class="sysinfo-row"><b>interface</b><span class="val">Telegram Bot</span></div>
+        <div class="sysinfo-row"><b>database</b><span class="val">Supabase / Postgres</span></div>
+        <div class="sysinfo-row"><b>ai layer</b><span class="val">Gemini API</span></div>
+        <div class="sysinfo-row"><b>hosting cost</b><span class="val">₹0 / $0</span></div>
+        <div class="sysinfo-row"><b>uptime target</b><span class="val">24 / 7</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STACK -->
+<section id="stack">
+  <div class="eyebrow">Infrastructure</div>
+  <h2>Tech stack</h2>
+  <p class="lede">Every layer chosen to run permanently at zero cost — using GitHub Student Pack credits as runway, and free-forever tiers as the long-term home. Each card includes the fallback if the primary option fails.</p>
+  <div class="stack-grid">
+    <div class="stack-card c-amber"><div class="bar"></div><div class="layer-tag">Hosting — Year 1</div><h3>DigitalOcean Droplet</h3><p>$200 GitHub Student credit funds a small droplet (1–2 vCPU, 2GB RAM) running Docker for a full year with zero setup friction.</p><div class="alt"><b>Fallback:</b> Azure for Students ($100 credit)</div></div>
+    <div class="stack-card c-green"><div class="bar"></div><div class="layer-tag">Hosting — Forever</div><h3>Oracle Cloud Always Free</h3><p>2 OCPU / 12GB Arm instance, genuinely free forever. Migrate here once the DigitalOcean credit runs out.</p><div class="alt"><b>Fallback:</b> Google Cloud e2-micro (1GB RAM, free forever)</div></div>
+    <div class="stack-card c-cyan"><div class="bar"></div><div class="layer-tag">Automation</div><h3>n8n (self-hosted)</h3><p>Workflow engine running every scheduled job, webhook, and integration between Telegram, the database, and the AI layer. Runs as a Docker container.</p><div class="alt"><b>Version:</b> latest stable via Docker image</div></div>
+    <div class="stack-card c-green"><div class="bar"></div><div class="layer-tag">Database</div><h3>Supabase</h3><p>Postgres with built-in auth, storage, and row-level security. Free tier: 500MB DB, 1GB file storage — plenty for one user's data.</p><div class="alt"><b>Fallback:</b> Self-hosted Postgres on the same droplet</div></div>
+    <div class="stack-card c-violet"><div class="bar"></div><div class="layer-tag">Intelligence</div><h3>Gemini API</h3><p>Handles prioritization reasoning, PDF summarization, quiz generation, resume gap analysis. Generous free-tier daily request limits.</p><div class="alt"><b>Fallback:</b> Local Ollama model (e.g. Llama/Mistral 7B) on the droplet</div></div>
+    <div class="stack-card c-amber"><div class="bar"></div><div class="layer-tag">Interface</div><h3>Telegram Bot API</h3><p>The primary way you talk to LifeOS — commands, natural language, file uploads, daily digests, inline buttons, all in one chat thread. No rate limits that matter at personal scale.</p></div>
+    <div class="stack-card c-cyan"><div class="bar"></div><div class="layer-tag">Dashboard — Later</div><h3>React + Tailwind</h3><p>A visual layer added once the backend is solid — charts, analytics, manual data entry when Telegram isn't convenient. Auth via Supabase Auth.</p></div>
+    <div class="stack-card c-violet"><div class="bar"></div><div class="layer-tag">Extras</div><h3>Domain + Monitoring</h3><p>Free domain (1 yr) via the Student Pack. Optional: Prometheus + Grafana (both free, self-hosted) to watch droplet health and n8n execution success rate.</p></div>
+  </div>
+</section>
+
+<!-- SCHEMA -->
+<section id="schema">
+  <div class="eyebrow">Data layer</div>
+  <h2>Database schema, by module</h2>
+  <p class="lede">One Supabase project, one schema — every module reads and writes here, which is what lets AnalyticsOS query across all of them at the end.</p>
+  <div class="schema-grid" id="schema-grid"></div>
+</section>
+
+<!-- MODULES -->
+<section id="modules">
+  <div class="eyebrow">System processes</div>
+  <h2>7 modules, one data model</h2>
+  <p class="lede">Each module is independent enough to build and demo on its own, but they all read and write to the same Supabase backend — which is what makes the whole thing feel like one system instead of seven bots.</p>
+  <div id="module-list"></div>
+</section>
+
+<!-- WORKFLOWS -->
+<section id="workflows">
+  <div class="eyebrow">n8n pipelines</div>
+  <h2>How data actually moves</h2>
+  <p class="lede">Six representative workflows covering every trigger pattern you'll need — scheduled, message-triggered, and file-triggered. Everything else in the system follows one of these shapes.</p>
+  <div class="flow-tabs" id="flow-tabs"></div>
+  <div id="flow-panels"></div>
+</section>
+
+<!-- BUDGET -->
+<section id="budget">
+  <div class="eyebrow">Cost breakdown</div>
+  <h2>What this actually costs</h2>
+  <p class="lede">Every line item, and what happens when the free runway ends.</p>
+  <table class="compare">
+    <tr><th>Service</th><th>Plan</th><th>Cost</th><th>Runway</th><th>After runway ends</th></tr>
+    <tr><td><b>DigitalOcean</b></td><td>Droplet, student credit</td><td class="yes">$0</td><td>12 months</td><td>Migrate to Oracle Always Free</td></tr>
+    <tr><td><b>Oracle Cloud</b></td><td>Always Free tier</td><td class="yes">$0</td><td>Forever</td><td>— no expiry</td></tr>
+    <tr><td><b>Supabase</b></td><td>Free tier</td><td class="yes">$0</td><td>Ongoing</td><td>Usage caps apply, ample for 1 user</td></tr>
+    <tr><td><b>n8n</b></td><td>Self-hosted OSS</td><td class="yes">$0</td><td>Forever</td><td>— open source, no license cost</td></tr>
+    <tr><td><b>Telegram Bot API</b></td><td>Free</td><td class="yes">$0</td><td>Forever</td><td>— no paid tier exists</td></tr>
+    <tr><td><b>Gemini API</b></td><td>Free tier</td><td class="yes">$0</td><td>Ongoing</td><td>Rate limits, or fall back to local model</td></tr>
+    <tr><td><b>Domain name</b></td><td>Student Pack (Namecheap)</td><td class="yes">$0</td><td>12 months</td><td>Renew (~$10–15/yr) or drop, use IP</td></tr>
+  </table>
+  <div class="budget-total">
+    <div class="label">Total to build and run LifeOS for a full year</div>
+    <div class="amount">$0.00</div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section id="roadmap">
+  <div class="eyebrow">Build order</div>
+  <h2>Installation sequence</h2>
+  <p class="lede">Build in this order — each phase depends on the infrastructure the previous one sets up. Check items off as you go.</p>
+  <div id="roadmap-list"></div>
+</section>
+
+<!-- EXTENSIONS -->
+<section id="extensions">
+  <div class="eyebrow">Optional plugins</div>
+  <h2>Extend into another domain</h2>
+  <p class="lede">Once the core system works, these are deliberate add-ons that pull in an adjacent skill area without diluting the project. Pick one based on where you want to work.</p>
+  <div class="ext-grid" id="ext-grid"></div>
+</section>
+
+<!-- PITCH -->
+<section id="pitch">
+  <div class="eyebrow">Interview material</div>
+  <h2>How to talk about it</h2>
+  <p class="lede">What this project actually demonstrates, stated plainly.</p>
+  <div class="pitch-term">
+    <div class="l">Designed and built <b>LifeOS</b>, a 7-module personal automation system integrating n8n, Supabase, and the Gemini API</div>
+    <div class="l">Implemented <b>AI-driven reasoning pipelines</b> — task prioritization, PDF-to-quiz generation, resume gap analysis — not just single API calls</div>
+    <div class="l">Designed and normalized an <b>18-table Postgres schema</b> shared across all modules to enable cross-module analytics</div>
+    <div class="l">Deployed and maintained a <b>self-hosted automation stack</b> on a Linux VPS, at zero ongoing infrastructure cost</div>
+    <div class="l">Built <b>6+ event-driven workflows</b> handling scheduled, message, and file-upload triggers with error handling</div>
+    <div class="l">Maintained the project continuously across <b>multiple semesters</b>, extending scope as new needs emerged</div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="eyebrow">Before you start</div>
+  <h2>FAQ</h2>
+  <div id="faq-list"></div>
+</section>
+
+<footer>LifeOS — built one module at a time<span class="cursor-blink"></span></footer>
+
+<script>
+/* ===== BOOT SEQUENCE ===== */
+const bootLines = [
+  {t:"[    0.000000] LifeOS kernel booting...", cls:"tag"},
+  {t:"[    0.142001] mounting supabase::postgres  ", cls:"ok", suf:"[ OK ]"},
+  {t:"[    0.288122] starting n8n workflow engine ", cls:"ok", suf:"[ OK ]"},
+  {t:"[    0.401355] connecting telegram bot api  ", cls:"ok", suf:"[ OK ]"},
+  {t:"[    0.522871] loading gemini inference layer", cls:"ok", suf:"[ OK ]"},
+  {t:"[    0.690004] initializing 7 modules...    ", cls:"ok", suf:"[ OK ]"},
+  {t:"[    0.812233] loading 18 schema tables...  ", cls:"ok", suf:"[ OK ]"},
+  {t:"", cls:""},
+  {t:"LifeOS v1.0 ready_", cls:"ok"},
+];
+const bootLog = document.getElementById('boot-log');
+let bootDone = false;
+function runBoot(){
+  bootLog.innerHTML = '';
+  bootLines.forEach((l,i)=>{
+    const d = document.createElement('div');
+    d.className = 'line';
+    d.innerHTML = l.suf ? `<span class="${l.cls}">${l.t}</span><span style="color:var(--green)">${l.suf}</span>` : `<span class="${l.cls}">${l.t}</span>`;
+    bootLog.appendChild(d);
+    setTimeout(()=>d.classList.add('show'), i*200);
+  });
+  setTimeout(()=>{
+    const cur = document.createElement('span');
+    cur.id='boot-cursor';
+    bootLog.lastChild.appendChild(cur);
+  }, bootLines.length*200);
+  setTimeout(hideBoot, bootLines.length*200 + 650);
+}
+function hideBoot(){
+  if(bootDone) return;
+  bootDone = true;
+  document.getElementById('boot').classList.add('hidden');
+}
+document.getElementById('boot-skip').addEventListener('click', hideBoot);
+runBoot();
+
+/* ===== CLOCK ===== */
+function tick(){
+  const now = new Date();
+  document.getElementById('clock').textContent = now.toLocaleTimeString('en-US',{hour12:false});
+}
+tick(); setInterval(tick,1000);
+
+/* ===== REVEAL ON SCROLL ===== */
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); });
+},{threshold:.12});
+function observeAll(sel){ document.querySelectorAll(sel).forEach(el=>io.observe(el)); }
+
+/* ===== SCHEMA DATA ===== */
+const schema = [
+  {name:"Core OS",color:"var(--amber)",tables:[
+    {t:"users",f:"id, telegram_id, name, timezone"},
+    {t:"tasks",f:"id, user_id, title, priority, status, due_date"},
+    {t:"goals",f:"id, user_id, title, target_date, progress"},
+    {t:"events",f:"id, user_id, title, start_time, end_time, source"},
+  ]},
+  {name:"StudyOS",color:"var(--cyan)",tables:[
+    {t:"documents",f:"id, user_id, title, subject, file_url, summary"},
+    {t:"quiz_questions",f:"id, document_id, question, answer, difficulty"},
+    {t:"grades",f:"id, user_id, subject, grade, credits"},
+  ]},
+  {name:"Knowledge Vault",color:"var(--violet)",tables:[
+    {t:"knowledge_items",f:"id, user_id, type, title, url, summary, tags[]"},
+  ]},
+  {name:"ProjectOS",color:"var(--green)",tables:[
+    {t:"daily_logs",f:"id, user_id, date, task, issue, learning"},
+    {t:"reports",f:"id, user_id, period, content, generated_at"},
+  ]},
+  {name:"CareerOS",color:"var(--amber)",tables:[
+    {t:"applications",f:"id, user_id, company, role, stage, applied_date, deadline"},
+    {t:"resume_analysis",f:"id, user_id, job_id, match_score, missing_skills[]"},
+  ]},
+  {name:"Finance",color:"var(--cyan)",tables:[
+    {t:"expenses",f:"id, user_id, amount, category, note, date"},
+    {t:"budgets",f:"id, user_id, category, monthly_limit"},
+  ]},
+  {name:"AnalyticsOS",color:"var(--violet)",tables:[
+    {t:"metrics_daily",f:"id, user_id, date, study_hours, coding_hours, tasks_done"},
+    {t:"weekly_scores",f:"id, user_id, week, productivity_score, recommendation"},
+  ]},
+];
+const schemaGrid = document.getElementById('schema-grid');
+schema.forEach(s=>{
+  const el = document.createElement('div');
+  el.className = 'schema-card reveal';
+  el.innerHTML = `
+    <div class="schema-head"><div class="sw" style="background:${s.color}"></div><span>${s.name}</span></div>
+    <div class="schema-body">
+      ${s.tables.map(t=>`<div class="table-row"><span class="tname">${t.t}</span><span class="fields">${t.f}</span></div>`).join('')}
+    </div>`;
+  schemaGrid.appendChild(el);
+});
+observeAll('#schema-grid .schema-card');
+
+/* ===== MODULES DATA ===== */
+const modules = [
+  {pid:"01",icon:"🗂️",bg:"rgba(255,180,84,.12)",name:"Core OS",sub:"Task, goal & calendar engine",status:"foundation",statusColor:"var(--amber)",
+   desc:"The base layer everything else plugs into. Natural-language task capture, calendar sync, and Gemini-driven prioritization that reasons about what to do first instead of dumping a raw list.",
+   why:"This is the daily habit loop — if this module isn't sticky, nothing built on top of it will be used either.",
+   tables:"users · tasks · goals · events",
+   feats:["/addtask","/tasks","/summary","Morning Brief","Evening review","Goal tracking","Calendar sync","AI prioritization"],
+   cmds:[{u:"remind me to submit the DBMS assignment friday",b:"added → \"DBMS assignment\" · due Fri · priority: high"},
+         {u:"/summary",b:"3 tasks due today · 1 event at 4pm · suggested order: assignment → gym → reading"}]},
+  {pid:"02",icon:"📚",bg:"rgba(94,234,212,.12)",name:"StudyOS",sub:"Academic assistant",status:"core",statusColor:"var(--cyan)",
+   desc:"Upload course PDFs and get them turned into structured study material automatically — summaries, quizzes, and revision prompts generated from your own notes.",
+   why:"Turns passive reading into active recall practice, generated automatically from material you already have.",
+   tables:"documents · quiz_questions · grades",
+   feats:["/uploadpdf","Auto-summary","/quiz [subject]","/revise [subject]","GPA tracker","Exam countdown"],
+   cmds:[{u:"/uploadpdf [DBMS_Unit3.pdf]",b:"processed → 12 pages · summary ready · 8 quiz questions generated"},
+         {u:"/quiz dbms",b:"Q1. What is the difference between 2NF and 3NF?"}]},
+  {pid:"03",icon:"🧠",bg:"rgba(184,161,255,.12)",name:"Knowledge Vault",sub:"Second brain",status:"core",statusColor:"var(--cyan)",
+   desc:"Every article, video, repo, or PDF you save gets auto-tagged and summarized, then becomes searchable — the value compounds the longer you use it.",
+   why:"The one module that gets more valuable every single week you keep using it — a strong 'long-term project' story.",
+   tables:"knowledge_items",
+   feats:["Save any link","Auto-tagging","/search [term]","Cross-type search"],
+   cmds:[{u:"[shares a docker tutorial link]",b:"saved → \"Docker in 100 seconds\" · tags: devops, containers"},
+         {u:"/search docker",b:"3 notes · 2 videos · 1 repo found"}]},
+  {pid:"04",icon:"🛠️",bg:"rgba(110,231,160,.12)",name:"ProjectOS",sub:"Auto-documentation",status:"growth",statusColor:"var(--text-faint)",
+   desc:"A daily check-in turns into automatic changelogs — daily and weekly reports generated from your own one-line updates, ready-made for standups and resumes.",
+   why:"Solves the 'I built something cool 3 months ago and forgot the details' problem — good for resumes and interviews later.",
+   tables:"daily_logs · reports",
+   feats:["Daily check-in","Auto changelog","Weekly report","Progress summary"],
+   cmds:[{u:"built the PDF processor today, hit an OCR bug",b:"logged → Day 14 · ProjectOS"},
+         {u:"/report weekly",b:"5 logs this week · 2 issues resolved · summary generated"}]},
+  {pid:"05",icon:"💼",bg:"rgba(255,180,84,.12)",name:"CareerOS",sub:"Internship & job tracker",status:"growth",statusColor:"var(--text-faint)",
+   desc:"Tracks every application and interview stage, and uses Gemini to compare your resume against a job description to flag missing skills before you apply.",
+   why:"Turns internship hunting from a spreadsheet chore into a system that actively tells you what to fix.",
+   tables:"applications · resume_analysis",
+   feats:["Application tracker","Interview stages","Resume gap analysis","Deadline alerts"],
+   cmds:[{u:"/apply Google · SWE Intern · deadline Aug 1",b:"tracked → stage: applied"},
+         {u:"/matchresume [job link]",b:"match: 78% · missing skill: Docker"}]},
+  {pid:"06",icon:"💰",bg:"rgba(94,234,212,.12)",name:"Finance Tracker",sub:"Spending awareness",status:"growth",statusColor:"var(--text-faint)",
+   desc:"Log expenses in plain language via Telegram — auto-categorized, with weekly summaries and budget threshold alerts.",
+   why:"Smallest module to build, but a daily-use habit — good early win to keep momentum.",
+   tables:"expenses · budgets",
+   feats:["Natural-language logging","Auto-categorize","Weekly summary","Budget alerts"],
+   cmds:[{u:"spent 300 on groceries",b:"logged → ₹300 · Food · this week: ₹1,840"},
+         {u:"/budget food",b:"₹1,840 / ₹2,500 this month · 74% used"}]},
+  {pid:"07",icon:"📊",bg:"rgba(184,161,255,.12)",name:"AnalyticsOS",sub:"The connective layer",status:"capstone",statusColor:"var(--violet)",
+   desc:"Pulls data from every other module into one weekly digest with a computed productivity score and pattern-based recommendations — this is what makes LifeOS feel like one system.",
+   why:"The module that proves the whole system is actually connected, not just seven bots sharing a name.",
+   tables:"metrics_daily · weekly_scores",
+   feats:["Weekly digest","Productivity score","Cross-module patterns","AI recommendations"],
+   cmds:[{u:"/weekly",b:"study 16h · coding 12h · tasks done 22 · score: 84"},
+         {u:"[auto, Sunday 8pm]",b:"recommend: increase DBMS revision — quiz scores dropped 12%"}]},
+];
+const moduleList = document.getElementById('module-list');
+modules.forEach(m=>{
+  const el = document.createElement('div');
+  el.className = 'module reveal';
+  el.innerHTML = `
+    <div class="module-head">
+      <div class="module-pid">PID ${m.pid}</div>
+      <div class="module-icon" style="background:${m.bg}">${m.icon}</div>
+      <div class="module-title"><h3>${m.name}</h3><span>${m.sub}</span></div>
+      <div class="module-status" style="color:${m.statusColor};border:1px solid ${m.statusColor}44;background:${m.statusColor}14">${m.status}</div>
+      <div class="module-chev">▾</div>
+    </div>
+    <div class="module-body">
+      <div class="module-body-inner">
+        <p>${m.desc}</p>
+        <div class="module-why">${m.why}</div>
+        <div class="module-feats">${m.feats.map(f=>`<span>${f}</span>`).join('')}</div>
+        <div class="module-sub-label">tables</div>
+        <div class="module-tables">${m.tables}</div>
+        <div class="module-sub-label">example exchange</div>
+        ${m.cmds.map(c=>`<div class="module-cmd"><span class="you">you: ${c.u}</span><br>bot: ${c.b}</div>`).join('')}
+      </div>
+    </div>`;
+  moduleList.appendChild(el);
+});
+observeAll('#module-list .module');
+document.querySelectorAll('.module-head').forEach(h=>{
+  h.addEventListener('click', ()=>{
+    h.parentElement.classList.toggle('open');
+    const body = h.nextElementSibling;
+    body.style.maxHeight = body.style.maxHeight ? null : body.scrollHeight+'px';
+  });
+});
+
+/* ===== WORKFLOWS DATA ===== */
+const flows = [
+  {name:"Morning Brief", desc:"Runs daily on a schedule — no user action needed.", nodes:[
+    {k:"trigger",v:"Cron — 7:00 AM daily"},
+    {k:"fetch",v:"Supabase: today's tasks, events, goals"},
+    {k:"process",v:"Gemini: prioritize + reasoning"},
+    {k:"format",v:"Build digest message"},
+    {k:"deliver",v:"Telegram: send to user"},
+  ]},
+  {name:"PDF → Quiz", desc:"Triggered by a file upload in Telegram.", nodes:[
+    {k:"trigger",v:"Telegram: /uploadpdf + file"},
+    {k:"store",v:"Supabase Storage: save PDF"},
+    {k:"process",v:"Gemini: extract + summarize + quiz"},
+    {k:"store",v:"Supabase: structured notes + quiz"},
+    {k:"deliver",v:"Telegram: confirm, ready to /quiz"},
+  ]},
+  {name:"Knowledge Save", desc:"Triggered by sharing any link or file.", nodes:[
+    {k:"trigger",v:"Telegram: link or file shared"},
+    {k:"detect",v:"Identify type — article / video / repo"},
+    {k:"process",v:"Gemini: summarize + auto-tag"},
+    {k:"store",v:"Supabase: save with search index"},
+    {k:"deliver",v:"Telegram: confirm saved"},
+  ]},
+  {name:"Habit Check-in", desc:"Inline button tap, no typing required.", nodes:[
+    {k:"trigger",v:"Telegram: inline button tap"},
+    {k:"upsert",v:"Supabase: log today's habit entry"},
+    {k:"calculate",v:"Compute current streak"},
+    {k:"deliver",v:"Telegram: confirm + streak count"},
+  ]},
+  {name:"Expense Logging", desc:"Natural language parsed into structured data.", nodes:[
+    {k:"trigger",v:"Telegram: free-text expense message"},
+    {k:"process",v:"Gemini: parse amount + category"},
+    {k:"store",v:"Supabase: insert expense row"},
+    {k:"check",v:"Compare against monthly budget"},
+    {k:"deliver",v:"Telegram: confirm, alert if over threshold"},
+  ]},
+  {name:"Weekly Analytics", desc:"The capstone workflow — reads from every other module.", nodes:[
+    {k:"trigger",v:"Cron — Sunday 8:00 PM"},
+    {k:"aggregate",v:"Supabase: pull from all module tables"},
+    {k:"process",v:"Gemini: score + generate recommendations"},
+    {k:"store",v:"Supabase: save weekly_scores row"},
+    {k:"deliver",v:"Telegram: send full weekly digest"},
+  ]},
+];
+const tabsEl = document.getElementById('flow-tabs');
+const panelsEl = document.getElementById('flow-panels');
+const arrowSVG = `<svg viewBox="0 0 36 12" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="0" y1="6" x2="30" y2="6" stroke="currentColor" stroke-width="1.5"/><path d="M24 1L30 6L24 11" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>`;
+flows.forEach((f,i)=>{
+  const tab = document.createElement('div');
+  tab.className = 'flow-tab' + (i===0?' active':'');
+  tab.textContent = f.name;
+  tab.onclick = ()=>{
+    document.querySelectorAll('.flow-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.flow-panel').forEach(p=>p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('panel-'+i).classList.add('active');
+  };
+  tabsEl.appendChild(tab);
+
+  const panel = document.createElement('div');
+  panel.className = 'flow-panel' + (i===0?' active':'');
+  panel.id = 'panel-'+i;
+  let chain = `<div class="flow-desc">${f.desc}</div><div class="flow-chain">`;
+  f.nodes.forEach((n,j)=>{
+    chain += `<div class="flow-node"><div class="k">${n.k}</div><div class="v">${n.v}</div></div>`;
+    if(j < f.nodes.length-1){
+      chain += `<div class="flow-arrow">${arrowSVG}<div class="pulse" style="animation-delay:${j*0.3}s"></div></div>`;
+    }
+  });
+  chain += '</div>';
+  panel.innerHTML = chain;
+  panelsEl.appendChild(panel);
+});
+
+/* ===== ROADMAP DATA ===== */
+const roadmap = [
+  {n:"01",name:"Foundation",tag:"infra",goal:"Stand up the core system every other module depends on.",stack:"DigitalOcean · Docker · n8n · Supabase · Telegram API",
+   items:["Provision DigitalOcean droplet + Docker","Deploy n8n + Supabase connection","Create Telegram bot + webhook","Build users / tasks / goals / events tables"]},
+  {n:"02",name:"Core Loop",tag:"daily driver",goal:"Make it something you actually check every morning.",stack:"n8n cron · Gemini API",
+   items:["/addtask, /tasks, /summary commands","Morning Brief cron workflow","Goal tracking CRUD","Gemini prioritization reasoning"]},
+  {n:"03",name:"StudyOS",tag:"academic",goal:"Turn course material into an active study pipeline.",stack:"Supabase Storage · Gemini extraction",
+   items:["/uploadpdf ingestion + storage","Gemini summarization pipeline","/quiz generation + delivery","GPA / exam countdown tracker"]},
+  {n:"04",name:"Knowledge Vault",tag:"second brain",goal:"Never lose something you learned again.",stack:"Gemini tagging · Postgres full-text search",
+   items:["Multi-type link/file capture","Auto-tag + summarize pipeline","/search across all saved items"]},
+  {n:"05",name:"ProjectOS",tag:"documentation",goal:"Turn daily check-ins into automatic reports.",stack:"n8n scheduled aggregation · Gemini",
+   items:["Daily check-in prompt workflow","Structured log storage","Auto weekly report generation"]},
+  {n:"06",name:"CareerOS",tag:"job hunt",goal:"Make internship hunting data-driven.",stack:"Gemini resume comparison",
+   items:["Application + interview tracker","Resume vs JD gap analysis","Deadline reminder workflow"]},
+  {n:"07",name:"AnalyticsOS",tag:"capstone",goal:"Connect every module into one weekly signal.",stack:"Cross-table Supabase queries · Gemini scoring",
+   items:["Cross-module data aggregation","Productivity score calculation","Pattern-based recommendations"]},
+  {n:"08",name:"Dashboard + Polish",tag:"optional",goal:"Add a visual layer and harden the system.",stack:"React · Tailwind · Supabase Auth",
+   items:["React dashboard reading same Supabase data","Supabase Auth login","Error handling + retry logic in n8n","README + architecture diagram for resume"]},
+];
+const roadmapList = document.getElementById('roadmap-list');
+roadmap.forEach((p,i)=>{
+  const el = document.createElement('div');
+  el.className = 'phase reveal';
+  el.innerHTML = `
+    <div class="phase-rail">
+      <div class="phase-dot"></div>
+      ${i<roadmap.length-1?'<div class="phase-line"></div>':''}
+    </div>
+    <div class="phase-card">
+      <div class="phase-card-head">
+        <h3><span class="num">${p.n}</span>${p.name}</h3>
+        <div class="phase-tag">${p.tag}</div>
+      </div>
+      <div class="phase-goal">${p.goal}</div>
+      <div class="phase-stack"><b>uses:</b> ${p.stack}</div>
+      <div class="checklist">
+        ${p.items.map((it,j)=>`<div class="check-item" data-phase="${i}" data-item="${j}"><div class="check-box"></div><span class="label">${it}</span></div>`).join('')}
+      </div>
+      <div class="phase-progress">0 / ${p.items.length} complete</div>
+    </div>`;
+  roadmapList.appendChild(el);
+});
+observeAll('#roadmap-list .phase');
+document.addEventListener('click', (e)=>{
+  const item = e.target.closest('.check-item');
+  if(!item) return;
+  item.classList.toggle('checked');
+  const phaseEl = item.closest('.phase');
+  const total = phaseEl.querySelectorAll('.check-item').length;
+  const done = phaseEl.querySelectorAll('.check-item.checked').length;
+  phaseEl.classList.toggle('done', done===total);
+  phaseEl.querySelector('.phase-progress').textContent = `${done} / ${total} complete`;
+});
+
+/* ===== EXTENSIONS DATA ===== */
+const exts = [
+  {tag:"ML / AIML",title:"Train a real model",desc:"A small classifier on your own task data — predict completion likelihood or ideal time-of-day. Shifts you from AI consumer to AI builder."},
+  {tag:"DevOps",title:"CI/CD + monitoring",desc:"GitHub Actions auto-deploy, Prometheus + Grafana watching your droplet and n8n execution health."},
+  {tag:"Data Engineering",title:"Real ETL + BI",desc:"Formalize AnalyticsOS into proper ETL workflows, add Metabase for dashboards instead of just Telegram summaries."},
+  {tag:"Mobile",title:"Companion app",desc:"React Native app talking to the same Supabase backend, with push notifications alongside Telegram."},
+  {tag:"Security",title:"Auth + hardening",desc:"JWT-based auth on the dashboard, rate-limited webhooks, proper secrets rotation discipline."},
+  {tag:"Systems Design",title:"Design for scale",desc:"Queue-based processing for heavy AI tasks instead of synchronous calls — good interview talking points even at solo scale."},
+];
+const extGrid = document.getElementById('ext-grid');
+exts.forEach(x=>{
+  const el = document.createElement('div');
+  el.className = 'ext-card reveal';
+  el.innerHTML = `<div class="tag">${x.tag}</div><h4>${x.title}</h4><p>${x.desc}</p>`;
+  extGrid.appendChild(el);
+});
+observeAll('#ext-grid .ext-card');
+
+/* ===== FAQ DATA ===== */
+const faqs = [
+  {q:"What if Oracle Cloud capacity signup fails?",a:"Retry over a few days, try a different availability domain, or fall back to Google Cloud's e2-micro (also free forever, just 1GB RAM instead of 12GB). Don't let this block starting — build on DigitalOcean first."},
+  {q:"What happens if Gemini's free tier rate limits are hit?",a:"Cache responses where possible (e.g. don't re-summarize the same PDF twice), space out heavy workflows, or fall back to a small self-hosted model via Ollama for non-critical parsing tasks."},
+  {q:"Is my data private?",a:"Yes — Supabase supports row-level security scoped to your user ID, and this is a single-user system by design. If you open it to others later, RLS policies need to be revisited."},
+  {q:"What happens after graduation?",a:"Nothing breaks — it's your own infrastructure. Keep using it as a personal tool, or open-source the repo as a portfolio piece with a live demo link."},
+  {q:"Do I need to build all 7 modules before it's useful?",a:"No — Core OS alone (Phase 1–2) is already a usable daily tool. Everything after that adds value incrementally; there's no point where the system is 'incomplete' and unusable."},
+  {q:"Why Telegram instead of a mobile app from day one?",a:"Zero app-store friction, free API, built-in push notifications, and it's already installed on your phone — the fastest path to a daily-use interface. The dashboard/app comes later once the core logic is proven."},
+];
+const faqList = document.getElementById('faq-list');
+faqs.forEach(f=>{
+  const el = document.createElement('div');
+  el.className = 'faq-item reveal';
+  el.innerHTML = `<div class="faq-q"><span>${f.q}</span><span class="chev">▾</span></div><div class="faq-a"><div class="faq-a-inner">${f.a}</div></div>`;
+  faqList.appendChild(el);
+});
+observeAll('#faq-list .faq-item');
+document.querySelectorAll('.faq-q').forEach(q=>{
+  q.addEventListener('click', ()=>{
+    const item = q.parentElement;
+    item.classList.toggle('open');
+    const a = q.nextElementSibling;
+    a.style.maxHeight = a.style.maxHeight ? null : a.scrollHeight+'px';
+  });
+});
+</script>
+</body>
+</html>
