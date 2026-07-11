@@ -142,6 +142,46 @@ Full setup walkthrough in [`docs/overview.html`](docs/overview.html).
 
 ---
 
+## Development Progress
+
+### ✅ Milestone 1 — Infrastructure & Telegram Gateway
+
+Completed:
+
+- Dockerized local development environment
+- Self-hosted n8n instance
+- Telegram Bot integration
+- Cloudflare Tunnel for webhook exposure
+- Supabase project configuration
+- Environment variable management
+- First end-to-end Telegram workflow
+
+Current workflow:
+
+```text
+Telegram
+    │
+    ▼
+Cloudflare Tunnel
+    │
+    ▼
+n8n
+    │
+    ▼
+Telegram Response
+```
+
+The project now has a fully working automation pipeline and is ready for database integration.
+
+---
+
+**Next milestone**
+
+- User registration
+- Supabase database schema
+- Task storage
+- Command router
+
 ## License
 
 MIT — see [LICENSE](LICENSE).
