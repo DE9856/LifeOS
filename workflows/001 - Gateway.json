@@ -1,0 +1,558 @@
+{
+  "name": "001 - Gateway",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "c2db6758-93d9-4488-875d-0fb75ece1e76",
+      "name": "Telegram Trigger",
+      "webhookId": "a734635c-c080-4f6f-91cf-629ec7e53a06",
+      "credentials": {
+        "telegramApi": {
+          "id": "jy3KlkySRaRQgJyf",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $node[\"Telegram Trigger\"].json.message.chat.id }}",
+        "text": "=🎉 Welcome to LifeOS, {{ $node[\"Telegram Trigger\"].json.message.from.first_name }}!  Your account has been created successfully.",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        816,
+        96
+      ],
+      "id": "9b2613f6-44f1-488e-bb38-643229810689",
+      "name": "Send a text message1",
+      "webhookId": "80d3072a-5456-4c3c-9230-0ff854fbfc90",
+      "credentials": {
+        "telegramApi": {
+          "id": "jy3KlkySRaRQgJyf",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c4ff9048-ce99-43fd-b4eb-9dc80fdb83c6",
+              "name": "chat_id",
+              "value": "={{ $node[\"Telegram Trigger\"].json.message.chat.id }}",
+              "type": "number"
+            },
+            {
+              "id": "79cb6dd3-8d87-4e7c-86d3-83af4ebaf34b",
+              "name": "telegram_user_id",
+              "value": "={{ $node[\"Telegram Trigger\"].json.message.from.id }}",
+              "type": "number"
+            },
+            {
+              "id": "1efea6e6-1d48-4227-b27d-46e9dd0a3db9",
+              "name": "first_name",
+              "value": "={{ $node[\"Telegram Trigger\"].json.message.from.first_name }}",
+              "type": "string"
+            },
+            {
+              "id": "b99e0ed9-a36c-4440-9491-806f22a376aa",
+              "name": "username",
+              "value": "={{ $node[\"Telegram Trigger\"].json.message.from.username }}",
+              "type": "string"
+            },
+            {
+              "id": "5ee348f4-e9fe-4867-9b80-cbef51fddbef",
+              "name": "message",
+              "value": "={{ $node[\"Telegram Trigger\"].json.message.text }}",
+              "type": "string"
+            },
+            {
+              "id": "cc0b6257-06b6-4ad1-aac2-f7d3bd891cc5",
+              "name": "message_id",
+              "value": "={{ $node[\"Telegram Trigger\"].json.message.message_id }}",
+              "type": "number"
+            },
+            {
+              "id": "c2ef38c5-b986-4bb3-8e3a-84abbff07e31",
+              "name": "is_new_user",
+              "value": true,
+              "type": "boolean"
+            },
+            {
+              "id": "d5a0630f-8c7e-4eef-b4a5-84ea8d6c7b61",
+              "name": "platform",
+              "value": "\"telegram\"",
+              "type": "string"
+            },
+            {
+              "id": "aacfde02-5c4f-46b8-a2e7-3bb3506a71eb",
+              "name": "received_at",
+              "value": "={{ $now }}",
+              "type": "string"
+            },
+            {
+              "id": "9e9e6880-2a2c-493a-b395-844b7d384953",
+              "name": "user_id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1024,
+        96
+      ],
+      "id": "5c3c46a4-a7cd-4e77-943a-1c9f41dcd883",
+      "name": "Gateway Output - New User"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c4ff9048-ce99-43fd-b4eb-9dc80fdb83c6",
+              "name": "chat_id",
+              "value": "={{ $node[\"Telegram Trigger\"].json.message.chat.id }}",
+              "type": "number"
+            },
+            {
+              "id": "79cb6dd3-8d87-4e7c-86d3-83af4ebaf34b",
+              "name": "telegram_user_id",
+              "value": "={{ $node[\"Telegram Trigger\"].json.message.from.id }}",
+              "type": "number"
+            },
+            {
+              "id": "1efea6e6-1d48-4227-b27d-46e9dd0a3db9",
+              "name": "first_name",
+              "value": "={{ $node[\"Telegram Trigger\"].json.message.from.first_name }}",
+              "type": "string"
+            },
+            {
+              "id": "b99e0ed9-a36c-4440-9491-806f22a376aa",
+              "name": "username",
+              "value": "={{ $node[\"Telegram Trigger\"].json.message.from.username }}",
+              "type": "string"
+            },
+            {
+              "id": "5ee348f4-e9fe-4867-9b80-cbef51fddbef",
+              "name": "message",
+              "value": "={{ $node[\"Telegram Trigger\"].json.message.text }}",
+              "type": "string"
+            },
+            {
+              "id": "cc0b6257-06b6-4ad1-aac2-f7d3bd891cc5",
+              "name": "message_id",
+              "value": "={{ $node[\"Telegram Trigger\"].json.message.message_id }}",
+              "type": "number"
+            },
+            {
+              "id": "c2ef38c5-b986-4bb3-8e3a-84abbff07e31",
+              "name": "is_new_user",
+              "value": false,
+              "type": "boolean"
+            },
+            {
+              "id": "d5a0630f-8c7e-4eef-b4a5-84ea8d6c7b61",
+              "name": "platform",
+              "value": "\"telegram\"",
+              "type": "string"
+            },
+            {
+              "id": "aacfde02-5c4f-46b8-a2e7-3bb3506a71eb",
+              "name": "received_at",
+              "value": "={{ $now }}",
+              "type": "string"
+            },
+            {
+              "id": "d7a0ecb4-aa39-401d-b1be-1261a8181479",
+              "name": "user_id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        800,
+        -144
+      ],
+      "id": "74d6741f-ac7e-42fc-bf20-2a5837ab49a0",
+      "name": "Gateway Output - Existing User"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "users",
+        "limit": 1,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "telegram_id",
+              "condition": "eq",
+              "keyValue": "={{ $json.message.from.id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        192,
+        0
+      ],
+      "id": "53b375a8-6f09-4333-b8ee-b8ed79fd935f",
+      "name": "Find User",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "ZH2IdOeF0pwuVjao",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a112a06a-8b4a-46ad-bccc-8e78ff5b514d",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        400,
+        0
+      ],
+      "id": "0419e6d5-9425-4480-8739-54334fad3380",
+      "name": "User Exists?"
+    },
+    {
+      "parameters": {
+        "tableId": "users",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "telegram_id",
+              "fieldValue": "={{$node[\"Telegram Trigger\"].json.message.from.id}}"
+            },
+            {
+              "fieldId": "username",
+              "fieldValue": "={{$node[\"Telegram Trigger\"].json.message.from.username}}"
+            },
+            {
+              "fieldId": "first_name",
+              "fieldValue": "={{$node[\"Telegram Trigger\"].json.message.from.first_name}}"
+            },
+            {
+              "fieldId": "last_name",
+              "fieldValue": "={{$node[\"Telegram Trigger\"].json.message.from.last_name}}"
+            },
+            {
+              "fieldId": "language_code",
+              "fieldValue": "={{$node[\"Telegram Trigger\"].json.message.from.language_code}}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        608,
+        96
+      ],
+      "id": "cde93ad1-bd04-4739-82a5-66e48aa89b0c",
+      "name": "Create User",
+      "credentials": {
+        "supabaseApi": {
+          "id": "ZH2IdOeF0pwuVjao",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "2I6gzcjnCEV8aO6o",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/2I6gzcjnCEV8aO6o",
+          "cachedResultName": "002 - Router"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "is_new_user": "={{ $json.is_new_user }}",
+            "chat_id": "={{ $json.chat_id }}",
+            "telegram_user_id": "={{ $json.telegram_user_id }}",
+            "first_name": "={{ $json.first_name }}",
+            "username": "={{ $json.username }}",
+            "message": "={{ $json.message }}",
+            "platform": "={{ $json.platform }}",
+            "received_at": "={{ $json.received_at }}",
+            "message_id": "={{ $json.message_id }}",
+            "user_id": "={{ $json.user_id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "chat_id",
+              "displayName": "chat_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "telegram_user_id",
+              "displayName": "telegram_user_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "first_name",
+              "displayName": "first_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "username",
+              "displayName": "username",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "is_new_user",
+              "displayName": "is_new_user",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "boolean",
+              "removed": false
+            },
+            {
+              "id": "platform",
+              "displayName": "platform",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "received_at",
+              "displayName": "received_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "message_id",
+              "displayName": "message_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "user_id",
+              "displayName": "user_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": true,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        1232,
+        0
+      ],
+      "id": "5fda98a9-3039-4ce0-a531-86c63ab4f2e9",
+      "name": "Call Router"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Find User",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message1": {
+      "main": [
+        [
+          {
+            "node": "Gateway Output - New User",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gateway Output - New User": {
+      "main": [
+        [
+          {
+            "node": "Call Router",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gateway Output - Existing User": {
+      "main": [
+        [
+          {
+            "node": "Call Router",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find User": {
+      "main": [
+        [
+          {
+            "node": "User Exists?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "User Exists?": {
+      "main": [
+        [
+          {
+            "node": "Gateway Output - Existing User",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create User",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create User": {
+      "main": [
+        [
+          {
+            "node": "Send a text message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call Router": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "9bfcce28-4bdd-4ea6-a699-7863d6645cfb",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cf6c16fac9beef294813451d8fba325c4b79be1ea695aafb4d5d972f96419775"
+  },
+  "nodeGroups": [],
+  "id": "yjm9mcgAXfBhAwCZ",
+  "tags": []
+}
