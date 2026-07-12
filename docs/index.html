@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LifeOS — System Overview</title>
+<title>LifeOS — Engineering Constitution</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -35,11 +35,12 @@
   /* ===== BOOT SCREEN ===== */
   #boot{position:fixed;inset:0;background:#0a0c10;z-index:1000;display:flex;align-items:center;justify-content:center;transition:opacity .6s ease, visibility .6s ease;}
   #boot.hidden{opacity:0;visibility:hidden;pointer-events:none;}
-  #boot-log{font-family:var(--mono);color:var(--green);font-size:13px;width:min(560px,86vw);}
+  #boot-log{font-family:var(--mono);color:var(--green);font-size:13px;width:min(600px,86vw);}
   #boot-log .line{opacity:0;white-space:pre-wrap;margin-bottom:4px;}
   #boot-log .line.show{opacity:1;}
   #boot-log .ok{color:var(--green);}
   #boot-log .tag{color:var(--text-faint);}
+  #boot-log .warn{color:var(--amber);}
   #boot-cursor{display:inline-block;width:8px;height:14px;background:var(--amber);animation:blink 1s step-end infinite;vertical-align:middle;}
   #boot-skip{position:absolute;bottom:28px;right:28px;font-family:var(--mono);font-size:11px;color:var(--text-faint);border:1px solid var(--border-light);padding:6px 12px;border-radius:3px;cursor:pointer;letter-spacing:.05em;}
   #boot-skip:hover{color:var(--amber);border-color:var(--amber-dim);}
@@ -48,33 +49,35 @@
   /* ===== MENU BAR ===== */
   #menubar{position:sticky;top:0;z-index:100;background:rgba(20,23,29,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:48px;}
   #menubar .brand{font-family:var(--mono);font-weight:600;font-size:14px;color:var(--text);display:flex;align-items:center;gap:8px;flex-shrink:0;}
-  #menubar .brand .dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);}
+  #menubar .brand .dot{width:8px;height:8px;border-radius:50%;background:var(--amber);box-shadow:0 0 8px var(--amber);}
   #menubar nav{display:flex;gap:1px;overflow-x:auto;scrollbar-width:none;}
   #menubar nav::-webkit-scrollbar{display:none;}
   #menubar nav a{font-family:var(--mono);font-size:11.5px;color:var(--text-dim);padding:6px 10px;border-radius:4px;transition:.15s;letter-spacing:.02em;white-space:nowrap;}
   #menubar nav a:hover{color:var(--text);background:var(--panel-alt);}
   #clock{font-family:var(--mono);font-size:12px;color:var(--text-dim);letter-spacing:.03em;flex-shrink:0;margin-left:12px;}
-  @media (max-width:920px){ #menubar nav{display:none;} }
+  @media (max-width:1000px){ #menubar nav{display:none;} }
 
   /* ===== SECTIONS SHARED ===== */
-  section{padding:90px 24px;max-width:1180px;margin:0 auto;}
+  section{padding:84px 24px;max-width:1180px;margin:0 auto;border-bottom:1px solid var(--border);}
+  section:last-of-type{border-bottom:none;}
   .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
   .eyebrow::before{content:'';width:16px;height:1px;background:var(--amber);}
   h2{font-family:var(--mono);font-size:clamp(24px,3.4vw,36px);font-weight:600;margin-bottom:16px;letter-spacing:-.01em;}
   h3{font-family:var(--mono);}
-  .lede{color:var(--text-dim);max-width:680px;font-size:15.5px;margin-bottom:48px;}
+  .lede{color:var(--text-dim);max-width:700px;font-size:15.5px;margin-bottom:44px;}
   .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease, transform .6s ease;}
   .reveal.in{opacity:1;transform:translateY(0);}
 
   /* ===== HERO ===== */
-  #hero{padding-top:70px;padding-bottom:60px;}
+  #hero{padding-top:68px;padding-bottom:56px;}
   .hero-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:48px;align-items:center;}
   @media (max-width:900px){.hero-grid{grid-template-columns:1fr;}}
   #hero .prompt{font-family:var(--mono);color:var(--text-faint);font-size:13px;margin-bottom:18px;}
   #hero .prompt span{color:var(--cyan);}
-  #hero h1{font-family:var(--mono);font-weight:700;font-size:clamp(34px,5.2vw,58px);line-height:1.05;letter-spacing:-.02em;margin-bottom:20px;}
+  #hero h1{font-family:var(--mono);font-weight:700;font-size:clamp(30px,4.6vw,50px);line-height:1.1;letter-spacing:-.02em;margin-bottom:20px;}
   #hero h1 .accent{color:var(--amber);}
-  #hero p.desc{color:var(--text-dim);font-size:16.5px;max-width:520px;margin-bottom:30px;}
+  #hero p.desc{color:var(--text-dim);font-size:16px;max-width:540px;margin-bottom:22px;}
+  .doc-tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11.5px;color:var(--violet);background:rgba(184,161,255,.08);border:1px solid rgba(184,161,255,.3);padding:6px 12px;border-radius:20px;margin-bottom:26px;}
   .btn-row{display:flex;gap:12px;flex-wrap:wrap;}
   .btn{font-family:var(--mono);font-size:13px;font-weight:600;padding:12px 22px;border-radius:6px;cursor:pointer;border:1px solid transparent;transition:.18s;letter-spacing:.02em;}
   .btn-primary{background:var(--amber);color:#1a1206;}
@@ -90,31 +93,72 @@
   .sysinfo-head .dots span:nth-child(2){background:#ffbd2e;}
   .sysinfo-head .dots span:nth-child(3){background:#28c941;}
   .sysinfo-body{padding:18px 20px;font-family:var(--mono);font-size:12.5px;}
-  .sysinfo-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px dashed var(--border);color:var(--text-dim);}
+  .sysinfo-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px dashed var(--border);color:var(--text-dim);gap:12px;}
   .sysinfo-row:last-child{border-bottom:none;}
   .sysinfo-row b{color:var(--text);font-weight:500;}
-  .sysinfo-row .val{color:var(--cyan);}
+  .sysinfo-row .val{color:var(--cyan);text-align:right;}
+  .sysinfo-row .val.amber{color:var(--amber);}
+  .sysinfo-foot{padding:10px 20px 16px;font-family:var(--mono);font-size:10.5px;color:var(--text-faint);border-top:1px dashed var(--border);}
 
-  /* ===== STACK ===== */
-  .stack-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-bottom:20px;}
-  .stack-card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:20px;transition:.2s;position:relative;overflow:hidden;}
-  .stack-card:hover{border-color:var(--border-light);transform:translateY(-3px);}
-  .stack-card .layer-tag{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-faint);margin-bottom:10px;}
-  .stack-card h3{font-size:16px;margin-bottom:8px;color:var(--text);}
-  .stack-card p{font-size:13px;color:var(--text-dim);margin-bottom:10px;}
-  .stack-card .alt{font-family:var(--mono);font-size:11px;color:var(--text-faint);border-top:1px dashed var(--border);padding-top:10px;}
-  .stack-card .alt b{color:var(--text-dim);}
-  .stack-card .bar{position:absolute;left:0;top:0;bottom:0;width:3px;}
-  .c-amber .bar{background:var(--amber);} .c-cyan .bar{background:var(--cyan);} .c-violet .bar{background:var(--violet);} .c-green .bar{background:var(--green);}
+  /* ===== RULE CARDS (development rules) ===== */
+  .rule-grid{display:flex;flex-direction:column;gap:12px;}
+  .rule-card{display:flex;gap:18px;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:18px 22px;align-items:flex-start;}
+  .rule-num{font-family:var(--mono);font-size:20px;font-weight:700;color:var(--amber-dim);flex-shrink:0;width:34px;}
+  .rule-body h3{font-size:14.5px;color:var(--text);margin-bottom:5px;}
+  .rule-body p{font-size:13.5px;color:var(--text-dim);}
+  .rule-body code{background:var(--panel-alt);border:1px solid var(--border);padding:1px 6px;border-radius:4px;font-size:12px;color:var(--cyan);}
 
-  /* ===== COMPARE TABLE ===== */
-  .compare{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--border);border-radius:10px;overflow:hidden;font-size:13.5px;}
-  .compare th{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-faint);text-align:left;padding:12px 16px;background:var(--panel-alt);border-bottom:1px solid var(--border);}
-  .compare td{padding:12px 16px;border-bottom:1px solid var(--border);color:var(--text-dim);}
-  .compare tr:last-child td{border-bottom:none;}
-  .compare td.yes{color:var(--green);}
-  .compare td.no{color:var(--text-faint);}
-  .compare td b{color:var(--text);}
+  /* ===== PHILOSOPHY / PIPELINE ===== */
+  .pipeline{display:flex;flex-wrap:wrap;align-items:center;gap:0;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:26px;}
+  .pipe-step{font-family:var(--mono);font-size:12.5px;color:var(--text);background:var(--panel-alt);border:1px solid var(--border-light);padding:10px 16px;border-radius:7px;white-space:nowrap;}
+  .pipe-arrow{color:var(--cyan);padding:0 10px;font-size:14px;}
+  @media (max-width:760px){.pipeline{flex-direction:column;align-items:stretch;} .pipe-step{text-align:center;} .pipe-arrow{transform:rotate(90deg);padding:6px 0;align-self:center;}}
+
+  .truth-box{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:center;background:var(--panel);border:1px solid var(--green);border-radius:10px;padding:24px;margin-top:22px;}
+  @media (max-width:700px){.truth-box{grid-template-columns:1fr;}}
+  .truth-box .side{font-family:var(--mono);font-size:13px;}
+  .truth-box .side.primary{color:var(--green);font-weight:600;}
+  .truth-box .side.mirror{color:var(--text-faint);}
+  .truth-box .mid{font-family:var(--mono);color:var(--text-faint);font-size:20px;text-align:center;}
+
+  /* ===== TREE ===== */
+  .tree{background:#0f1319;border:1px solid var(--border);border-radius:10px;padding:20px 24px;font-family:var(--mono);font-size:12.5px;color:var(--text-dim);white-space:pre;overflow-x:auto;line-height:1.75;}
+  .tree .dir{color:var(--cyan);}
+  .tree .file{color:var(--text-dim);}
+  .tree .cmt{color:var(--text-faint);}
+
+  /* ===== GIT WORKFLOW ===== */
+  .git-flow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:var(--mono);font-size:12.5px;}
+  .git-node{background:var(--panel);border:1px solid var(--border-light);border-radius:20px;padding:8px 16px;color:var(--text);}
+  .git-node.main{border-color:var(--red);color:var(--red);}
+  .git-node.dev{border-color:var(--amber);color:var(--amber);}
+  .git-arrow{color:var(--text-faint);}
+
+  /* ===== NAMING GOOD/BAD ===== */
+  .name-compare{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media (max-width:700px){.name-compare{grid-template-columns:1fr;}}
+  .name-col{background:var(--panel);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+  .name-col-head{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.08em;padding:10px 16px;border-bottom:1px solid var(--border);}
+  .name-col.bad .name-col-head{color:var(--red);background:rgba(255,107,107,.08);}
+  .name-col.good .name-col-head{color:var(--green);background:rgba(110,231,160,.08);}
+  .name-row{font-family:var(--mono);font-size:12.5px;padding:11px 16px;border-bottom:1px dashed var(--border);color:var(--text-dim);}
+  .name-row:last-child{border-bottom:none;}
+  .name-col.good .name-row{color:var(--text);}
+
+  /* ===== GATEWAY DIAGRAM ===== */
+  .gw-wrap{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:26px;}
+  .gw-trigger{font-family:var(--mono);font-size:12.5px;background:var(--panel-alt);border:1px solid var(--amber-dim);color:var(--amber);padding:10px 18px;border-radius:7px;text-align:center;max-width:320px;margin:0 auto 14px;}
+  .gw-split{display:flex;justify-content:center;color:var(--text-faint);font-family:var(--mono);font-size:11px;margin-bottom:10px;}
+  .gw-branches{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  @media (max-width:760px){.gw-branches{grid-template-columns:1fr;}}
+  .gw-branch{background:var(--panel-alt);border:1px solid var(--border-light);border-radius:8px;padding:16px 18px;}
+  .gw-branch .lbl{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-faint);margin-bottom:8px;}
+  .gw-branch.lit .lbl{color:var(--cyan);}
+  .gw-branch.ai .lbl{color:var(--violet);}
+  .gw-branch p{font-size:12.5px;color:var(--text-dim);margin-bottom:8px;}
+  .gw-branch code{display:block;background:#0f1319;border:1px solid var(--border);border-radius:5px;padding:8px 10px;font-family:var(--mono);font-size:11px;color:var(--green);margin-bottom:6px;overflow-x:auto;}
+  .gw-merge{text-align:center;font-family:var(--mono);font-size:11px;color:var(--text-faint);margin:14px 0;}
+  .gw-out{font-family:var(--mono);font-size:12.5px;background:var(--panel-alt);border:1px solid var(--border-light);color:var(--text);padding:10px 18px;border-radius:7px;text-align:center;max-width:340px;margin:0 auto;}
 
   /* ===== SCHEMA ===== */
   .schema-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;}
@@ -123,10 +167,13 @@
   .schema-head .sw{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
   .schema-head span{font-family:var(--mono);font-size:12.5px;color:var(--text);}
   .schema-body{padding:14px 16px;}
-  .table-row{font-family:var(--mono);font-size:11.5px;margin-bottom:10px;}
+  .table-row{font-family:var(--mono);font-size:11.5px;margin-bottom:10px;display:flex;justify-content:space-between;gap:8px;align-items:baseline;}
   .table-row:last-child{margin-bottom:0;}
   .table-row .tname{color:var(--cyan);}
-  .table-row .fields{color:var(--text-faint);display:block;margin-top:2px;padding-left:12px;line-height:1.6;}
+  .table-row .fields{color:var(--text-faint);display:block;margin-top:2px;padding-left:12px;line-height:1.6;flex:1;}
+  .table-row .stat{font-size:9.5px;text-transform:uppercase;letter-spacing:.06em;padding:2px 7px;border-radius:10px;white-space:nowrap;flex-shrink:0;height:fit-content;}
+  .table-row .stat.live{color:var(--green);border:1px solid rgba(110,231,160,.4);background:rgba(110,231,160,.08);}
+  .table-row .stat.planned{color:var(--text-faint);border:1px solid var(--border-light);background:transparent;}
 
   /* ===== MODULES ===== */
   .module{background:var(--panel);border:1px solid var(--border);border-radius:10px;margin-bottom:12px;overflow:hidden;}
@@ -151,28 +198,47 @@
   .module-cmd{font-family:var(--mono);font-size:12px;color:var(--green);background:#0f1319;padding:10px 14px;border-radius:6px;border:1px solid var(--border);margin-bottom:8px;}
   .module-cmd:last-child{margin-bottom:0;}
   .module-cmd .you{color:var(--text-dim);}
+  .module-contract{background:#0f1319;border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:14px;}
+  .module-contract-row{display:flex;gap:12px;padding:6px 0;border-bottom:1px dashed var(--border);font-size:12px;}
+  .module-contract-row:last-child{border-bottom:none;}
+  .module-contract-row b{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-faint);width:150px;flex-shrink:0;}
+  .module-contract-row span{color:var(--text-dim);}
+  .maturity-badge{font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.06em;padding:2px 9px;border-radius:10px;white-space:nowrap;}
 
-  /* ===== WORKFLOWS ===== */
-  .flow-tabs{display:flex;gap:8px;margin-bottom:28px;flex-wrap:wrap;}
-  .flow-tab{font-family:var(--mono);font-size:12px;padding:9px 16px;border-radius:6px;border:1px solid var(--border);background:var(--panel);color:var(--text-dim);cursor:pointer;transition:.15s;}
-  .flow-tab.active{border-color:var(--amber-dim);color:var(--amber);background:rgba(255,180,84,.07);}
-  .flow-panel{display:none;}
-  .flow-panel.active{display:block;}
-  .flow-panel .flow-desc{font-size:13px;color:var(--text-dim);margin-bottom:18px;}
-  .flow-chain{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;}
-  .flow-node{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px 18px;min-width:150px;flex:1;position:relative;}
-  .flow-node .k{font-family:var(--mono);font-size:9.5px;color:var(--text-faint);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;}
-  .flow-node .v{font-family:var(--mono);font-size:12.5px;color:var(--text);line-height:1.4;}
-  .flow-arrow{display:flex;align-items:center;justify-content:center;width:36px;flex-shrink:0;color:var(--cyan);position:relative;}
-  .flow-arrow svg{width:100%;}
-  .flow-arrow .pulse{position:absolute;width:5px;height:5px;border-radius:50%;background:var(--cyan);top:50%;left:0;transform:translateY(-50%);box-shadow:0 0 6px var(--cyan);animation:travel 1.8s linear infinite;}
-  @keyframes travel{0%{left:0;opacity:0;}10%{opacity:1;}90%{opacity:1;}100%{left:100%;opacity:0;}}
-  @media (max-width:760px){.flow-chain{flex-direction:column;} .flow-arrow{width:100%;height:26px;} .flow-arrow svg{transform:rotate(90deg);width:20px;margin:0 auto;}}
+  /* ===== NUMBERED PROCESS ===== */
+  .process-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-family:var(--mono);font-size:12.5px;}
+  .process-step{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:10px 16px;color:var(--text);display:flex;align-items:center;gap:8px;}
+  .process-step b{color:var(--amber);}
+  .process-arrow{color:var(--text-faint);}
 
-  /* ===== BUDGET ===== */
-  .budget-total{background:var(--panel);border:1px solid var(--green);border-radius:10px;padding:20px 24px;margin-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
-  .budget-total .label{font-family:var(--mono);font-size:13px;color:var(--text-dim);}
-  .budget-total .amount{font-family:var(--mono);font-size:24px;color:var(--green);font-weight:700;}
+  /* ===== TABLE (naming ranges / testing / commits) ===== */
+  .compare{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--border);border-radius:10px;overflow:hidden;font-size:13.5px;}
+  .compare th{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-faint);text-align:left;padding:12px 16px;background:var(--panel-alt);border-bottom:1px solid var(--border);}
+  .compare td{padding:12px 16px;border-bottom:1px solid var(--border);color:var(--text-dim);}
+  .compare tr:last-child td{border-bottom:none;}
+  .compare td.yes{color:var(--green);}
+  .compare td.no{color:var(--text-faint);}
+  .compare td b{color:var(--text);}
+  .compare td.mono, .compare th.mono{font-family:var(--mono);}
+
+  /* ===== CHECK ROWS (testing / rules) ===== */
+  .check-static{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:13px;color:var(--text-dim);padding:9px 0;border-bottom:1px dashed var(--border);}
+  .check-static:last-child{border-bottom:none;}
+  .check-static .box{width:15px;height:15px;border:1.5px solid var(--green);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--green);font-size:10px;}
+
+  /* ===== MILESTONE ===== */
+  .milestone{background:var(--panel);border:1px solid var(--green);border-radius:10px;padding:22px 24px;margin-bottom:16px;}
+  .milestone-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px;}
+  .milestone-head h3{font-size:15px;color:var(--text);}
+  .milestone-badge{font-family:var(--mono);font-size:10.5px;color:var(--green);border:1px solid var(--green);padding:4px 12px;border-radius:20px;letter-spacing:.05em;}
+  .milestone ul{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;}
+  .milestone li{font-family:var(--mono);font-size:12.5px;color:var(--text-dim);display:flex;align-items:center;gap:8px;}
+  .milestone li::before{content:'✓';color:var(--green);font-weight:700;}
+
+  .gap-item{background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--amber);border-radius:8px;padding:16px 20px;margin-bottom:10px;}
+  .gap-item h4{font-size:13.5px;color:var(--text);margin-bottom:5px;}
+  .gap-item p{font-size:12.5px;color:var(--text-dim);}
+  .gap-item .when{font-family:var(--mono);font-size:10.5px;color:var(--amber);text-transform:uppercase;letter-spacing:.05em;margin-top:8px;display:block;}
 
   /* ===== ROADMAP ===== */
   .phase{display:flex;gap:20px;margin-bottom:6px;position:relative;}
@@ -181,10 +247,12 @@
   .phase.done .phase-dot{background:var(--green);border-color:var(--green);box-shadow:0 0 8px rgba(110,231,160,.5);}
   .phase-line{width:2px;flex:1;background:var(--border);margin:4px 0;}
   .phase-card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:18px 20px;flex:1;margin-bottom:24px;}
+  .phase-card.shipped{border-color:var(--green);}
   .phase-card-head{display:flex;justify-content:space-between;align-items:center;cursor:pointer;gap:12px;flex-wrap:wrap;}
   .phase-card-head h3{font-size:15px;color:var(--text);}
   .phase-card-head .num{font-family:var(--mono);color:var(--amber);font-size:12px;margin-right:8px;}
   .phase-tag{font-family:var(--mono);font-size:10px;color:var(--text-faint);background:var(--panel-alt);padding:4px 10px;border-radius:20px;border:1px solid var(--border);white-space:nowrap;}
+  .phase-tag.shipped{color:var(--green);border-color:var(--green);}
   .phase-goal{font-size:13px;color:var(--text-dim);margin:10px 0 8px;}
   .phase-stack{font-family:var(--mono);font-size:11px;color:var(--text-faint);margin-bottom:14px;}
   .phase-stack b{color:var(--violet);}
@@ -195,32 +263,107 @@
   .check-item.checked .check-box::after{content:'✓';font-size:11px;color:#0a0c10;font-weight:700;}
   .check-item.checked span.label{color:var(--text-faint);text-decoration:line-through;}
   .phase-progress{font-family:var(--mono);font-size:11px;color:var(--text-faint);margin-top:12px;}
+  .roadmap-note{font-family:var(--mono);font-size:11.5px;color:var(--text-faint);background:var(--panel);border:1px dashed var(--border-light);border-radius:8px;padding:12px 16px;margin-bottom:24px;}
+  .roadmap-note b{color:var(--amber);}
 
-  /* ===== EXTENSIONS ===== */
-  .ext-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;}
-  .ext-card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:18px;transition:.2s;}
-  .ext-card:hover{border-color:var(--violet);background:rgba(184,161,255,.04);}
-  .ext-card .tag{font-family:var(--mono);font-size:10px;color:var(--violet);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;}
-  .ext-card h4{font-family:var(--mono);font-size:14px;margin-bottom:6px;}
-  .ext-card p{font-size:12.5px;color:var(--text-dim);}
+  /* ===== DAILY ROUTINE ===== */
+  .routine-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+  @media (max-width:700px){.routine-grid{grid-template-columns:1fr;}}
+  .routine-card{background:#0f1319;border:1px solid var(--border);border-radius:10px;padding:18px 20px;}
+  .routine-card h4{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;}
+  .routine-card.start h4{color:var(--green);}
+  .routine-card.stop h4{color:var(--red);}
+  .routine-card ol{padding-left:18px;font-family:var(--mono);font-size:12px;color:var(--text-dim);}
+  .routine-card li{margin-bottom:6px;padding-left:2px;}
+  .routine-card code{color:var(--cyan);}
 
-  /* ===== PITCH ===== */
-  .pitch-term{background:#0f1319;border:1px solid var(--border);border-radius:10px;padding:20px 22px;font-family:var(--mono);font-size:13px;}
-  .pitch-term .l{color:var(--text-dim);margin-bottom:10px;padding-left:18px;position:relative;}
-  .pitch-term .l::before{content:'$';position:absolute;left:0;color:var(--green);}
-  .pitch-term .l b{color:var(--text);}
-  .pitch-term .l:last-child{margin-bottom:0;}
+  /* ===== ADR CARDS ===== */
+  .adr-card{background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--violet);border-radius:8px;padding:20px 24px;margin-bottom:14px;}
+  .adr-card-head{display:flex;align-items:center;gap:10px;margin-bottom:4px;flex-wrap:wrap;}
+  .adr-card-head .adr-num{font-family:var(--mono);font-size:11px;color:var(--violet);background:rgba(184,161,255,.1);border:1px solid rgba(184,161,255,.3);padding:2px 9px;border-radius:20px;}
+  .adr-card-head h4{font-size:15px;color:var(--text);}
+  .adr-status{font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.06em;padding:2px 8px;border-radius:10px;color:var(--green);border:1px solid rgba(110,231,160,.4);background:rgba(110,231,160,.08);margin-left:auto;}
+  .adr-fields{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;}
+  @media (max-width:700px){.adr-fields{grid-template-columns:1fr;}}
+  .adr-field b{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--text-faint);display:block;margin-bottom:4px;}
+  .adr-field p,.adr-field ul{font-size:12.5px;color:var(--text-dim);}
+  .adr-field ul{padding-left:16px;}
+  .adr-field.full{grid-column:1 / -1;}
 
-  /* ===== FAQ ===== */
-  .faq-item{background:var(--panel);border:1px solid var(--border);border-radius:10px;margin-bottom:10px;overflow:hidden;}
-  .faq-q{padding:16px 20px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;font-family:var(--mono);font-size:13.5px;color:var(--text);}
-  .faq-q .chev{color:var(--text-faint);transition:transform .25s;flex-shrink:0;}
-  .faq-item.open .faq-q .chev{transform:rotate(180deg);}
-  .faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease;}
-  .faq-a-inner{padding:0 20px 18px;font-size:13px;color:var(--text-dim);}
+  /* ===== TIMELINE ===== */
+  .timeline{position:relative;padding-left:28px;border-left:2px solid var(--border);margin-top:8px;}
+  .timeline-item{position:relative;padding-bottom:22px;}
+  .timeline-item:last-child{padding-bottom:0;}
+  .timeline-item::before{content:'';position:absolute;left:-34px;top:3px;width:11px;height:11px;border-radius:50%;background:var(--panel-alt);border:2px solid var(--amber);}
+  .timeline-item.future::before{border-color:var(--border-light);background:var(--panel);}
+  .timeline-item .tyear{font-family:var(--mono);font-size:11px;color:var(--amber);margin-bottom:3px;letter-spacing:.04em;}
+  .timeline-item.future .tyear{color:var(--text-faint);}
+  .timeline-item p{font-size:13px;color:var(--text-dim);}
+
+  /* ===== PRINCIPLE LIST ===== */
+  .principle-list{display:flex;flex-direction:column;gap:10px;}
+  .principle{display:flex;gap:16px;background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:14px 18px;align-items:flex-start;}
+  .principle .pnum{font-family:var(--mono);font-size:13px;color:var(--amber);flex-shrink:0;width:22px;}
+  .principle p{font-size:13.5px;color:var(--text-dim);}
+  .principle p b{color:var(--text);}
+
+  /* ===== EXPANDED PRINCIPLE CARDS (Article XXII) ===== */
+  .eprinciple{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:20px 22px;margin-bottom:12px;}
+  .eprinciple-head{display:flex;align-items:baseline;gap:12px;margin-bottom:10px;}
+  .eprinciple-head .enum{font-family:var(--mono);font-size:12px;color:var(--amber);}
+  .eprinciple-head h4{font-size:14.5px;color:var(--text);}
+  .eprinciple-why{font-size:13px;color:var(--text-dim);margin-bottom:12px;}
+  .eprinciple-ex{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  @media (max-width:640px){.eprinciple-ex{grid-template-columns:1fr;}}
+  .eprinciple-ex .good,.eprinciple-ex .bad{border-radius:6px;padding:8px 12px;font-family:var(--mono);font-size:11.5px;}
+  .eprinciple-ex .good{background:rgba(110,231,160,.07);border:1px solid rgba(110,231,160,.3);color:var(--green);}
+  .eprinciple-ex .bad{background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.3);color:var(--red);}
+  .eprinciple-ex .good b, .eprinciple-ex .bad b{display:block;font-family:var(--sans);font-size:10px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;opacity:.75;}
+
+  /* ===== EVENT REGISTRY ===== */
+  .event-card{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin-bottom:10px;}
+  .event-card-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap;}
+  .event-card-head code{font-family:var(--mono);font-size:13px;color:var(--amber);background:var(--panel-alt);padding:3px 9px;border-radius:5px;border:1px solid var(--border-light);}
+  .event-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;font-size:12px;}
+  .event-fields b{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-faint);display:block;margin-bottom:3px;}
+  .event-fields span{color:var(--text-dim);}
+  .event-fields span.tbd{color:var(--text-faint);font-style:italic;}
+
+  /* ===== COMMAND SPEC ===== */
+  .cmd-card{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin-bottom:10px;}
+  .cmd-card-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+  .cmd-card-head code{font-family:var(--mono);font-size:13px;color:var(--green);background:#0f1319;padding:3px 9px;border-radius:5px;border:1px solid var(--border-light);}
+  .cmd-card-head .module-tag{font-family:var(--mono);font-size:10px;color:var(--violet);border:1px solid rgba(184,161,255,.35);background:rgba(184,161,255,.08);padding:2px 8px;border-radius:20px;}
+  .cmd-fields{font-size:12px;color:var(--text-dim);display:grid;gap:5px;}
+  .cmd-fields b{color:var(--text-faint);font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;margin-right:6px;}
+
+  /* ===== DICTIONARY ===== */
+  .dict-card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:18px 20px;margin-bottom:12px;}
+  .dict-card-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .dict-card-head code{font-family:var(--mono);font-size:14px;color:var(--cyan);}
+  .dict-row{display:flex;gap:14px;padding:6px 0;border-bottom:1px dashed var(--border);font-size:12.5px;}
+  .dict-row:last-child{border-bottom:none;}
+  .dict-row b{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-faint);width:130px;flex-shrink:0;padding-top:1px;}
+  .dict-row span{color:var(--text-dim);}
+  .dict-row span.future{color:var(--text-faint);font-style:italic;}
+
+  /* ===== DECISION LOG ===== */
+  .declog{background:#0f1319;border:1px solid var(--border);border-radius:10px;padding:20px 24px;font-family:var(--mono);font-size:12.5px;}
+  .declog-row{display:flex;gap:16px;padding:9px 0;border-bottom:1px dashed var(--border);}
+  .declog-row:last-child{border-bottom:none;}
+  .declog-row .dtag{color:var(--amber);width:80px;flex-shrink:0;}
+  .declog-row .dtag.future{color:var(--text-faint);}
+  .declog-row span{color:var(--text-dim);}
+
+  /* ===== MATURITY ===== */
+  .maturity-legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:24px;}
+  .maturity-legend .item{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11.5px;color:var(--text-dim);background:var(--panel);border:1px solid var(--border);padding:7px 14px;border-radius:20px;}
+  .maturity-legend .dot{width:8px;height:8px;border-radius:50%;}
+  .maturity-table td{font-family:var(--mono);}
 
   footer{border-top:1px solid var(--border);padding:36px 24px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--text-faint);}
   footer .cursor-blink{display:inline-block;width:7px;height:12px;background:var(--amber);animation:blink 1s step-end infinite;vertical-align:middle;margin-left:2px;}
+  footer .amend{margin-top:8px;font-size:11px;}
 </style>
 </head>
 <body>
@@ -231,18 +374,35 @@
 </div>
 
 <div id="menubar">
-  <div class="brand"><span class="dot"></span> LifeOS</div>
+  <div class="brand"><span class="dot"></span> LifeOS / constitution</div>
   <nav>
     <a href="#overview">overview</a>
-    <a href="#stack">stack</a>
+    <a href="#philosophy">vision</a>
+    <a href="#architecture">architecture</a>
+    <a href="#rules">dev rules</a>
+    <a href="#adr">decisions</a>
+    <a href="#repo">repo</a>
+    <a href="#git">git</a>
+    <a href="#versioning">versioning</a>
+    <a href="#gateway">router</a>
+    <a href="#naming">naming</a>
     <a href="#schema">schema</a>
+    <a href="#database">db plan</a>
+    <a href="#dictionary">dictionary</a>
+    <a href="#events">events</a>
+    <a href="#ai">ai philosophy</a>
+    <a href="#maturity">maturity</a>
     <a href="#modules">modules</a>
-    <a href="#workflows">workflows</a>
-    <a href="#budget">budget</a>
-    <a href="#roadmap">build order</a>
-    <a href="#extensions">extensions</a>
-    <a href="#pitch">resume</a>
-    <a href="#faq">faq</a>
+    <a href="#process">process</a>
+    <a href="#devphilosophy">dev philosophy</a>
+    <a href="#testing">testing</a>
+    <a href="#failure">failure</a>
+    <a href="#security">security</a>
+    <a href="#status">status</a>
+    <a href="#roadmap">roadmap</a>
+    <a href="#coding">coding standards</a>
+    <a href="#history">history</a>
+    <a href="#infra">infra</a>
   </nav>
   <div id="clock">--:--:--</div>
 </div>
@@ -251,145 +411,1005 @@
 <section id="overview">
   <div class="hero-grid">
     <div>
-      <div class="prompt"><span>you@college</span>:~$ whoami --system</div>
-      <h1>Your life,<br>running as <span class="accent">one system.</span></h1>
-      <p class="desc">LifeOS is a personal operating system for college — a Telegram-driven automation layer that manages tasks, study, knowledge, projects, and career prep through one connected pipeline instead of six disconnected apps. Built on n8n, Supabase, and Gemini, at zero ongoing cost.</p>
+      <div class="prompt"><span>you@college</span>:~$ cat CONSTITUTION.md</div>
+      <div class="doc-tag">📄 living document — amended every sprint, not a status page</div>
+      <h1>The rules that keep<br>LifeOS <span class="accent">one system.</span></h1>
+      <p class="desc">This is the binding engineering guide for LifeOS — architecture, naming conventions, git discipline, and the Telegram Gateway contract every module has to follow. It is not a build log and it is not a demo: it's the constitution the code has to agree with before it merges. It documents what exists today, separately and clearly from what is planned.</p>
       <div class="btn-row">
-        <button class="btn btn-primary" onclick="document.getElementById('roadmap').scrollIntoView({behavior:'smooth'})">View build order</button>
-        <button class="btn btn-ghost" onclick="document.getElementById('modules').scrollIntoView({behavior:'smooth'})">See modules</button>
+        <button class="btn btn-primary" onclick="document.getElementById('rules').scrollIntoView({behavior:'smooth'})">Read the rules</button>
+        <button class="btn btn-ghost" onclick="document.getElementById('status').scrollIntoView({behavior:'smooth'})">Current build status</button>
       </div>
     </div>
     <div class="sysinfo reveal">
-      <div class="sysinfo-head"><div class="dots"><span></span><span></span><span></span></div>system.status</div>
+      <div class="sysinfo-head"><div class="dots"><span></span><span></span><span></span></div>document.meta</div>
       <div class="sysinfo-body">
-        <div class="sysinfo-row"><b>modules</b><span class="val">7 active</span></div>
-        <div class="sysinfo-row"><b>tables</b><span class="val">18 across schema</span></div>
-        <div class="sysinfo-row"><b>workflows</b><span class="val">6+ n8n pipelines</span></div>
-        <div class="sysinfo-row"><b>interface</b><span class="val">Telegram Bot</span></div>
-        <div class="sysinfo-row"><b>database</b><span class="val">Supabase / Postgres</span></div>
-        <div class="sysinfo-row"><b>ai layer</b><span class="val">Gemini API</span></div>
-        <div class="sysinfo-row"><b>hosting cost</b><span class="val">₹0 / $0</span></div>
-        <div class="sysinfo-row"><b>uptime target</b><span class="val">24 / 7</span></div>
+        <div class="sysinfo-row"><b>constitution</b><span class="val">v1.4</span></div>
+        <div class="sysinfo-row"><b>project version</b><span class="val">v0.2.0 — Telegram Gateway</span></div>
+        <div class="sysinfo-row"><b>next target</b><span class="val amber">v0.3.0 — The Router</span></div>
+        <div class="sysinfo-row"><b>modules shipped</b><span class="val amber">1 of 7 (partial)</span></div>
+        <div class="sysinfo-row"><b>tables live</b><span class="val amber">1 of 16</span></div>
+        <div class="sysinfo-row"><b>current phase</b><span class="val">02 — The Router</span></div>
+        <div class="sysinfo-row"><b>binding on</b><span class="val">every future sprint</span></div>
+        <div class="sysinfo-row"><b>amend by</b><span class="val">PR, same commit as code</span></div>
       </div>
+      <div class="sysinfo-foot">This panel describes the state of the <b style="color:var(--text-dim)">document</b>, not a live connection to the running bot.</div>
     </div>
   </div>
 </section>
 
-<!-- STACK -->
-<section id="stack">
-  <div class="eyebrow">Infrastructure</div>
-  <h2>Tech stack</h2>
-  <p class="lede">Every layer chosen to run permanently at zero cost — using GitHub Student Pack credits as runway, and free-forever tiers as the long-term home. Each card includes the fallback if the primary option fails.</p>
-  <div class="stack-grid">
-    <div class="stack-card c-amber"><div class="bar"></div><div class="layer-tag">Hosting — Year 1</div><h3>DigitalOcean Droplet</h3><p>$200 GitHub Student credit funds a small droplet (1–2 vCPU, 2GB RAM) running Docker for a full year with zero setup friction.</p><div class="alt"><b>Fallback:</b> Azure for Students ($100 credit)</div></div>
-    <div class="stack-card c-green"><div class="bar"></div><div class="layer-tag">Hosting — Forever</div><h3>Oracle Cloud Always Free</h3><p>2 OCPU / 12GB Arm instance, genuinely free forever. Migrate here once the DigitalOcean credit runs out.</p><div class="alt"><b>Fallback:</b> Google Cloud e2-micro (1GB RAM, free forever)</div></div>
-    <div class="stack-card c-cyan"><div class="bar"></div><div class="layer-tag">Automation</div><h3>n8n (self-hosted)</h3><p>Workflow engine running every scheduled job, webhook, and integration between Telegram, the database, and the AI layer. Runs as a Docker container.</p><div class="alt"><b>Version:</b> latest stable via Docker image</div></div>
-    <div class="stack-card c-green"><div class="bar"></div><div class="layer-tag">Database</div><h3>Supabase</h3><p>Postgres with built-in auth, storage, and row-level security. Free tier: 500MB DB, 1GB file storage — plenty for one user's data.</p><div class="alt"><b>Fallback:</b> Self-hosted Postgres on the same droplet</div></div>
-    <div class="stack-card c-violet"><div class="bar"></div><div class="layer-tag">Intelligence</div><h3>Gemini API</h3><p>Handles prioritization reasoning, PDF summarization, quiz generation, resume gap analysis. Generous free-tier daily request limits.</p><div class="alt"><b>Fallback:</b> Local Ollama model (e.g. Llama/Mistral 7B) on the droplet</div></div>
-    <div class="stack-card c-amber"><div class="bar"></div><div class="layer-tag">Interface</div><h3>Telegram Bot API</h3><p>The primary way you talk to LifeOS — commands, natural language, file uploads, daily digests, inline buttons, all in one chat thread. No rate limits that matter at personal scale.</p></div>
-    <div class="stack-card c-cyan"><div class="bar"></div><div class="layer-tag">Dashboard — Later</div><h3>React + Tailwind</h3><p>A visual layer added once the backend is solid — charts, analytics, manual data entry when Telegram isn't convenient. Auth via Supabase Auth.</p></div>
-    <div class="stack-card c-violet"><div class="bar"></div><div class="layer-tag">Extras</div><h3>Domain + Monitoring</h3><p>Free domain (1 yr) via the Student Pack. Optional: Prometheus + Grafana (both free, self-hosted) to watch droplet health and n8n execution success rate.</p></div>
+<!-- PHILOSOPHY / VISION -->
+<section id="philosophy">
+  <div class="eyebrow">Article I</div>
+  <h2>Vision &amp; philosophy</h2>
+  <p class="lede">LifeOS is not a collection of apps. It is a <b style="color:var(--text)">personal operating system</b> — every module shares one database, one automation engine, one user model, one event log, and one task system. A new feature integrates into that shared ecosystem; it does not stand alone.</p>
+
+  <h3 style="font-size:14px;color:var(--text-dim);margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em;">Why LifeOS exists</h3>
+  <p class="lede" style="font-size:13.5px;">Productivity today is fragmented across tools that don't talk to each other: Google Calendar holds events, Google Tasks holds tasks, Notion holds notes, GitHub holds projects, PDFs sit in Drive, expenses live in a spreadsheet somewhere. Each tool is fine on its own — the cost is in the seams between them. LifeOS exists to be the <b style="color:var(--text)">orchestration layer</b> that connects them: one place that understands a task, a document, an expense, and a calendar event as parts of the same life, not seven unrelated records.</p>
+
+  <div class="name-compare" style="margin-bottom:32px;">
+    <div class="name-col bad">
+      <div class="name-col-head">✕ What LifeOS is not</div>
+      <div class="name-row">Another to-do app</div>
+      <div class="name-row">Another note-taking app</div>
+      <div class="name-row">Another calendar app</div>
+      <div class="name-row">A UI wrapper around existing tools</div>
+    </div>
+    <div class="name-col good">
+      <div class="name-col-head">✓ What LifeOS is</div>
+      <div class="name-row">The system that owns the data</div>
+      <div class="name-row">Google Calendar, dashboards, and exports are synchronized <i>views</i></div>
+      <div class="name-row">One user model shared across every module</div>
+      <div class="name-row">An automation layer, reachable from one Telegram bot</div>
+    </div>
   </div>
+
+  <div class="pipeline reveal">
+    <div class="pipe-step">User</div><div class="pipe-arrow">→</div>
+    <div class="pipe-step">Telegram</div><div class="pipe-arrow">→</div>
+    <div class="pipe-step">n8n Gateway</div><div class="pipe-arrow">→</div>
+    <div class="pipe-step">Business Logic</div><div class="pipe-arrow">→</div>
+    <div class="pipe-step">AI (optional)</div><div class="pipe-arrow">→</div>
+    <div class="pipe-step">Supabase</div><div class="pipe-arrow">→</div>
+    <div class="pipe-step">External sync</div><div class="pipe-arrow">→</div>
+    <div class="pipe-step">Reply to user</div>
+  </div>
+  <div class="truth-box reveal">
+    <div class="side primary">Supabase<br><span style="color:var(--text-dim);font-weight:400;">single source of truth</span></div>
+    <div class="mid">⇒</div>
+    <div class="side mirror">Google Calendar, dashboards, exports<br>synchronized views — never primary storage</div>
+  </div>
+
+  <h3 style="font-size:14px;color:var(--text-dim);margin:40px 0 16px;text-transform:uppercase;letter-spacing:.06em;">Guiding principles</h3>
+  <p class="lede" style="font-size:13.5px;margin-bottom:20px;">These are the yardsticks every future design decision gets measured against. They're expanded into full immutable rules — with rationale and good/bad examples — in Article XXII, Engineering Principles.</p>
+  <div class="principle-list reveal">
+    <div class="principle"><div class="pnum">01</div><p><b>Supabase is the single source of truth.</b> External services mirror data; they do not own it.</p></div>
+    <div class="principle"><div class="pnum">02</div><p><b>Modules are interconnected.</b> No module evolves into a silo with its own isolated data model if a shared model already exists.</p></div>
+    <div class="principle"><div class="pnum">03</div><p><b>Automation before manual work.</b> If a repetitive task can be automated reliably, LifeOS should automate it.</p></div>
+    <div class="principle"><div class="pnum">04</div><p><b>Deterministic logic before AI.</b> Use rules where rules are sufficient; use AI only when interpretation or generation is genuinely needed.</p></div>
+    <div class="principle"><div class="pnum">05</div><p><b>Build complete vertical slices.</b> Finish one usable capability end-to-end — database → workflow → integration → documentation — before starting another.</p></div>
+    <div class="principle"><div class="pnum">06</div><p><b>Optimize for maintainability.</b> Favor clear, modular workflows over clever but hard-to-understand implementations.</p></div>
+    <div class="principle"><div class="pnum">07</div><p><b>Every architectural decision is documented.</b> If a future developer asks "why was it built this way?", the answer already exists in this guide — see Article IV, Architecture Decision Records.</p></div>
+  </div>
+</section>
+
+<!-- SYSTEM ARCHITECTURE -->
+<section id="architecture">
+  <div class="eyebrow">Article II</div>
+  <h2>System architecture</h2>
+  <p class="lede">The philosophy pipeline above is the general shape. These are the specific flows it decomposes into, depending on what kind of request is moving through the system.</p>
+
+  <h3 style="font-size:13px;color:var(--text-dim);margin-bottom:10px;text-transform:uppercase;letter-spacing:.06em;">High-level architecture</h3>
+  <div class="pipeline reveal" style="margin-bottom:28px;">
+    <div class="pipe-step">User</div><div class="pipe-arrow">→</div>
+    <div class="pipe-step">Telegram</div><div class="pipe-arrow">→</div>
+    <div class="pipe-step">Gateway (001)</div><div class="pipe-arrow">→</div>
+    <div class="pipe-step">Router</div><div class="pipe-arrow">→</div>
+    <div class="pipe-step">Module workflow</div><div class="pipe-arrow">→</div>
+    <div class="pipe-step">Supabase</div><div class="pipe-arrow">→</div>
+    <div class="pipe-step">External services</div>
+  </div>
+
+  <h3 style="font-size:13px;color:var(--text-dim);margin-bottom:10px;text-transform:uppercase;letter-spacing:.06em;">Execution flow — a single command</h3>
+  <div class="pipeline reveal" style="margin-bottom:28px;">
+    <div class="pipe-step">User</div><div class="pipe-arrow">→</div>
+    <div class="pipe-step">Telegram</div><div class="pipe-arrow">→</div>
+    <div class="pipe-step">Module workflow</div><div class="pipe-arrow">→</div>
+    <div class="pipe-step">Database</div><div class="pipe-arrow">→</div>
+    <div class="pipe-step">Calendar (if relevant)</div><div class="pipe-arrow">→</div>
+    <div class="pipe-step">Reply</div>
+  </div>
+
+  <h3 style="font-size:13px;color:var(--text-dim);margin-bottom:10px;text-transform:uppercase;letter-spacing:.06em;">AI flow — natural-language intent</h3>
+  <div class="pipeline reveal" style="margin-bottom:28px;">
+    <div class="pipe-step">Message</div><div class="pipe-arrow">→</div>
+    <div class="pipe-step">Gemini — intent detection</div><div class="pipe-arrow">→</div>
+    <div class="pipe-step">Structured JSON</div><div class="pipe-arrow">→</div>
+    <div class="pipe-step">Module workflow</div><div class="pipe-arrow">→</div>
+    <div class="pipe-step">Database</div>
+  </div>
+
+  <h3 style="font-size:13px;color:var(--text-dim);margin-bottom:10px;text-transform:uppercase;letter-spacing:.06em;">Synchronization flow — reads out of Supabase</h3>
+  <div class="pipeline reveal" style="margin-bottom:28px;">
+    <div class="pipe-step">Supabase</div><div class="pipe-arrow">→</div>
+    <div class="pipe-step">Google Calendar</div><div class="pipe-arrow">→</div>
+    <div class="pipe-step">Dashboard</div><div class="pipe-arrow">→</div>
+    <div class="pipe-step">AnalyticsOS</div>
+  </div>
+
+  <h3 style="font-size:13px;color:var(--text-dim);margin-bottom:10px;text-transform:uppercase;letter-spacing:.06em;">Deployment flow</h3>
+  <div class="pipeline reveal">
+    <div class="pipe-step">Laptop</div><div class="pipe-arrow">→</div>
+    <div class="pipe-step">Docker</div><div class="pipe-arrow">→</div>
+    <div class="pipe-step">Cloudflare Tunnel</div><div class="pipe-arrow">→</div>
+    <div class="pipe-step">Oracle VPS (Phase 10)</div><div class="pipe-arrow">→</div>
+    <div class="pipe-step">Production</div>
+  </div>
+</section>
+
+<!-- DEVELOPMENT RULES -->
+<section id="rules">
+  <div class="eyebrow">Article III</div>
+  <h2>The 5 development rules</h2>
+  <p class="lede">Every commit is checked against these before it's allowed near <code>main</code>.</p>
+  <div class="rule-grid" id="rule-grid"></div>
+
+  <h3 style="font-size:13px;color:var(--text-dim);margin:32px 0 14px;text-transform:uppercase;letter-spacing:.06em;">Extended review checklist</h3>
+  <p class="lede" style="font-size:13px;margin-bottom:16px;">These fold in the naming (Article IX), versioning (Article VII), and git (Article VI) rules into one pre-merge pass. If any box is unchecked, the PR isn't done. This is also the authoritative "merge requirements" reference for every sprint's Definition of Done in Article XXI.</p>
+  <div class="check-static reveal"><div class="box">✓</div> Workflow name follows the numbered convention</div>
+  <div class="check-static reveal"><div class="box">✓</div> Every node renamed to describe intent — no default names</div>
+  <div class="check-static reveal"><div class="box">✓</div> New tables/columns follow snake_case + <code>*_id</code> foreign keys</div>
+  <div class="check-static reveal"><div class="box">✓</div> Migration file added under <code>database/migrations/</code></div>
+  <div class="check-static reveal"><div class="box">✓</div> Commit messages follow Conventional Commits</div>
+  <div class="check-static reveal"><div class="box">✓</div> PR title follows <code>ModuleOS-NNN — Feature name</code></div>
+  <div class="check-static reveal"><div class="box">✓</div> Version bump + CHANGELOG entry included if this closes a milestone</div>
+  <div class="check-static reveal"><div class="box">✓</div> No TODOs, no hardcoded secrets, no console-only error handling</div>
+</section>
+
+<!-- ARCHITECTURE DECISION RECORDS -->
+<section id="adr">
+  <div class="eyebrow">Article IV</div>
+  <h2>Architecture decision records</h2>
+  <p class="lede">The historical record of why LifeOS is built the way it is. New architectural decisions get appended here, in order, and are never rewritten after the fact — if a decision is later reversed, that reversal is its own new ADR that supersedes the old one.</p>
+
+  <div class="adr-card reveal">
+    <div class="adr-card-head"><span class="adr-num">ADR 001</span><h4>Telegram instead of a native mobile app</h4><span class="adr-status">accepted</span></div>
+    <div class="adr-fields">
+      <div class="adr-field"><b>Reason</b><p>Rapid development, cross-platform by default, native push notifications, and zero app-store install friction — a chat interface was reachable on day one.</p></div>
+      <div class="adr-field"><b>Trade-offs</b><p>UI is constrained to text/buttons; no custom native screens; every module is bottlenecked through one webhook (see ADR 004).</p></div>
+      <div class="adr-field"><b>Alternatives considered</b><ul><li>Native iOS/Android app</li><li>Web app (PWA)</li><li>WhatsApp Business API</li></ul></div>
+      <div class="adr-field"><b>Future impact</b><p>The Phase 10 React dashboard is additive, not a replacement — Telegram stays the primary interface.</p></div>
+    </div>
+  </div>
+
+  <div class="adr-card reveal">
+    <div class="adr-card-head"><span class="adr-num">ADR 002</span><h4>Supabase is the single source of truth</h4><span class="adr-status">accepted</span></div>
+    <div class="adr-fields">
+      <div class="adr-field"><b>Reason</b><p>One Postgres schema that every module reads and writes is what makes AnalyticsOS able to query across modules later. Splitting storage per module would make that impossible without a sync layer of its own.</p></div>
+      <div class="adr-field"><b>Trade-offs</b><p>Supabase becomes a single point of failure (see Article XVIII, Failure Strategy) and a scaling bottleneck if usage ever grows past a single user.</p></div>
+      <div class="adr-field"><b>Alternatives considered</b><ul><li>Per-module databases</li><li>Firebase / Firestore</li><li>Self-hosted Postgres without Supabase's auth/storage layer</li></ul></div>
+      <div class="adr-field"><b>Future impact</b><p>Every future integration (Calendar, dashboard, exports) is defined as a mirror of Supabase, never a second writer — see ADR 003.</p></div>
+    </div>
+  </div>
+
+  <div class="adr-card reveal">
+    <div class="adr-card-head"><span class="adr-num">ADR 003</span><h4>Google Calendar is synchronization only</h4><span class="adr-status">accepted</span></div>
+    <div class="adr-fields">
+      <div class="adr-field"><b>Reason</b><p>Calendar's data model (events with start/end times) can't represent a task, a grade, or an expense. Making it the database would force every other module to be reshaped around Calendar's constraints instead of its own.</p></div>
+      <div class="adr-field"><b>Trade-offs</b><p>Requires a sync workflow and accepts the possibility of drift if a user edits an event directly in Google Calendar.</p></div>
+      <div class="adr-field"><b>Alternatives considered</b><ul><li>Google Calendar as primary store for events</li><li>Two-way real-time sync</li></ul></div>
+      <div class="adr-field"><b>Future impact</b><p>Conflict resolution rule: Supabase always wins. A Calendar-side edit is either pulled back in explicitly or overwritten on the next sync — this still needs to be formalized before Phase 03 ships.</p></div>
+    </div>
+  </div>
+
+  <div class="adr-card reveal">
+    <div class="adr-card-head"><span class="adr-num">ADR 004</span><h4>One Telegram Gateway, never per-module triggers</h4><span class="adr-status">accepted</span></div>
+    <div class="adr-fields">
+      <div class="adr-field"><b>Reason</b><p>A Telegram bot can register exactly one webhook URL — a platform limit, not a preference. Every module has to funnel through a single router (Article VIII).</p></div>
+      <div class="adr-field"><b>Trade-offs</b><p>The Gateway workflow becomes a critical path — if it goes down, every module goes down with it, not just one.</p></div>
+      <div class="adr-field"><b>Alternatives considered</b><ul><li>Separate bots per module (rejected — fragments the user experience across N bots)</li><li>Polling instead of webhooks (rejected — higher latency, no real benefit)</li></ul></div>
+      <div class="adr-field"><b>Future impact</b><p>This is why the Router (Phase 02) has to ship before a second command exists — retrofitting it later means rebuilding every workflow that came before it.</p></div>
+    </div>
+  </div>
+
+  <div class="adr-card reveal">
+    <div class="adr-card-head"><span class="adr-num">ADR 005</span><h4>n8n for orchestration</h4><span class="adr-status">accepted</span></div>
+    <div class="adr-fields">
+      <div class="adr-field"><b>Reason</b><p>Workflow automation gives visual, inspectable pipelines for wiring Telegram → logic → database → external services, without hand-writing the same request/response plumbing seven times.</p></div>
+      <div class="adr-field"><b>Trade-offs</b><p>Large Code nodes become unmaintainable inside n8n's editor (see Article XXII, Coding Standards, Rule 6) — n8n is meant to orchestrate, not host the application.</p></div>
+      <div class="adr-field"><b>Alternatives considered</b><ul><li>Hand-rolled Node.js backend with no visual workflow layer</li><li>Zapier / Make (rejected — not self-hostable, ongoing cost)</li></ul></div>
+      <div class="adr-field"><b>Future impact</b><p>If a Code node ever exceeds ~50 lines, that logic graduates into a proper backend service that n8n calls, rather than growing in place.</p></div>
+    </div>
+  </div>
+
+  <div class="adr-card reveal">
+    <div class="adr-card-head"><span class="adr-num">ADR 006</span><h4>AI never stores state</h4><span class="adr-status">accepted</span></div>
+    <div class="adr-fields">
+      <div class="adr-field full"><b>Reason</b><p>Gemini is used for interpretation and generation — classifying intent, summarizing a PDF, generating a quiz — never for holding or being the record of what's true. That job belongs to Supabase and deterministic SQL. See Article XIII, AI Philosophy, for the full boundary.</p></div>
+      <div class="adr-field"><b>Trade-offs</b><p>Slightly more workflow steps per AI-assisted action (classify → structure → validate → write), instead of letting the model "just handle it."</p></div>
+      <div class="adr-field"><b>Alternatives considered</b><ul><li>Letting Gemini call Supabase functions directly</li><li>Using AI-managed memory/state instead of a schema</li></ul></div>
+      <div class="adr-field"><b>Future impact</b><p>Every AI response the system acts on has to be structured JSON, never free text — enforced at the Router (Article VIII, Rule 1).</p></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- REPO STRUCTURE -->
+<section id="repo">
+  <div class="eyebrow">Article V</div>
+  <h2>Repository structure</h2>
+  <p class="lede">One repo, one schema, one automation engine. Workflows are grouped by module so the folder tree mirrors the naming ranges below.</p>
+  <div class="tree reveal">LifeOS/
+├── <span class="dir">docker/</span>                  <span class="cmt"># compose files, .env.example</span>
+├── <span class="dir">database/</span>
+│   ├── <span class="dir">migrations/</span>           <span class="cmt"># versioned SQL, one file per change</span>
+│   └── <span class="dir">seeds/</span>
+├── <span class="dir">workflows/</span>                <span class="cmt"># exported n8n JSON, one per module</span>
+│   ├── <span class="dir">core/</span>
+│   ├── <span class="dir">study/</span>
+│   ├── <span class="dir">finance/</span>
+│   ├── <span class="dir">career/</span>
+│   ├── <span class="dir">projects/</span>
+│   ├── <span class="dir">analytics/</span>
+│   └── <span class="dir">shared/</span>              <span class="cmt"># gateway, router, reply helpers</span>
+├── <span class="dir">docs/</span>
+│   ├── <span class="dir">architecture/</span>
+│   ├── <span class="dir">diagrams/</span>
+│   ├── <span class="dir">screenshots/</span>
+│   └── <span class="dir">decisions/</span>            <span class="cmt"># one file per architectural decision</span>
+├── <span class="dir">dashboard/</span>                <span class="cmt"># future React app — Phase 10</span>
+├── <span class="file">README.md</span>
+├── <span class="file">CHANGELOG.md</span>
+├── <span class="file">LICENSE</span>
+└── <span class="file">.env.example</span></div>
+</section>
+
+<!-- GIT WORKFLOW -->
+<section id="git">
+  <div class="eyebrow">Article VI</div>
+  <h2>Git &amp; commit discipline</h2>
+  <p class="lede">Two branches for now. Feature branches get introduced once more than one thing is in flight at a time.</p>
+  <div class="git-flow reveal" style="margin-bottom:28px;">
+    <div class="git-node dev">develop</div><div class="git-arrow">→ commit → push →</div>
+    <div class="git-node">pull request</div><div class="git-arrow">→ review → merge →</div>
+    <div class="git-node main">main</div>
+  </div>
+  <p class="lede" style="margin-bottom:20px;font-size:13.5px;">Rule: never code directly on <code style="background:var(--panel-alt);border:1px solid var(--border);padding:1px 6px;border-radius:4px;color:var(--red);">main</code>. Only a completed, tested milestone reaches it.</p>
+  <div class="name-compare" style="margin-bottom:20px;">
+    <div class="name-col good">
+      <div class="name-col-head">Conventional commits</div>
+      <div class="name-row">feat(core): implement user registration</div>
+      <div class="name-row">feat(tasks): add Google Calendar sync</div>
+      <div class="name-row">fix(core): prevent duplicate users</div>
+      <div class="name-row">docs: update architecture</div>
+      <div class="name-row">refactor(core): split gateway workflow</div>
+      <div class="name-row">chore: update Docker configuration</div>
+    </div>
+    <div class="name-col good">
+      <div class="name-col-head">Pull request titles</div>
+      <div class="name-row">CoreOS-001 — Telegram Gateway</div>
+      <div class="name-row">CoreOS-002 — Task Engine</div>
+      <div class="name-row">StudyOS-001 — PDF Upload</div>
+      <div class="name-row">FinanceOS-001 — Expense Logging</div>
+    </div>
+  </div>
+  <p class="lede" style="margin-bottom:0;font-size:13.5px;">Every feature ends with: README update → CHANGELOG update → commit → push. No TODOs in a workflow that's marked finished. No secrets in code — everything lives in <code style="background:var(--panel-alt);border:1px solid var(--border);padding:1px 6px;border-radius:4px;color:var(--cyan);">.env</code> or n8n Credentials.</p>
+</section>
+
+<!-- VERSIONING -->
+<section id="versioning">
+  <div class="eyebrow">Article VII</div>
+  <h2>Versioning</h2>
+  <p class="lede">SemVer-<i>inspired</i>, not SemVer. LifeOS isn't a library with an API contract to protect — the version number should tell the story of the project's maturity, not whether a function signature changed.</p>
+  <table class="compare" style="margin-bottom:24px;">
+    <tr><th>Position</th><th>Meaning</th><th>Example</th></tr>
+    <tr><td class="mono"><b>MAJOR</b></td><td>A complete stage of the project</td><td class="mono">v0 Development · v1 MVP · v2 Production · v3 AI-enhanced</td></tr>
+    <tr><td class="mono"><b>MINOR</b></td><td>One completed sprint or milestone</td><td class="mono">v0.2.0 = CoreOS-001 shipped</td></tr>
+    <tr><td class="mono"><b>PATCH</b></td><td>Fixes, refactors, docs — no new milestone</td><td class="mono">v0.2.1 = fixed duplicate task bug</td></tr>
+  </table>
+  <div class="rule-grid" style="margin-bottom:28px;">
+    <div class="rule-card">
+      <div class="rule-num">R1</div>
+      <div class="rule-body"><h3>Tag every merge to main</h3><p>Tag name matches the changelog header exactly (<code>v0.2.0</code>). No untagged merges to main.</p></div>
+    </div>
+    <div class="rule-card">
+      <div class="rule-num">R2</div>
+      <div class="rule-body"><h3>Changelog + tag ship in the same PR</h3><p>Per Rule 3 (Article II): the version bump is part of "done," not a follow-up commit.</p></div>
+    </div>
+    <div class="rule-card">
+      <div class="rule-num">R3</div>
+      <div class="rule-body"><h3>Published tags are immutable</h3><p>Once a tag is pushed, it doesn't get renamed or reused — even if a later milestone name would read more cleanly in hindsight. History stays honest.</p></div>
+    </div>
+  </div>
+  <div class="roadmap-note reveal" style="margin-bottom:24px;"><b>Naming collision to watch:</b> the changelog's <code style="color:var(--cyan)">v0.2.0 "Telegram Gateway"</code> refers to the bot↔n8n↔Supabase wiring and registration flow — already shipped. It is <i>not</i> the same thing as the router described in Article VI below, which is a separate, not-yet-built milestone (target <code style="color:var(--amber)">v0.3.0</code>). Two different things happen to share the word "Gateway" — this document says <b style="color:var(--text)">"The Router"</b> from here on to keep them apart.</div>
+  <h3 style="font-size:14px;color:var(--text-dim);margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em;">v1.0.0 — MVP definition</h3>
+  <p class="lede" style="font-size:13.5px;margin-bottom:16px;">The version bump to <code style="background:var(--panel-alt);border:1px solid var(--border);padding:1px 6px;border-radius:4px;color:var(--amber);">v1.0.0</code> isn't a vibe — it's every box below checked.</p>
+  <div class="milestone" style="border-color:var(--border-light);">
+    <ul>
+      <li>CoreOS — users, tasks, calendar, Morning Brief</li>
+      <li>StudyOS — PDF upload, summaries, quiz generation</li>
+      <li>Knowledge Vault — save links, search</li>
+      <li>CareerOS — resume analysis</li>
+      <li>FinanceOS — expense tracking</li>
+      <li>AnalyticsOS — weekly digest</li>
+      <li>Dashboard — React frontend</li>
+      <li>VPS — always online</li>
+    </ul>
+  </div>
+</section>
+
+<!-- GATEWAY & ROUTER -->
+<section id="gateway">
+  <div class="eyebrow">Article VIII — load-bearing</div>
+  <h2>The Router</h2>
+  <p class="lede">A Telegram bot can register exactly <b style="color:var(--text)">one webhook URL</b>. That's a platform limit, not a style choice — it means every module funnels through a single router workflow, never through its own independent Telegram Trigger node. <i style="color:var(--text-faint)">(Not to be confused with the changelog's v0.2.0 "Telegram Gateway" — see the note in Article V.)</i></p>
+  <div class="gw-wrap reveal">
+    <div class="gw-trigger">Telegram Trigger — lives only in <b>001-Gateway</b></div>
+    <div class="gw-split">↓ starts with "/" ?</div>
+    <div class="gw-branches">
+      <div class="gw-branch lit">
+        <div class="lbl">Yes — literal command</div>
+        <p>Direct switch on the command string. No AI call, no latency, no ambiguity.</p>
+        <code>/addtask /tasks /done /delete /quiz /apply /budget</code>
+      </div>
+      <div class="gw-branch ai">
+        <div class="lbl">No — natural language</div>
+        <p>Gemini classifies intent and returns <b>structured JSON</b>, never free text:</p>
+        <code>{"intent":"add_task","title":"Finish biology","due_date":"2026-07-17","priority":"high"}</code>
+        <p style="margin-bottom:0;">Unknown / low-confidence → Gateway replies with help text instead of guessing.</p>
+      </div>
+    </div>
+    <div class="gw-merge">both paths resolve to the same <b style="color:var(--text)">intent key</b> ↓</div>
+    <div class="gw-out">Execute Workflow → 2XX-Tasks / 3XX-StudyOS / 7XX-FinanceOS…</div>
+  </div>
+  <div class="rule-grid" style="margin-top:22px;margin-bottom:32px;">
+    <div class="rule-card">
+      <div class="rule-num">R1</div>
+      <div class="rule-body"><h3>One intent vocabulary</h3><p>A literal command and its natural-language equivalent must resolve to the identical intent key (e.g. <code>/addtask</code> and "remind me to…" both → <code>add_task</code>). The router doesn't care which path it came from.</p></div>
+    </div>
+    <div class="rule-card">
+      <div class="rule-num">R2</div>
+      <div class="rule-body"><h3>Sub-workflows own their reply</h3><p>Per the philosophy pipeline, the module workflow — not the Gateway — sends the final Telegram reply. The Gateway only routes.</p></div>
+    </div>
+    <div class="rule-card">
+      <div class="rule-num">R3</div>
+      <div class="rule-body"><h3>No silent failure</h3><p>An unrecognized command or a low-confidence Gemini classification must produce a reply. "Nothing happens" is the one failure mode that isn't allowed.</p></div>
+    </div>
+  </div>
+
+  <h3 style="font-size:14px;color:var(--text-dim);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em;">Telegram command specification</h3>
+  <p class="lede" style="font-size:13px;margin-bottom:20px;">One page listing every command that reaches the Router. This is a registry, not a duplicate spec — validation, workflow, DB writes, and events are each owned by the module the command routes to, per its Module Contract (Article XIV) and the Event Registry (Article XII). This section exists so the full command surface is visible in one place.</p>
+  <div id="cmd-list"></div>
+</section>
+
+<!-- NAMING -->
+<section id="naming">
+  <div class="eyebrow">Article IX</div>
+  <h2>Naming conventions</h2>
+  <p class="lede">Every workflow, node, table, and column follows a fixed convention so the project reads the same way after a six-month gap.</p>
+
+  <h3 style="font-size:14px;color:var(--text-dim);margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em;">Workflow number ranges</h3>
+  <table class="compare" style="margin-bottom:32px;">
+    <tr><th>Range</th><th>Module</th><th>Range</th><th>Module</th></tr>
+    <tr><td class="mono"><b>001–099</b></td><td>Gateway</td><td class="mono"><b>600–699</b></td><td>CareerOS</td></tr>
+    <tr><td class="mono"><b>100–199</b></td><td>Users</td><td class="mono"><b>700–799</b></td><td>FinanceOS</td></tr>
+    <tr><td class="mono"><b>200–299</b></td><td>Tasks</td><td class="mono"><b>800–899</b></td><td>AnalyticsOS</td></tr>
+    <tr><td class="mono"><b>300–399</b></td><td>StudyOS</td><td class="mono"><b>900–999</b></td><td>Shared utilities</td></tr>
+    <tr><td class="mono"><b>400–499</b></td><td>Knowledge Vault</td><td class="mono"></td><td></td></tr>
+    <tr><td class="mono"><b>500–599</b></td><td>ProjectOS</td><td class="mono"></td><td></td></tr>
+  </table>
+
+  <div class="name-compare" style="margin-bottom:32px;">
+    <div class="name-col bad">
+      <div class="name-col-head">✕ Workflow names to avoid</div>
+      <div class="name-row">workflow1</div>
+      <div class="name-row">new workflow</div>
+      <div class="name-row">test</div>
+      <div class="name-row">telegram</div>
+    </div>
+    <div class="name-col good">
+      <div class="name-col-head">✓ Actual convention</div>
+      <div class="name-row">001 - Telegram Gateway</div>
+      <div class="name-row">100 - User Registration</div>
+      <div class="name-row">200 - Add Task</div>
+      <div class="name-row">301 - Upload PDF</div>
+    </div>
+  </div>
+
+  <div class="name-compare" style="margin-bottom:32px;">
+    <div class="name-col bad">
+      <div class="name-col-head">✕ Default node names</div>
+      <div class="name-row">IF</div>
+      <div class="name-row">Get many rows</div>
+      <div class="name-row">Create row</div>
+    </div>
+    <div class="name-col good">
+      <div class="name-col-head">✓ Renamed to describe intent</div>
+      <div class="name-row">User Exists?</div>
+      <div class="name-row">Lookup User</div>
+      <div class="name-row">Create User</div>
+    </div>
+  </div>
+
+  <h3 style="font-size:14px;color:var(--text-dim);margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em;">Database naming</h3>
+  <table class="compare">
+    <tr><th>Object</th><th>Convention</th><th>Example</th></tr>
+    <tr><td><b>Tables</b></td><td class="mono">snake_case</td><td class="mono">daily_logs, knowledge_items</td></tr>
+    <tr><td><b>Columns</b></td><td class="mono">snake_case</td><td class="mono">telegram_id, calendar_event_id</td></tr>
+    <tr><td><b>Primary key</b></td><td class="mono">always id UUID</td><td class="mono">id</td></tr>
+    <tr><td><b>Foreign keys</b></td><td class="mono">*_id, never telegram_id</td><td class="mono">user_id, task_id, document_id</td></tr>
+  </table>
 </section>
 
 <!-- SCHEMA -->
 <section id="schema">
-  <div class="eyebrow">Data layer</div>
+  <div class="eyebrow">Article X</div>
   <h2>Database schema, by module</h2>
-  <p class="lede">One Supabase project, one schema — every module reads and writes here, which is what lets AnalyticsOS query across all of them at the end.</p>
+  <p class="lede">One Supabase project, one schema — every module reads and writes here, which is what lets AnalyticsOS query across all of them later. <span style="color:var(--green)">Green</span> = live in Supabase today. Everything else is ratified but not yet built. For the full per-table breakdown — purpose, relationships, indexes, and candidate future columns — see the Database Dictionary directly below.</p>
   <div class="schema-grid" id="schema-grid"></div>
+</section>
+
+<!-- DATABASE MASTER PLAN -->
+<section id="database">
+  <div class="eyebrow">Article XI</div>
+  <h2>Database master plan</h2>
+  <p class="lede">The module-by-module view above is how the schema is built. This is how it fits together — ownership, relationships, and where the schema still has room to grow.</p>
+
+  <div class="tree reveal" style="margin-bottom:24px;">users  <span class="cmt"># root — every FK chain terminates here</span>
+├── tasks              <span class="cmt"># user_id → users.id</span>
+├── goals              <span class="cmt"># user_id → users.id</span>
+├── events              <span class="cmt"># user_id → users.id, task_id → tasks.id (nullable)</span>
+├── documents           <span class="cmt"># user_id → users.id  (StudyOS)</span>
+│   └── quiz_questions  <span class="cmt"># document_id → documents.id</span>
+├── grades              <span class="cmt"># user_id → users.id</span>
+├── knowledge_items     <span class="cmt"># user_id → users.id  (Knowledge Vault)</span>
+├── daily_logs          <span class="cmt"># user_id → users.id  (ProjectOS)</span>
+│   └── reports         <span class="cmt"># user_id → users.id, aggregates daily_logs</span>
+├── applications         <span class="cmt"># user_id → users.id  (CareerOS)</span>
+│   └── resume_analysis  <span class="cmt"># user_id → users.id, job_id → applications.id</span>
+├── expenses             <span class="cmt"># user_id → users.id  (FinanceOS)</span>
+├── budgets              <span class="cmt"># user_id → users.id</span>
+├── metrics_daily        <span class="cmt"># user_id → users.id  (AnalyticsOS — reads, doesn't own)</span>
+├── weekly_scores        <span class="cmt"># user_id → users.id</span>
+└── events_log            <span class="cmt"># user_id → users.id  — see Article XII, Event Log</span></div>
+
+  <table class="compare" style="margin-bottom:24px;">
+    <tr><th>Rule</th><th>What it means</th></tr>
+    <tr><td><b>Ownership</b></td><td>Every table is owned by exactly one module. Other modules read it via foreign key, never by duplicating its columns.</td></tr>
+    <tr><td><b>Root entity</b></td><td><code class="mono" style="background:var(--panel-alt);border:1px solid var(--border);padding:1px 6px;border-radius:4px;color:var(--cyan);">users</code> is the only table with no <code class="mono">*_id</code> foreign key. Every other table's ownership chain terminates there.</td></tr>
+    <tr><td><b>AnalyticsOS is read-only</b></td><td><code class="mono" style="background:var(--panel-alt);border:1px solid var(--border);padding:1px 6px;border-radius:4px;color:var(--cyan);">metrics_daily</code> and <code class="mono">weekly_scores</code> are computed from other modules' tables (and eventually the event log) — AnalyticsOS never becomes a second writer to another module's data.</td></tr>
+    <tr><td><b>Future expansion</b></td><td>New modules add new tables under their own naming range (Article IX) and always carry a <code class="mono">user_id</code> — no table is user-less unless it's explicitly system-wide config.</td></tr>
+  </table>
+</section>
+
+<!-- DATABASE DICTIONARY -->
+<section id="dictionary">
+  <div class="eyebrow">Article XI — Dictionary</div>
+  <h2>Database dictionary</h2>
+  <p class="lede">Every table, documented individually: purpose, columns (Article X), relationships (Article XI's ownership tree), indexes, and what it's used by. <b style="color:var(--text)">Future columns are ideas, not commitments</b> — marked as such, never implied to exist. Indexes and future columns are intentionally sparse where nothing beyond the primary key exists yet; that's the current truth, not an omission.</p>
+  <div id="dict-list"></div>
+</section>
+
+<!-- EVENT LOG ARCHITECTURE -->
+<section id="events">
+  <div class="eyebrow">Article XII</div>
+  <h2>Event log architecture</h2>
+  <p class="lede">A single <code style="background:var(--panel-alt);border:1px solid var(--border);padding:1px 6px;border-radius:4px;color:var(--cyan);">events_log</code> table that every module writes to whenever something meaningful happens. This is what lets AnalyticsOS (Article XIV) read one table instead of querying all seven modules directly.</p>
+  <div class="roadmap-note reveal" style="margin-bottom:24px;"><b>Naming collision to watch:</b> CoreOS already has a table called <code style="color:var(--cyan)">events</code> (Article X) for calendar events — start_time, end_time, source. That is not this table. <code style="color:var(--amber)">events_log</code> is an append-only activity trail across all modules; <code style="color:var(--cyan)">events</code> is calendar state owned by CoreOS. Keep the <code style="color:var(--amber)">_log</code> suffix to keep them apart, same rule as the Gateway/Router split in Article VII (Versioning).</div>
+
+  <table class="compare" style="margin-bottom:24px;">
+    <tr><th>Column</th><th>Purpose</th></tr>
+    <tr><td class="mono">id</td><td>UUID primary key</td></tr>
+    <tr><td class="mono">user_id</td><td>FK → users.id</td></tr>
+    <tr><td class="mono">module</td><td>which module emitted it — core, study, finance, career, projects, analytics</td></tr>
+    <tr><td class="mono">event_type</td><td>e.g. <code class="mono">task_created</code>, <code class="mono">quiz_completed</code></td></tr>
+    <tr><td class="mono">payload</td><td>jsonb — event-specific detail, kept small</td></tr>
+    <tr><td class="mono">created_at</td><td>timestamp</td></tr>
+  </table>
+
+  <p class="lede" style="font-size:13px;margin-bottom:20px;">This table is additive, not a replacement for the domain tables — <code style="background:var(--panel-alt);border:1px solid var(--border);padding:1px 6px;border-radius:4px;color:var(--cyan);">tasks</code> is still the source of truth for a task's current state. <code style="background:var(--panel-alt);border:1px solid var(--border);padding:1px 6px;border-radius:4px;color:var(--cyan);">events_log</code> is the append-only history of what happened, which a mutable row can't tell you on its own.</p>
+
+  <h3 style="font-size:14px;color:var(--text-dim);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em;">Event registry</h3>
+  <p class="lede" style="font-size:13px;margin-bottom:20px;">Every event gets an owner before it gets an implementation. This is the contract — producer, consumers, and retry behavior — not the payload shape. Payloads are marked <span style="color:var(--text-faint);font-style:italic;">TBD</span> until the owning module actually ships and defines them; writing a shape now would be inventing detail the module hasn't decided yet.</p>
+  <div id="event-list"></div>
+</section>
+
+<!-- AI PHILOSOPHY -->
+<section id="ai">
+  <div class="eyebrow">Article XIII</div>
+  <h2>AI philosophy</h2>
+  <p class="lede">Gemini has exactly three jobs in LifeOS. Everything deterministic stays deterministic — see Guiding Principle 04 in Article I, and ADR 006 in Article IV.</p>
+
+  <div class="rule-grid" style="margin-bottom:28px;">
+    <div class="rule-card">
+      <div class="rule-num">①</div>
+      <div class="rule-body"><h3>Interpret</h3><p>Turn unstructured input into structured intent — "remind me to submit the assignment friday" → <code>{"intent":"add_task","due_date":"2026-07-17"}</code>.</p></div>
+    </div>
+    <div class="rule-card">
+      <div class="rule-num">②</div>
+      <div class="rule-body"><h3>Generate</h3><p>Produce new content from existing data — PDF summaries, quiz questions, weekly report prose.</p></div>
+    </div>
+    <div class="rule-card">
+      <div class="rule-num">③</div>
+      <div class="rule-body"><h3>Recommend</h3><p>Surface a suggestion for the user to accept or ignore — task prioritization, schedule changes, resume gap analysis. AI never auto-applies a recommendation without the user (or an explicit rule) confirming it.</p></div>
+    </div>
+  </div>
+
+  <div class="name-compare">
+    <div class="name-col good">
+      <div class="name-col-head">✓ Good uses</div>
+      <div class="name-row">Extract due date · Classify intent</div>
+      <div class="name-row">Summarize PDF · Generate quiz</div>
+      <div class="name-row">Prioritize tasks (suggestion only) · Resume gap analysis</div>
+    </div>
+    <div class="name-col bad">
+      <div class="name-col-head">✕ AI never does this</div>
+      <div class="name-row">Store data — that's Supabase's job</div>
+      <div class="name-row">Authenticate users</div>
+      <div class="name-row">Replace SQL for reads or writes</div>
+      <div class="name-row">Manage workflow state or control flow</div>
+      <div class="name-row">Be the source of truth for anything</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECT MATURITY -->
+<section id="maturity">
+  <div class="eyebrow">Article XIV — Maturity</div>
+  <h2>Project maturity</h2>
+  <p class="lede">Every module and workflow gets one of six maturity states. This is the fastest way for anyone reading the constitution to tell what's production-ready versus conceptual, without reading every section in full.</p>
+  <div class="maturity-legend reveal" id="maturity-legend"></div>
+  <table class="compare maturity-table">
+    <tr><th>Module / workflow</th><th>Maturity</th><th>Basis</th></tr>
+    <tr><td><b>001-Gateway</b> (registration + welcome)</td><td class="mono" style="color:var(--green)">Stable</td><td>Live in Supabase + n8n today — see Article XX.</td></tr>
+    <tr><td><b>002-Router</b></td><td class="mono" style="color:var(--amber)">In Development</td><td>Target v0.3.0, Phase 02 — see Article VIII, Article XXI.</td></tr>
+    <tr><td><b>CoreOS</b> — tasks, goals, calendar, Morning Brief</td><td class="mono" style="color:var(--text-dim)">Planned</td><td>Ratified schema (Article X), no workflow yet. Target Phase 03.</td></tr>
+    <tr><td><b>StudyOS</b></td><td class="mono" style="color:var(--violet)">Research</td><td>Module spec exists (Article XVI); PDF/quiz pipeline not designed in detail yet.</td></tr>
+    <tr><td><b>Knowledge Vault</b></td><td class="mono" style="color:var(--text-dim)">Planned</td><td>Module spec exists; depends on CoreOS shipping first.</td></tr>
+    <tr><td><b>ProjectOS</b></td><td class="mono" style="color:var(--text-dim)">Planned</td><td>Module spec exists; not started.</td></tr>
+    <tr><td><b>CareerOS</b></td><td class="mono" style="color:var(--text-dim)">Planned</td><td>Module spec exists; not started.</td></tr>
+    <tr><td><b>FinanceOS</b></td><td class="mono" style="color:var(--text-dim)">Planned</td><td>Module spec exists; not started.</td></tr>
+    <tr><td><b>AnalyticsOS</b></td><td class="mono" style="color:var(--text-dim)">Planned</td><td>Depends on every other module plus the event log — last in build order by design.</td></tr>
+    <tr><td><b>React dashboard</b></td><td class="mono" style="color:var(--text-faint)">Research</td><td>Named in ADR 001 as additive; no design work done yet.</td></tr>
+  </table>
 </section>
 
 <!-- MODULES -->
 <section id="modules">
-  <div class="eyebrow">System processes</div>
+  <div class="eyebrow">Article XV</div>
   <h2>7 modules, one data model</h2>
-  <p class="lede">Each module is independent enough to build and demo on its own, but they all read and write to the same Supabase backend — which is what makes the whole thing feel like one system instead of seven bots.</p>
+  <p class="lede">Each module is independent enough to build and demo on its own, but all of them read and write to the same Supabase backend and route through the same Gateway. Every module below carries a full <b style="color:var(--text)">Module Contract</b> — Purpose, Dependencies, Database, Inputs, Outputs, Failure Behaviour, then a three-part split of Current Implementation / Planned Behaviour / Future Extensions, so it's always clear what's actually running versus what's designed versus what's an open idea.</p>
   <div id="module-list"></div>
 </section>
 
-<!-- WORKFLOWS -->
-<section id="workflows">
-  <div class="eyebrow">n8n pipelines</div>
-  <h2>How data actually moves</h2>
-  <p class="lede">Six representative workflows covering every trigger pattern you'll need — scheduled, message-triggered, and file-triggered. Everything else in the system follows one of these shapes.</p>
-  <div class="flow-tabs" id="flow-tabs"></div>
-  <div id="flow-panels"></div>
+<!-- PROCESS -->
+<section id="process">
+  <div class="eyebrow">Article XVI</div>
+  <h2>Feature development process</h2>
+  <p class="lede">Every feature, in every module, follows the same nine steps — no skipping to "workflow" before "database" is settled.</p>
+  <div class="process-row reveal">
+    <div class="process-step"><b>1</b> Design</div><div class="process-arrow">→</div>
+    <div class="process-step"><b>2</b> Database</div><div class="process-arrow">→</div>
+    <div class="process-step"><b>3</b> Workflow</div><div class="process-arrow">→</div>
+    <div class="process-step"><b>4</b> Telegram</div><div class="process-arrow">→</div>
+    <div class="process-step"><b>5</b> Testing</div><div class="process-arrow">→</div>
+    <div class="process-step"><b>6</b> README</div><div class="process-arrow">→</div>
+    <div class="process-step"><b>7</b> CHANGELOG</div><div class="process-arrow">→</div>
+    <div class="process-step"><b>8</b> Commit</div><div class="process-arrow">→</div>
+    <div class="process-step"><b>9</b> Merge</div>
+  </div>
+  <h3 style="font-size:14px;color:var(--text-dim);margin:32px 0 12px;text-transform:uppercase;letter-spacing:.06em;">Standard workflow shape</h3>
+  <div class="process-row reveal">
+    <div class="process-step">Telegram</div><div class="process-arrow">→</div>
+    <div class="process-step">Validation</div><div class="process-arrow">→</div>
+    <div class="process-step">Read DB</div><div class="process-arrow">→</div>
+    <div class="process-step">Business Logic</div><div class="process-arrow">→</div>
+    <div class="process-step">AI (optional)</div><div class="process-arrow">→</div>
+    <div class="process-step">Write DB</div><div class="process-arrow">→</div>
+    <div class="process-step">External sync</div><div class="process-arrow">→</div>
+    <div class="process-step">Reply</div>
+  </div>
+  <p class="lede" style="margin-top:28px;margin-bottom:8px;font-size:13.5px;"><b style="color:var(--text)">Business logic</b> — code node for parsing, calculations, conditions, formatting. <b style="color:var(--text)">Built-in nodes</b> — Telegram, Supabase, HTTP, Gemini, Google Calendar.</p>
 </section>
 
-<!-- BUDGET -->
-<section id="budget">
-  <div class="eyebrow">Cost breakdown</div>
-  <h2>What this actually costs</h2>
-  <p class="lede">Every line item, and what happens when the free runway ends.</p>
-  <table class="compare">
-    <tr><th>Service</th><th>Plan</th><th>Cost</th><th>Runway</th><th>After runway ends</th></tr>
-    <tr><td><b>DigitalOcean</b></td><td>Droplet, student credit</td><td class="yes">$0</td><td>12 months</td><td>Migrate to Oracle Always Free</td></tr>
-    <tr><td><b>Oracle Cloud</b></td><td>Always Free tier</td><td class="yes">$0</td><td>Forever</td><td>— no expiry</td></tr>
-    <tr><td><b>Supabase</b></td><td>Free tier</td><td class="yes">$0</td><td>Ongoing</td><td>Usage caps apply, ample for 1 user</td></tr>
-    <tr><td><b>n8n</b></td><td>Self-hosted OSS</td><td class="yes">$0</td><td>Forever</td><td>— open source, no license cost</td></tr>
-    <tr><td><b>Telegram Bot API</b></td><td>Free</td><td class="yes">$0</td><td>Forever</td><td>— no paid tier exists</td></tr>
-    <tr><td><b>Gemini API</b></td><td>Free tier</td><td class="yes">$0</td><td>Ongoing</td><td>Rate limits, or fall back to local model</td></tr>
-    <tr><td><b>Domain name</b></td><td>Student Pack (Namecheap)</td><td class="yes">$0</td><td>12 months</td><td>Renew (~$10–15/yr) or drop, use IP</td></tr>
+<!-- DEVELOPMENT PHILOSOPHY -->
+<section id="devphilosophy">
+  <div class="eyebrow">Article XVII</div>
+  <h2>Development philosophy</h2>
+  <p class="lede">How work actually gets sequenced, day to day — the operating habits behind the roadmap in Article XXI.</p>
+  <div class="principle-list reveal">
+    <div class="principle"><div class="pnum">01</div><p><b>Build vertically.</b> Don't build five unfinished modules — finish one feature completely (Article XVI) before starting the next.</p></div>
+    <div class="principle"><div class="pnum">02</div><p><b>Every sprint produces usable software.</b> Not a partial workflow, not a schema with no UI in front of it — something that can actually be used through Telegram.</p></div>
+    <div class="principle"><div class="pnum">03</div><p><b>Prefer maintainability over cleverness.</b> A boring workflow a stranger can follow beats a clever one only the author understands.</p></div>
+    <div class="principle"><div class="pnum">04</div><p><b>Architecture before implementation.</b> Design (step 1 of Article XVI) happens before a single node gets placed.</p></div>
+    <div class="principle"><div class="pnum">05</div><p><b>Infrastructure should never dictate architecture.</b> The Quick Tunnel being dev-only doesn't change how a module is designed — it just delays when it can run unattended (see Article XX, Known Gaps).</p></div>
+    <div class="principle"><div class="pnum">06</div><p><b>Shared components over duplicated logic.</b> If two modules need the same reply-formatting or validation logic, it goes in <code style="background:var(--panel-alt);border:1px solid var(--border);padding:1px 6px;border-radius:4px;color:var(--cyan);">workflows/shared/</code>, not copy-pasted twice.</p></div>
+  </div>
+</section>
+
+<!-- TESTING & QUALITY -->
+<section id="testing">
+  <div class="eyebrow">Article XVIII</div>
+  <h2>Testing &amp; quality</h2>
+  <p class="lede">AI usage boundaries now live in Article XIII, AI Philosophy. This article is just the testing bar.</p>
+  <h3 style="font-size:13px;color:var(--text-dim);margin-bottom:12px;">Before every merge</h3>
+  <div class="check-static reveal"><div class="box">✓</div> Test new user</div>
+  <div class="check-static reveal"><div class="box">✓</div> Test existing user</div>
+  <div class="check-static reveal"><div class="box">✓</div> Test invalid input</div>
+  <div class="check-static reveal"><div class="box">✓</div> Test empty database</div>
+  <div class="check-static reveal"><div class="box">✓</div> Test duplicate data</div>
+  <div class="check-static reveal"><div class="box">✓</div> Test integration failure (Telegram, Calendar, Supabase down)</div>
+  <div class="check-static reveal"><div class="box">✓</div> Test AI failure (Gemini timeout or malformed JSON)</div>
+  <div class="check-static reveal"><div class="box">✓</div> Test duplicate webhook delivery (same Telegram update twice)</div>
+</section>
+
+<!-- FAILURE STRATEGY -->
+<section id="failure">
+  <div class="eyebrow">Article XIX</div>
+  <h2>Failure strategy</h2>
+  <p class="lede">Balances transparency with the user against not spamming them about every transient hiccup — while protecting data integrity above both.</p>
+
+  <div class="rule-grid" style="margin-bottom:28px;">
+    <div class="rule-card">
+      <div class="rule-num">R1</div>
+      <div class="rule-body"><h3>Never fail silently</h3><p>Every failure resolves to one of: user notification, retry, event log entry, or escalation. "Nothing happens" is forbidden — this extends Article VIII Rule 3 (Router) to every workflow, not just the Router.</p></div>
+    </div>
+    <div class="rule-card">
+      <div class="rule-num">R2</div>
+      <div class="rule-body"><h3>Never claim success on a failed write</h3><p>If a database write fails, the reply must say so. "Task created" when the insert failed is a worse bug than any crash — this is the core data-integrity rule.</p></div>
+    </div>
+  </div>
+
+  <div class="name-compare" style="margin-bottom:24px;">
+    <div class="name-col good">
+      <div class="name-col-head">User-facing workflows</div>
+      <div class="name-row">Telegram command · task creation · Gemini call</div>
+      <div class="name-row">On failure: log it → reply to the user → stop cleanly</div>
+      <div class="name-row">"I couldn't create your task because Google Calendar is unavailable. Nothing has been lost — try again shortly."</div>
+      <div class="name-row">Never expose stack traces or raw API errors</div>
+    </div>
+    <div class="name-col good">
+      <div class="name-col-head">Background jobs</div>
+      <div class="name-row">Daily summaries · calendar sync · reminders · DB cleanup</div>
+      <div class="name-row">On failure: log the event → retry automatically if appropriate</div>
+      <div class="name-row">Notify the user only if the failure becomes persistent or touches their data</div>
+      <div class="name-row">No Telegram message for every background hiccup</div>
+    </div>
+  </div>
+
+  <h3 style="font-size:13px;color:var(--text-dim);margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em;">Retry policy</h3>
+  <table class="compare" style="margin-bottom:24px;">
+    <tr><th>Failure type</th><th>Examples</th><th>Behavior</th></tr>
+    <tr><td><b>Transient</b></td><td>HTTP 429, timeouts, temporary network issues, 503</td><td class="yes">Retry with exponential backoff</td></tr>
+    <tr><td><b>Permanent</b></td><td>Invalid API key, missing permissions, malformed request, auth error</td><td class="no">Fail immediately · log · notify user if action was user-initiated</td></tr>
   </table>
-  <div class="budget-total">
-    <div class="label">Total to build and run LifeOS for a full year</div>
-    <div class="amount">$0.00</div>
+
+  <h3 style="font-size:13px;color:var(--text-dim);margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em;">Service-specific behavior</h3>
+  <table class="compare" style="margin-bottom:24px;">
+    <tr><th>Service</th><th>On failure</th></tr>
+    <tr><td><b>Telegram</b></td><td>Retry the send; if it still fails, log the event for later inspection.</td></tr>
+    <tr><td><b>Gemini</b></td><td>Return a friendly fallback — "I'm having trouble thinking right now, please try again shortly" — never a raw API error.</td></tr>
+    <tr><td><b>Google Calendar</b></td><td>Do not pretend the event was created. Tell the user the calendar was not updated.</td></tr>
+    <tr><td><b>Supabase</b></td><td>Abort the operation. Never continue with a partially written row.</td></tr>
+    <tr><td><b>n8n</b></td><td>Log the execution, preserve context where possible, avoid leaving the system in an inconsistent state.</td></tr>
+    <tr><td><b>VPS / infrastructure</b></td><td>Return a graceful "temporarily unavailable" response; recover automatically once the service is back.</td></tr>
+  </table>
+
+  <div class="truth-box reveal" style="border-color:var(--amber);">
+    <div class="side primary" style="color:var(--amber);">Idempotent<br><span style="color:var(--text-dim);font-weight:400;">safe to retry, resistant to duplicate execution</span></div>
+    <div class="mid">⇒</div>
+    <div class="side mirror">If Telegram delivers the same update twice, processing it twice must not create duplicate tasks or users.</div>
+  </div>
+</section>
+
+<!-- SECURITY -->
+<section id="security">
+  <div class="eyebrow">Article XX</div>
+  <h2>Security</h2>
+  <p class="lede">What's actually protecting LifeOS today, versus what's scheduled — tied to Phase 10, Deploy &amp; Harden (Article XXI), not left aspirational.</p>
+
+  <h3 style="font-size:13px;color:var(--text-dim);margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em;">Current — Phase 01 onward</h3>
+  <table class="compare" style="margin-bottom:28px;">
+    <tr><th>Secret</th><th>Where it lives</th></tr>
+    <tr><td>Telegram Bot Token</td><td class="mono">.env / n8n Credentials</td></tr>
+    <tr><td>Supabase Service Role Key</td><td class="mono">.env / n8n Credentials</td></tr>
+    <tr><td>Gemini API Key</td><td class="mono">.env / n8n Credentials</td></tr>
+    <tr><td>Cloudflare Tunnel token</td><td class="mono">.env, local only</td></tr>
+  </table>
+  <p class="lede" style="font-size:13px;margin-bottom:28px;">Rule 5 (Article III) applies without exception: no secret is ever committed as plaintext inside workflow JSON or source. This is the whole of the current security posture — single local user, no public auth surface yet.</p>
+
+  <h3 style="font-size:13px;color:var(--text-dim);margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em;">Scheduled — Phase 10, Deploy &amp; Harden</h3>
+  <table class="compare">
+    <tr><th>Control</th><th>Why it waits for Phase 10</th></tr>
+    <tr><td><b>Row-Level Security (RLS)</b></td><td>Only matters once LifeOS is reachable beyond one local user on one local machine.</td></tr>
+    <tr><td><b>Authentication</b></td><td>Supabase Auth, added alongside the React dashboard — Telegram's own identity is sufficient while the dashboard doesn't exist.</td></tr>
+    <tr><td><b>Encryption at rest / in transit</b></td><td>Named Tunnel + Oracle VPS migration is the point where traffic leaves a trusted local network.</td></tr>
+    <tr><td><b>Backups</b></td><td>Scheduled Supabase backups, set up as part of hardening the permanent host — not meaningful to automate against a laptop that's off half the time.</td></tr>
+  </table>
+</section>
+
+<!-- STATUS -->
+<section id="status">
+  <div class="eyebrow">Article XXI</div>
+  <h2>Current build status</h2>
+  <p class="lede">What actually exists in Supabase and n8n today, versus what's ratified but unbuilt. This section is the one place in the document meant to be read as "state of the union," not as a rule.</p>
+
+  <div class="milestone reveal">
+    <div class="milestone-head">
+      <h3>v0.1.0 — Foundation</h3>
+      <span class="milestone-badge">✓ tagged</span>
+    </div>
+    <ul>
+      <li>Docker Compose setup</li>
+      <li>Self-hosted n8n</li>
+      <li>Telegram Bot integration</li>
+      <li>Cloudflare Tunnel</li>
+      <li>Supabase configuration</li>
+      <li>First Telegram webhook workflow</li>
+    </ul>
+  </div>
+  <div class="milestone reveal">
+    <div class="milestone-head">
+      <h3>v0.2.0 — Telegram Gateway</h3>
+      <span class="milestone-badge">✓ tagged</span>
+    </div>
+    <ul>
+      <li>Connected Telegram Bot API to n8n</li>
+      <li>Connected Supabase database</li>
+      <li>Automatic user registration</li>
+      <li>Existing user detection</li>
+      <li>Welcome messages for new users</li>
+      <li>Welcome back messages for returning users</li>
+      <li>Cloudflare Tunnel integration for local webhook testing</li>
+    </ul>
+  </div>
+  <p class="lede" style="font-size:12.5px;margin-bottom:0;">Reproduced from <code style="background:var(--panel-alt);border:1px solid var(--border);padding:1px 6px;border-radius:4px;color:var(--cyan);">CHANGELOG.md</code> — that file is still the record of truth; this is a mirror, not a replacement.</p>
+
+  <h3 style="font-size:14px;color:var(--text-dim);margin:28px 0 12px;text-transform:uppercase;letter-spacing:.06em;">Known gaps — not bugs, sequencing</h3>
+  <div class="gap-item reveal">
+    <h4>No Gateway/Router yet</h4>
+    <p>The current Telegram Trigger <i>is</i> the registration workflow. It needs to become 001-Gateway before a second command is added — Telegram only allows one webhook, so this can't be retrofitted per-module later without rebuilding every workflow that came before it.</p>
+    <span class="when">blocks: Phase 03 onward</span>
+  </div>
+  <div class="gap-item reveal">
+    <h4>Quick Tunnel is dev-only, by design</h4>
+    <p>The Cloudflare Quick Tunnel URL changes on every restart and requires a manual <code style="color:var(--cyan)">cloudflared tunnel</code> + webhook update each session. That's fine while actively developing solo. It becomes a real problem the moment an unattended cron workflow (Morning Brief) needs to fire without a laptop open — fix before that phase, not before this one.</p>
+    <span class="when">blocks: unattended cron workflows (Phase 03), not Phase 02</span>
+  </div>
+  <div class="gap-item reveal">
+    <h4>Permanent hosting is a Phase 10 decision</h4>
+    <p>DigitalOcean droplet / Oracle Always Free migration happens after most modules are built and validated locally — not before. Building on rented infrastructure before the workflows are stable just adds deploy friction to every iteration.</p>
+    <span class="when">scheduled: Phase 10 — Deploy &amp; Harden</span>
+  </div>
+
+  <h3 style="font-size:14px;color:var(--text-dim);margin:28px 0 12px;text-transform:uppercase;letter-spacing:.06em;">Snapshot — where things stand right now</h3>
+  <div class="sysinfo reveal" style="max-width:520px;">
+    <div class="sysinfo-head"><div class="dots"><span></span><span></span><span></span></div>project.snapshot</div>
+    <div class="sysinfo-body">
+      <div class="sysinfo-row"><b>current branch</b><span class="val">develop</span></div>
+      <div class="sysinfo-row"><b>current tag</b><span class="val">v0.2.0</span></div>
+      <div class="sysinfo-row"><b>current database</b><span class="val amber">1 table live (users)</span></div>
+      <div class="sysinfo-row"><b>current workflows</b><span class="val">001 — registration + welcome</span></div>
+      <div class="sysinfo-row"><b>current integrations</b><span class="val">Telegram · Supabase</span></div>
+      <div class="sysinfo-row"><b>current deployment</b><span class="val">local, Cloudflare Quick Tunnel</span></div>
+      <div class="sysinfo-row"><b>next milestone</b><span class="val amber">Phase 02 — The Router</span></div>
+    </div>
+    <div class="sysinfo-foot">See Article XXIII for the full chronological decision history.</div>
   </div>
 </section>
 
 <!-- ROADMAP -->
 <section id="roadmap">
-  <div class="eyebrow">Build order</div>
-  <h2>Installation sequence</h2>
-  <p class="lede">Build in this order — each phase depends on the infrastructure the previous one sets up. Check items off as you go.</p>
+  <div class="eyebrow">Article XXI</div>
+  <h2>Build order</h2>
+  <p class="lede">Each phase depends on the infrastructure the previous one sets up. Infra migration is deliberately last, not first. Every phase's Definition of Done references Article III for merge requirements — that checklist isn't repeated per phase. Rollback Strategy is standardized across every phase (see box below) rather than written out per sprint.</p>
+  <div class="roadmap-note reveal"><b>Note:</b> phase 01 is the only phase marked shipped. Checkbox state below is local to this page view and doesn't persist — treat it as a working copy, not the record of truth (that's CHANGELOG.md). Phases 01 and 02 carry the full sprint template (why / database / workflow / Telegram / testing / DoD / dependencies / future unlocks / merge requirements / rollback); phases 03–10 use the compact goal + stack + checklist format until they're up next, at which point they get expanded the same way.</div>
+  <div class="rule-grid" style="margin-bottom:28px;">
+    <div class="rule-card">
+      <div class="rule-num">↺</div>
+      <div class="rule-body"><h3>Standard rollback strategy — applies to every phase</h3><p>1. Restore the previous workflow export from <code>workflows/</code>. 2. Restore the previous database migration (down-migration or backup restore). 3. Redeploy the previous Docker image / compose config. 4. Retag the previous version if the broken tag already reached <code>main</code> (Article VII, Rule 3 — tags are never renamed, a new patch tag is cut instead).</p></div>
+    </div>
+  </div>
   <div id="roadmap-list"></div>
 </section>
 
-<!-- EXTENSIONS -->
-<section id="extensions">
-  <div class="eyebrow">Optional plugins</div>
-  <h2>Extend into another domain</h2>
-  <p class="lede">Once the core system works, these are deliberate add-ons that pull in an adjacent skill area without diluting the project. Pick one based on where you want to work.</p>
-  <div class="ext-grid" id="ext-grid"></div>
+<!-- CODING STANDARDS -->
+<section id="coding">
+  <div class="eyebrow">Article XXII</div>
+  <h2>Coding standards &amp; repository maintenance</h2>
+  <p class="lede">Naming ranges for workflows and tables live in Article IX. This is everything inside them — how the JavaScript, SQL, and n8n nodes themselves are written, meant to stay consistent for the lifetime of the project.</p>
+
+  <div class="truth-box reveal" style="border-color:var(--violet);margin-bottom:32px;">
+    <div class="side primary" style="color:var(--violet);">n8n orchestrates<br><span style="color:var(--text-dim);font-weight:400;">decides WHAT happens next</span></div>
+    <div class="mid">⇒</div>
+    <div class="side mirror">Backend services execute<br>decide HOW it happens — n8n should never become the application itself</div>
+  </div>
+
+  <h3 style="font-size:13px;color:var(--text-dim);margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em;">JavaScript (Code nodes &amp; backend services)</h3>
+  <table class="compare" style="margin-bottom:16px;">
+    <tr><th>Rule</th><th>Convention</th></tr>
+    <tr><td>Language level</td><td>ES2023+ · <code class="mono">const</code> by default · <code class="mono">let</code> only when reassignment is required · never <code class="mono">var</code></td></tr>
+    <tr><td>Functions</td><td>Small and single-purpose. A 300-line function is a sign the logic belongs in several functions, or out of the Code node entirely.</td></tr>
+    <tr><td>Naming</td><td>camelCase for functions and variables — <code class="mono">createTask()</code>, <code class="mono">taskId</code>, <code class="mono">telegramId</code></td></tr>
+    <tr><td>Constants</td><td>UPPER_SNAKE_CASE — <code class="mono">MAX_TASKS</code>, <code class="mono">DEFAULT_TIMEZONE</code></td></tr>
+    <tr><td>Comments</td><td>Explain <b>why</b>, never <b>what</b>. <code class="mono">// Retry — Telegram occasionally returns transient errors.</code> not <code class="mono">// increment i</code></td></tr>
+    <tr><td>File naming</td><td>snake_case for backend files (<code class="mono">calendar_sync.js</code>) · PascalCase for React components (<code class="mono">TaskCard.jsx</code>)</td></tr>
+  </table>
+
+  <h3 style="font-size:13px;color:var(--text-dim);margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em;">SQL &amp; database design</h3>
+  <table class="compare" style="margin-bottom:16px;">
+    <tr><th>Rule</th><th>Convention</th></tr>
+    <tr><td>Tables &amp; columns</td><td>snake_case — see Article IX for the full naming table</td></tr>
+    <tr><td>Primary key</td><td>Always <code class="mono">id UUID</code>. Never a bare integer ID.</td></tr>
+    <tr><td>Foreign keys</td><td>Always explicit — <code class="mono">user_id</code>, <code class="mono">task_id</code>, <code class="mono">project_id</code></td></tr>
+    <tr><td>Standard columns</td><td>Every table carries <code class="mono">id</code>, <code class="mono">created_at</code>, <code class="mono">updated_at</code>. User-owned tables always carry <code class="mono">user_id</code>.</td></tr>
+    <tr><td>Enums</td><td>Prefer <code class="mono">CHECK</code> constraints over native Postgres <code class="mono">ENUM</code> types until there's a compelling reason otherwise.</td></tr>
+  </table>
+
+  <h3 style="font-size:13px;color:var(--text-dim);margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em;">n8n workflow &amp; node naming</h3>
+  <div class="name-compare" style="margin-bottom:16px;">
+    <div class="name-col bad">
+      <div class="name-col-head">✕ Never</div>
+      <div class="name-row">If · If1 · Code · Code2</div>
+    </div>
+    <div class="name-col good">
+      <div class="name-col-head">✓ Always</div>
+      <div class="name-row">Check Existing User · Route Command · Parse Intent</div>
+    </div>
+  </div>
+  <p class="lede" style="font-size:13px;margin-bottom:16px;">You should know exactly what a node does without opening it. Workflows follow <code style="background:var(--panel-alt);border:1px solid var(--border);padding:1px 6px;border-radius:4px;color:var(--cyan);">ModuleOS - NNN - Description</code>, e.g. <code style="background:var(--panel-alt);border:1px solid var(--border);padding:1px 6px;border-radius:4px;color:var(--cyan);">CoreOS - 003 - Task Engine</code> — numbers never change once assigned.</p>
+
+  <div class="rule-grid" style="margin-bottom:28px;">
+    <div class="rule-card">
+      <div class="rule-num">①</div>
+      <div class="rule-body"><h3>One responsibility per workflow</h3><p>Don't build Telegram → Everything. Build Gateway → Router → Task Engine → Calendar Engine as separate workflows, each doing one job.</p></div>
+    </div>
+    <div class="rule-card">
+      <div class="rule-num">②</div>
+      <div class="rule-body"><h3>Code nodes stay tiny</h3><p>~50 lines max. Past that, the logic moves into a proper backend service that n8n calls — n8n orchestrates, it doesn't become the application (ADR 005).</p></div>
+    </div>
+    <div class="rule-card">
+      <div class="rule-num">③</div>
+      <div class="rule-body"><h3>Handle every external failure</h3><p>Telegram, Supabase, Gemini, Google Calendar, Cloudflare — never assume success. See Article XVIII, Failure Strategy, for the full policy.</p></div>
+    </div>
+    <div class="rule-card">
+      <div class="rule-num">④</div>
+      <div class="rule-body"><h3>Log for analytics later</h3><p>Every workflow should eventually log success, failure, duration, user, and operation — this is what Article XII's event log is built to capture.</p></div>
+    </div>
+  </div>
+
+  <h3 style="font-size:13px;color:var(--text-dim);margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em;">Repository maintenance cadence</h3>
+  <table class="compare" style="margin-bottom:32px;">
+    <tr><th>Task</th><th>Cadence</th></tr>
+    <tr><td>Export &amp; commit n8n workflows</td><td>Every time a workflow changes — never left only inside the running n8n instance</td></tr>
+    <tr><td>Update README</td><td>Every feature (step 6 of Article XVI)</td></tr>
+    <tr><td>Update CHANGELOG</td><td>Every feature (step 7 of Article XVI)</td></tr>
+    <tr><td>Tag a release</td><td>Every merge to <code class="mono">main</code> (Article VII, Rule 1)</td></tr>
+    <tr><td>Backup Supabase</td><td>Manual export until Phase 10, then scheduled (Article XIX)</td></tr>
+  </table>
+
+  <div class="truth-box reveal" style="border-color:var(--amber);margin-bottom:36px;">
+    <div class="side primary" style="color:var(--amber);">The 10-Year Rule<span style="color:var(--text-dim);font-weight:400;"></span></div>
+    <div class="mid">⇒</div>
+    <div class="side mirror">Write every workflow, table, function, and document as if someone unfamiliar with the project will need to understand and modify it ten years from now. Favor clarity, consistency, and explicitness over clever shortcuts.</div>
+  </div>
+
+  <h3 style="font-size:14px;color:var(--text-dim);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em;">Engineering principles — the immutable rules</h3>
+  <p class="lede" style="font-size:13px;margin-bottom:20px;">Article I's guiding principles state the yardsticks. These are the operational laws derived from them, each with the reasoning and a concrete good/bad pair, so a rule is never applied by vibes alone.</p>
+  <div id="eprinciple-list"></div>
 </section>
 
-<!-- PITCH -->
-<section id="pitch">
-  <div class="eyebrow">Interview material</div>
-  <h2>How to talk about it</h2>
-  <p class="lede">What this project actually demonstrates, stated plainly.</p>
-  <div class="pitch-term">
-    <div class="l">Designed and built <b>LifeOS</b>, a 7-module personal automation system integrating n8n, Supabase, and the Gemini API</div>
-    <div class="l">Implemented <b>AI-driven reasoning pipelines</b> — task prioritization, PDF-to-quiz generation, resume gap analysis — not just single API calls</div>
-    <div class="l">Designed and normalized an <b>18-table Postgres schema</b> shared across all modules to enable cross-module analytics</div>
-    <div class="l">Deployed and maintained a <b>self-hosted automation stack</b> on a Linux VPS, at zero ongoing infrastructure cost</div>
-    <div class="l">Built <b>6+ event-driven workflows</b> handling scheduled, message, and file-upload triggers with error handling</div>
-    <div class="l">Maintained the project continuously across <b>multiple semesters</b>, extending scope as new needs emerged</div>
+<!-- DECISION HISTORY & FUTURE VISION -->
+<section id="history">
+  <div class="eyebrow">Article XXIII</div>
+  <h2>Decision history &amp; future vision</h2>
+  <p class="lede">The chronological story of the project, distinct from the reasoned-argument form of the ADRs in Article IV — and where the modules are headed once they're all live.</p>
+
+  <h3 style="font-size:13px;color:var(--text-dim);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em;">Timeline</h3>
+  <div class="timeline reveal" style="margin-bottom:36px;">
+    <div class="timeline-item"><div class="tyear">2026</div><p>Project started. Docker + self-hosted n8n chosen as the runtime.</p></div>
+    <div class="timeline-item"><div class="tyear">2026</div><p>Telegram Bot API and Supabase connected — v0.1.0, Foundation, tagged.</p></div>
+    <div class="timeline-item"><div class="tyear">2026</div><p>User registration and existing-user detection shipped — v0.2.0, Telegram Gateway, tagged.</p></div>
+    <div class="timeline-item future"><div class="tyear">next</div><p>001-Gateway refactored into the Router; literal-command and Gemini-intent branches merged into one intent contract — v0.3.0.</p></div>
+    <div class="timeline-item future"><div class="tyear">later</div><p>Task Engine, Calendar sync, Morning Brief — the daily-use core loop — v0.4.0.</p></div>
+    <div class="timeline-item future"><div class="tyear">later</div><p>StudyOS, Knowledge Vault, ProjectOS, CareerOS, FinanceOS, AnalyticsOS ship in sequence — v0.5.0 through v0.10.0.</p></div>
+    <div class="timeline-item future"><div class="tyear">later</div><p>Deploy &amp; Harden: migration to Oracle Always Free, RLS, auth, and the React dashboard — v1.0.0, MVP complete.</p></div>
+  </div>
+
+  <h3 style="font-size:13px;color:var(--text-dim);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em;">Decision log</h3>
+  <p class="lede" style="font-size:13px;margin-bottom:16px;">Git history for architecture — a flat, chronological, one-line-per-version record. Where the ADRs (Article IV) argue <i>why</i>, this just logs <i>what happened, when</i>. Future entries are projections from the roadmap (Article XXI), not commitments to a date.</p>
+  <div class="declog reveal" id="declog" style="margin-bottom:36px;"></div>
+
+  <h3 style="font-size:13px;color:var(--text-dim);margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em;">Future vision — how the modules connect</h3>
+  <div class="tree reveal">StudyOS creates a task           <span class="cmt"># "read Ch.4 before the quiz"</span>
+  ↓
+Task appears in Calendar          <span class="cmt"># CoreOS sync</span>
+  ↓
+Calendar feeds Morning Brief      <span class="cmt"># daily cron</span>
+  ↓
+Morning Brief emits events        <span class="cmt"># events_log, Article XII</span>
+  ↓
+AnalyticsOS reads the event log   <span class="cmt"># weekly digest</span>
+  ↓
+Analytics recommends schedule changes
+  ↓
+FinanceOS spending patterns feed back into the same weekly signal
+  ↓
+CareerOS application deadlines compete for the same task list
+
+<span class="cmt"># Nothing here is a separate bot with a shared name — it's one</span>
+<span class="cmt"># user model and one event log, read from seven directions.</span></div>
+</section>
+
+<!-- INFRA -->
+<section id="infra">
+  <div class="eyebrow">Article XXIV</div>
+  <h2>Infrastructure &amp; cost</h2>
+  <p class="lede">Local development costs $0 for the entire build — Docker Desktop plus a Cloudflare Quick Tunnel, run from your own machine. Permanent hosting is evaluated once, near the end, not maintained in parallel from day one.</p>
+  <div class="stack-grid" id="stack-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-bottom:28px;"></div>
+  <table class="compare">
+    <tr><th>Service</th><th>Plan</th><th>Cost</th><th>When it's introduced</th></tr>
+    <tr><td><b>Docker + n8n</b></td><td>Local, self-hosted OSS</td><td class="yes">$0</td><td>Phase 01 — now</td></tr>
+    <tr><td><b>Supabase</b></td><td>Free tier</td><td class="yes">$0</td><td>Phase 01 — now</td></tr>
+    <tr><td><b>Cloudflare Quick Tunnel</b></td><td>Free, dev-only</td><td class="yes">$0</td><td>Phase 01–09 (dev)</td></tr>
+    <tr><td><b>Telegram Bot API</b></td><td>Free</td><td class="yes">$0</td><td>Phase 01 — now</td></tr>
+    <tr><td><b>Gemini API</b></td><td>Free tier</td><td class="yes">$0</td><td>Phase 03 onward</td></tr>
+    <tr><td><b>Named Cloudflare Tunnel or DigitalOcean droplet</b></td><td>Free (student credit) / OSS</td><td class="yes">$0</td><td>Phase 10 — Deploy &amp; Harden</td></tr>
+    <tr><td><b>Oracle Cloud Always Free</b></td><td>Always-free tier</td><td class="yes">$0</td><td>Phase 10, permanent home</td></tr>
+  </table>
+</section>
+
+<!-- DAILY ROUTINE -->
+<section>
+  <div class="eyebrow">Appendix</div>
+  <h2>Daily dev routine</h2>
+  <p class="lede">Local dev-loop while everything still runs off a laptop with a Quick Tunnel.</p>
+  <div class="routine-grid">
+    <div class="routine-card start reveal">
+      <h4>Startup</h4>
+      <ol>
+        <li><code>git checkout develop</code></li>
+        <li><code>git pull</code></li>
+        <li><code>docker compose up -d</code></li>
+        <li><code>cloudflared tunnel --url http://localhost:5678</code></li>
+        <li>Update <code>WEBHOOK_URL</code></li>
+        <li>Restart Docker, open n8n</li>
+        <li>Test <code>/start</code></li>
+      </ol>
+    </div>
+    <div class="routine-card stop reveal">
+      <h4>Shutdown</h4>
+      <ol>
+        <li>Save work</li>
+        <li><code>git add / commit</code></li>
+        <li><code>git push</code></li>
+        <li><code>docker compose down</code></li>
+        <li><code>CTRL+C</code> cloudflared</li>
+      </ol>
+    </div>
   </div>
 </section>
 
-<!-- FAQ -->
-<section id="faq">
-  <div class="eyebrow">Before you start</div>
-  <h2>FAQ</h2>
-  <div id="faq-list"></div>
-</section>
-
-<footer>LifeOS — built one module at a time<span class="cursor-blink"></span></footer>
+<footer>LifeOS Engineering Constitution — amended in the same PR as the code it governs<span class="cursor-blink"></span>
+<div class="amend">constitution v1.4 · project v0.2.0 · next amendment due at v0.3.0 (The Router)</div>
+</footer>
 
 <script>
-/* ===== BOOT SEQUENCE ===== */
+/* ===== BOOT SEQUENCE — this is a document compiling, not a live system ===== */
 const bootLines = [
-  {t:"[    0.000000] LifeOS kernel booting...", cls:"tag"},
-  {t:"[    0.142001] mounting supabase::postgres  ", cls:"ok", suf:"[ OK ]"},
-  {t:"[    0.288122] starting n8n workflow engine ", cls:"ok", suf:"[ OK ]"},
-  {t:"[    0.401355] connecting telegram bot api  ", cls:"ok", suf:"[ OK ]"},
-  {t:"[    0.522871] loading gemini inference layer", cls:"ok", suf:"[ OK ]"},
-  {t:"[    0.690004] initializing 7 modules...    ", cls:"ok", suf:"[ OK ]"},
-  {t:"[    0.812233] loading 18 schema tables...  ", cls:"ok", suf:"[ OK ]"},
+  {t:"[CONSTITUTION] LifeOS Engineering Guide v1.4", cls:"tag"},
+  {t:"parsing 24 articles + appendix     ", cls:"ok", suf:"[ OK ]"},
+  {t:"indexing repository structure     ", cls:"ok", suf:"[ OK ]"},
+  {t:"loading workflow ranges 001–999   ", cls:"ok", suf:"[ OK ]"},
+  {t:"cross-checking changelog tags     ", cls:"ok", suf:"[ v0.2.0 ]"},
+  {t:"validating schema FK constraints  ", cls:"ok", suf:"[ OK ]"},
+  {t:"loading 6 architecture decisions  ", cls:"ok", suf:"[ OK ]"},
+  {t:"cross-referencing 7 module specs  ", cls:"ok", suf:"[ OK ]"},
+  {t:"loading module contracts         ", cls:"ok", suf:"[ OK ]"},
+  {t:"loading event registry           ", cls:"ok", suf:"[ OK ]"},
+  {t:"loading database dictionary      ", cls:"ok", suf:"[ OK ]"},
+  {t:"checking build status vs docs     ", cls:"warn", suf:"[ 1/16 tables live ]"},
   {t:"", cls:""},
-  {t:"LifeOS v1.0 ready_", cls:"ok"},
+  {t:"document ready — this is a rulebook, not a running system_", cls:"ok"},
 ];
 const bootLog = document.getElementById('boot-log');
 let bootDone = false;
@@ -398,7 +1418,7 @@ function runBoot(){
   bootLines.forEach((l,i)=>{
     const d = document.createElement('div');
     d.className = 'line';
-    d.innerHTML = l.suf ? `<span class="${l.cls}">${l.t}</span><span style="color:var(--green)">${l.suf}</span>` : `<span class="${l.cls}">${l.t}</span>`;
+    d.innerHTML = l.suf ? `<span class="${l.cls}">${l.t}</span><span style="color:${l.cls==='warn'?'var(--amber)':'var(--green)'}">${l.suf}</span>` : `<span class="${l.cls}">${l.t}</span>`;
     bootLog.appendChild(d);
     setTimeout(()=>d.classList.add('show'), i*200);
   });
@@ -417,7 +1437,7 @@ function hideBoot(){
 document.getElementById('boot-skip').addEventListener('click', hideBoot);
 runBoot();
 
-/* ===== CLOCK ===== */
+/* ===== CLOCK — local time only, not a system heartbeat ===== */
 function tick(){
   const now = new Date();
   document.getElementById('clock').textContent = now.toLocaleTimeString('en-US',{hour12:false});
@@ -429,38 +1449,56 @@ const io = new IntersectionObserver((entries)=>{
   entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); });
 },{threshold:.12});
 function observeAll(sel){ document.querySelectorAll(sel).forEach(el=>io.observe(el)); }
+observeAll('.reveal');
 
-/* ===== SCHEMA DATA ===== */
+/* ===== DEVELOPMENT RULES DATA ===== */
+const devRules = [
+  {n:"1",title:"Always develop on develop",body:"Never code directly on <code>main</code>. main only receives completed, merged milestones."},
+  {n:"2",title:"Every milestone: develop → PR → main",body:"No direct pushes to main, ever, including for \"quick fixes.\""},
+  {n:"3",title:"Every feature ends with docs",body:"README update, CHANGELOG update, commit, push — part of \"done,\" not an afterthought."},
+  {n:"4",title:"No TODOs in finished workflows",body:"If a workflow is marked complete, it doesn't contain a TODO. Unfinished work stays on a feature branch."},
+  {n:"5",title:"Never hardcode secrets",body:"Everything goes in <code>.env</code> or n8n Credentials. No API keys in workflow JSON that gets committed."},
+];
+const ruleGrid = document.getElementById('rule-grid');
+devRules.forEach(r=>{
+  const el = document.createElement('div');
+  el.className = 'rule-card reveal';
+  el.innerHTML = `<div class="rule-num">${r.n}</div><div class="rule-body"><h3>${r.title}</h3><p>${r.body}</p></div>`;
+  ruleGrid.appendChild(el);
+});
+observeAll('#rule-grid .rule-card');
+
+/* ===== SCHEMA DATA — live flag reflects actual Supabase state ===== */
 const schema = [
   {name:"Core OS",color:"var(--amber)",tables:[
-    {t:"users",f:"id, telegram_id, name, timezone"},
-    {t:"tasks",f:"id, user_id, title, priority, status, due_date"},
-    {t:"goals",f:"id, user_id, title, target_date, progress"},
-    {t:"events",f:"id, user_id, title, start_time, end_time, source"},
+    {t:"users",f:"id, telegram_id, name, timezone",live:true},
+    {t:"tasks",f:"id, user_id, title, priority, status, due_date",live:false},
+    {t:"goals",f:"id, user_id, title, target_date, progress",live:false},
+    {t:"events",f:"id, user_id, title, start_time, end_time, source",live:false},
   ]},
   {name:"StudyOS",color:"var(--cyan)",tables:[
-    {t:"documents",f:"id, user_id, title, subject, file_url, summary"},
-    {t:"quiz_questions",f:"id, document_id, question, answer, difficulty"},
-    {t:"grades",f:"id, user_id, subject, grade, credits"},
+    {t:"documents",f:"id, user_id, title, subject, file_url, summary",live:false},
+    {t:"quiz_questions",f:"id, document_id, question, answer, difficulty",live:false},
+    {t:"grades",f:"id, user_id, subject, grade, credits",live:false},
   ]},
   {name:"Knowledge Vault",color:"var(--violet)",tables:[
-    {t:"knowledge_items",f:"id, user_id, type, title, url, summary, tags[]"},
+    {t:"knowledge_items",f:"id, user_id, type, title, url, summary, tags[]",live:false},
   ]},
   {name:"ProjectOS",color:"var(--green)",tables:[
-    {t:"daily_logs",f:"id, user_id, date, task, issue, learning"},
-    {t:"reports",f:"id, user_id, period, content, generated_at"},
+    {t:"daily_logs",f:"id, user_id, date, task, issue, learning",live:false},
+    {t:"reports",f:"id, user_id, period, content, generated_at",live:false},
   ]},
   {name:"CareerOS",color:"var(--amber)",tables:[
-    {t:"applications",f:"id, user_id, company, role, stage, applied_date, deadline"},
-    {t:"resume_analysis",f:"id, user_id, job_id, match_score, missing_skills[]"},
+    {t:"applications",f:"id, user_id, company, role, stage, applied_date, deadline",live:false},
+    {t:"resume_analysis",f:"id, user_id, job_id, match_score, missing_skills[]",live:false},
   ]},
   {name:"Finance",color:"var(--cyan)",tables:[
-    {t:"expenses",f:"id, user_id, amount, category, note, date"},
-    {t:"budgets",f:"id, user_id, category, monthly_limit"},
+    {t:"expenses",f:"id, user_id, amount, category, note, date",live:false},
+    {t:"budgets",f:"id, user_id, category, monthly_limit",live:false},
   ]},
   {name:"AnalyticsOS",color:"var(--violet)",tables:[
-    {t:"metrics_daily",f:"id, user_id, date, study_hours, coding_hours, tasks_done"},
-    {t:"weekly_scores",f:"id, user_id, week, productivity_score, recommendation"},
+    {t:"metrics_daily",f:"id, user_id, date, study_hours, coding_hours, tasks_done",live:false},
+    {t:"weekly_scores",f:"id, user_id, week, productivity_score, recommendation",live:false},
   ]},
 ];
 const schemaGrid = document.getElementById('schema-grid');
@@ -470,7 +1508,7 @@ schema.forEach(s=>{
   el.innerHTML = `
     <div class="schema-head"><div class="sw" style="background:${s.color}"></div><span>${s.name}</span></div>
     <div class="schema-body">
-      ${s.tables.map(t=>`<div class="table-row"><span class="tname">${t.t}</span><span class="fields">${t.f}</span></div>`).join('')}
+      ${s.tables.map(t=>`<div class="table-row"><span><span class="tname">${t.t}</span><span class="fields">${t.f}</span></span><span class="stat ${t.live?'live':'planned'}">${t.live?'live':'planned'}</span></div>`).join('')}
     </div>`;
   schemaGrid.appendChild(el);
 });
@@ -478,60 +1516,147 @@ observeAll('#schema-grid .schema-card');
 
 /* ===== MODULES DATA ===== */
 const modules = [
-  {pid:"01",icon:"🗂️",bg:"rgba(255,180,84,.12)",name:"Core OS",sub:"Task, goal & calendar engine",status:"foundation",statusColor:"var(--amber)",
-   desc:"The base layer everything else plugs into. Natural-language task capture, calendar sync, and Gemini-driven prioritization that reasons about what to do first instead of dumping a raw list.",
+  {pid:"01",icon:"🗂️",bg:"rgba(255,180,84,.12)",name:"Core OS",sub:"Task, goal & calendar engine",status:"registration live",statusColor:"var(--green)",
+   desc:"The base layer everything else plugs into. Registration and user lookup are live; task capture, calendar sync, and Gemini prioritization are ratified but not yet built.",
    why:"This is the daily habit loop — if this module isn't sticky, nothing built on top of it will be used either.",
-   tables:"users · tasks · goals · events",
-   feats:["/addtask","/tasks","/summary","Morning Brief","Evening review","Goal tracking","Calendar sync","AI prioritization"],
+   ai:"Gemini extracts due dates and priority from natural language, and suggests a task order for the Morning Brief. It never decides what gets stored — the task row is written by deterministic logic regardless of how the request arrived.",
+   deps:"The Router (Article VIII) for command dispatch. No dependency on any other module.",
+   future:"Recurring tasks, sub-tasks, and a snooze/defer flow once the base loop is proven daily-sticky.",
+   tables:"users (live) · tasks · goals · events (planned)",
+   feats:["/addtask","/tasks","/done","/delete","Morning Brief","Goal tracking","Calendar sync","AI prioritization"],
    cmds:[{u:"remind me to submit the DBMS assignment friday",b:"added → \"DBMS assignment\" · due Fri · priority: high"},
-         {u:"/summary",b:"3 tasks due today · 1 event at 4pm · suggested order: assignment → gym → reading"}]},
-  {pid:"02",icon:"📚",bg:"rgba(94,234,212,.12)",name:"StudyOS",sub:"Academic assistant",status:"core",statusColor:"var(--cyan)",
+         {u:"/summary",b:"3 tasks due today · 1 event at 4pm · suggested order: assignment → gym → reading"}],
+   contract:{purpose:"Own the user's tasks, goals, and calendar state; be the daily-use core loop.",
+     inputs:"Telegram commands/NL messages routed with intent add_task, list_tasks, complete_task, delete_task (Router); Google Calendar webhook (planned, for drift detection).",
+     outputs:"Task rows in Supabase; Telegram replies; outbound Calendar event writes.",
+     failure:"Uses the global failure policy (Article XIX). Calendar write failures never block the task write — Supabase is source of truth (ADR 002/003).",
+     current:["/start registration (shared with 001-Gateway)","Existing-user detection","Welcome / welcome-back messages"],
+     planned:["tasks, goals, events tables (Article X)","/addtask /tasks /done /delete","Google Calendar sync","Morning Brief cron","Gemini due-date/priority extraction"],
+     future:["Recurring tasks","Sub-tasks","Snooze/defer flow"]}},
+  {pid:"02",icon:"📚",bg:"rgba(94,234,212,.12)",name:"StudyOS",sub:"Academic assistant",status:"planned",statusColor:"var(--text-faint)",
    desc:"Upload course PDFs and get them turned into structured study material automatically — summaries, quizzes, and revision prompts generated from your own notes.",
    why:"Turns passive reading into active recall practice, generated automatically from material you already have.",
+   ai:"Gemini summarizes uploaded PDFs and generates quiz questions from that summary. It never grades subjectively without a stored answer key to check against.",
+   deps:"CoreOS for the user model; Supabase Storage for file hosting.",
+   future:"Spaced-repetition scheduling for quiz delivery, and per-subject weak-topic detection feeding AnalyticsOS.",
    tables:"documents · quiz_questions · grades",
    feats:["/uploadpdf","Auto-summary","/quiz [subject]","/revise [subject]","GPA tracker","Exam countdown"],
    cmds:[{u:"/uploadpdf [DBMS_Unit3.pdf]",b:"processed → 12 pages · summary ready · 8 quiz questions generated"},
-         {u:"/quiz dbms",b:"Q1. What is the difference between 2NF and 3NF?"}]},
-  {pid:"03",icon:"🧠",bg:"rgba(184,161,255,.12)",name:"Knowledge Vault",sub:"Second brain",status:"core",statusColor:"var(--cyan)",
+         {u:"/quiz dbms",b:"Q1. What is the difference between 2NF and 3NF?"}],
+   contract:{purpose:"Turn uploaded course material into summaries and quiz questions.",
+     inputs:"Telegram file upload (PDF); intent upload_pdf, generate_quiz, revise (Router).",
+     outputs:"documents/quiz_questions rows; Telegram replies with summary or quiz text.",
+     failure:"Uses the global failure policy (Article XIX). No stored answer key → AI never auto-grades, only compares against it.",
+     current:[],
+     planned:["documents, quiz_questions, grades tables (Article X)","/uploadpdf ingestion + Supabase Storage","Gemini summarization pipeline","/quiz generation + delivery","GPA / exam countdown tracker"],
+     future:["Spaced-repetition scheduling","Per-subject weak-topic detection feeding AnalyticsOS"]}},
+  {pid:"03",icon:"🧠",bg:"rgba(184,161,255,.12)",name:"Knowledge Vault",sub:"Second brain",status:"planned",statusColor:"var(--text-faint)",
    desc:"Every article, video, repo, or PDF you save gets auto-tagged and summarized, then becomes searchable — the value compounds the longer you use it.",
-   why:"The one module that gets more valuable every single week you keep using it — a strong 'long-term project' story.",
+   why:"The one module that gets more valuable every single week you keep using it.",
+   ai:"Gemini tags and summarizes whatever's saved. Search itself stays plain Postgres full-text search — no AI in the read path, to keep it fast and predictable.",
+   deps:"CoreOS for the user model. No hard dependency on StudyOS or ProjectOS, though it can absorb links from either.",
+   future:"Cross-linking related saved items automatically, and surfacing forgotten items on a schedule.",
    tables:"knowledge_items",
    feats:["Save any link","Auto-tagging","/search [term]","Cross-type search"],
    cmds:[{u:"[shares a docker tutorial link]",b:"saved → \"Docker in 100 seconds\" · tags: devops, containers"},
-         {u:"/search docker",b:"3 notes · 2 videos · 1 repo found"}]},
-  {pid:"04",icon:"🛠️",bg:"rgba(110,231,160,.12)",name:"ProjectOS",sub:"Auto-documentation",status:"growth",statusColor:"var(--text-faint)",
-   desc:"A daily check-in turns into automatic changelogs — daily and weekly reports generated from your own one-line updates, ready-made for standups and resumes.",
-   why:"Solves the 'I built something cool 3 months ago and forgot the details' problem — good for resumes and interviews later.",
+         {u:"/search docker",b:"3 notes · 2 videos · 1 repo found"}],
+   contract:{purpose:"Capture, tag, and make searchable anything saved — links, files, notes.",
+     inputs:"Any shared Telegram link/file; intent save_item, search (Router).",
+     outputs:"knowledge_items rows; Telegram replies with save confirmation or search results.",
+     failure:"Uses the global failure policy (Article XIX).",
+     current:[],
+     planned:["knowledge_items table (Article X)","Multi-type link/file capture","Gemini auto-tag + summarize pipeline","/search across all saved items (Postgres full-text)"],
+     future:["Auto cross-linking related saved items","Scheduled surfacing of forgotten items"]}},
+  {pid:"04",icon:"🛠️",bg:"rgba(110,231,160,.12)",name:"ProjectOS",sub:"Auto-documentation",status:"planned",statusColor:"var(--text-faint)",
+   desc:"A daily check-in turns into automatic changelogs — daily and weekly reports generated from your own one-line updates.",
+   why:"Solves the \"I built something cool 3 months ago and forgot the details\" problem.",
+   ai:"Gemini turns a one-line daily check-in into readable report prose. The underlying daily_logs rows are stored verbatim — the AI output is a view, not the record.",
+   deps:"CoreOS for the user model.",
+   future:"Auto-linking a daily log entry to the task or project it refers to, once tasks and projects are queryable together.",
    tables:"daily_logs · reports",
    feats:["Daily check-in","Auto changelog","Weekly report","Progress summary"],
    cmds:[{u:"built the PDF processor today, hit an OCR bug",b:"logged → Day 14 · ProjectOS"},
-         {u:"/report weekly",b:"5 logs this week · 2 issues resolved · summary generated"}]},
-  {pid:"05",icon:"💼",bg:"rgba(255,180,84,.12)",name:"CareerOS",sub:"Internship & job tracker",status:"growth",statusColor:"var(--text-faint)",
-   desc:"Tracks every application and interview stage, and uses Gemini to compare your resume against a job description to flag missing skills before you apply.",
-   why:"Turns internship hunting from a spreadsheet chore into a system that actively tells you what to fix.",
+         {u:"/report weekly",b:"5 logs this week · 2 issues resolved · summary generated"}],
+   contract:{purpose:"Turn one-line daily check-ins into stored logs and generated reports.",
+     inputs:"Free-text Telegram check-in; intent log_day, generate_report (Router).",
+     outputs:"daily_logs/reports rows; Telegram replies with confirmation or report text.",
+     failure:"Uses the global failure policy (Article XIX). Report generation failing never loses the underlying daily_logs row — the row is written before the AI summarization step runs.",
+     current:[],
+     planned:["daily_logs, reports tables (Article X)","Daily check-in prompt workflow","Gemini weekly report generation"],
+     future:["Auto-linking a log entry to the task/project it refers to"]}},
+  {pid:"05",icon:"💼",bg:"rgba(255,180,84,.12)",name:"CareerOS",sub:"Internship & job tracker",status:"planned",statusColor:"var(--text-faint)",
+   desc:"Tracks every application and interview stage, and uses Gemini to compare your resume against a job description to flag missing skills.",
+   why:"Turns internship hunting from a spreadsheet chore into a system that tells you what to fix.",
+   ai:"Gemini compares resume text against a job description and returns a structured match score and missing-skills list — a recommendation the user acts on, not an auto-edit of the resume.",
+   deps:"CoreOS for the user model.",
+   future:"Auto-drafted follow-up messages per application stage, and deadline reminders feeding CoreOS's task list directly.",
    tables:"applications · resume_analysis",
    feats:["Application tracker","Interview stages","Resume gap analysis","Deadline alerts"],
    cmds:[{u:"/apply Google · SWE Intern · deadline Aug 1",b:"tracked → stage: applied"},
-         {u:"/matchresume [job link]",b:"match: 78% · missing skill: Docker"}]},
-  {pid:"06",icon:"💰",bg:"rgba(94,234,212,.12)",name:"Finance Tracker",sub:"Spending awareness",status:"growth",statusColor:"var(--text-faint)",
+         {u:"/matchresume [job link]",b:"match: 78% · missing skill: Docker"}],
+   contract:{purpose:"Track applications and interview stages; compare resume vs job description.",
+     inputs:"Telegram commands; intent add_application, match_resume (Router).",
+     outputs:"applications/resume_analysis rows; Telegram replies with tracked status or match score.",
+     failure:"Uses the global failure policy (Article XIX). A failed Gemini match never writes a partial resume_analysis row (Article XIX, Supabase row).",
+     current:[],
+     planned:["applications, resume_analysis tables (Article X)","Application + interview stage tracker","Gemini resume vs JD gap analysis","Deadline reminder workflow"],
+     future:["Auto-drafted follow-up messages per stage","Deadline reminders feeding CoreOS's task list"]}},
+  {pid:"06",icon:"💰",bg:"rgba(94,234,212,.12)",name:"Finance Tracker",sub:"Spending awareness",status:"planned",statusColor:"var(--text-faint)",
    desc:"Log expenses in plain language via Telegram — auto-categorized, with weekly summaries and budget threshold alerts.",
    why:"Smallest module to build, but a daily-use habit — good early win to keep momentum.",
+   ai:"Gemini parses free-text spend ('spent 250 on lunch') into amount + category. Budget math and threshold alerts are plain SQL — no AI in the number path.",
+   deps:"CoreOS for the user model.",
+   future:"Recurring-expense detection and a monthly trend summary feeding AnalyticsOS.",
    tables:"expenses · budgets",
    feats:["Natural-language logging","Auto-categorize","Weekly summary","Budget alerts"],
-   cmds:[{u:"spent 300 on groceries",b:"logged → ₹300 · Food · this week: ₹1,840"},
-         {u:"/budget food",b:"₹1,840 / ₹2,500 this month · 74% used"}]},
-  {pid:"07",icon:"📊",bg:"rgba(184,161,255,.12)",name:"AnalyticsOS",sub:"The connective layer",status:"capstone",statusColor:"var(--violet)",
-   desc:"Pulls data from every other module into one weekly digest with a computed productivity score and pattern-based recommendations — this is what makes LifeOS feel like one system.",
+   cmds:[{u:"spent ₹250 on lunch",b:"logged → ₹250 · Food · this week: ₹1,840"},
+         {u:"/budget food",b:"₹1,840 / ₹2,500 this month · 74% used"}],
+   contract:{purpose:"Log expenses from natural language, categorize them, and alert on budget thresholds.",
+     inputs:"Free-text Telegram spend message; intent log_expense, check_budget (Router).",
+     outputs:"expenses/budgets rows; Telegram replies with logged amount or budget status.",
+     failure:"Uses the global failure policy (Article XIX). Budget threshold math is plain SQL, so it never fails due to an AI outage — only the categorization step depends on Gemini.",
+     current:[],
+     planned:["expenses, budgets tables (Article X)","Gemini natural-language expense parsing","Auto-categorization","Weekly summary + budget alerts"],
+     future:["Recurring-expense detection","Monthly trend summary feeding AnalyticsOS"]}},
+  {pid:"07",icon:"📊",bg:"rgba(184,161,255,.12)",name:"AnalyticsOS",sub:"The connective layer",status:"planned",statusColor:"var(--text-faint)",
+   desc:"Pulls data from every other module into one weekly digest with a computed productivity score and pattern-based recommendations.",
    why:"The module that proves the whole system is actually connected, not just seven bots sharing a name.",
+   ai:"Gemini turns aggregated metrics into a written recommendation ('increase DBMS revision — quiz scores dropped 12%'). The metrics themselves are computed with plain SQL against the event log (Article XII), not inferred by the model.",
+   deps:"Every other module — this is the one place where that's intentional. Reads events_log plus each module's own tables; owns nothing upstream of itself.",
+   future:"Once events_log is live, migrate from querying each module's tables directly to reading the event log exclusively — see Article XII.",
    tables:"metrics_daily · weekly_scores",
    feats:["Weekly digest","Productivity score","Cross-module patterns","AI recommendations"],
    cmds:[{u:"/weekly",b:"study 16h · coding 12h · tasks done 22 · score: 84"},
-         {u:"[auto, Sunday 8pm]",b:"recommend: increase DBMS revision — quiz scores dropped 12%"}]},
+         {u:"[auto, Sunday 8pm]",b:"recommend: increase DBMS revision — quiz scores dropped 12%"}],
+   contract:{purpose:"Aggregate every module's activity into a weekly productivity score and recommendation.",
+     inputs:"Scheduled cron trigger (Sunday); reads events_log (Article XII) and each module's own tables.",
+     outputs:"metrics_daily/weekly_scores rows; Telegram digest message.",
+     failure:"Uses the global failure policy (Article XIX). Read-only against other modules' data (Article XI) — a failure here can never corrupt another module's tables.",
+     current:[],
+     planned:["metrics_daily, weekly_scores tables (Article X)","Cross-module data aggregation via direct table reads","Productivity score calculation","Gemini pattern-based recommendations"],
+     future:["Migrate reads from per-module tables to events_log exclusively (Article XII)"]}},
 ];
 const moduleList = document.getElementById('module-list');
 modules.forEach(m=>{
   const el = document.createElement('div');
   el.className = 'module reveal';
+  const c = m.contract;
+  const contractHTML = c ? `
+        <div class="module-sub-label">module contract</div>
+        <div class="module-contract">
+          <div class="module-contract-row"><b>Purpose</b><span>${c.purpose}</span></div>
+          <div class="module-contract-row"><b>Dependencies</b><span>${m.deps}</span></div>
+          <div class="module-contract-row"><b>Database</b><span>${m.tables}</span></div>
+          <div class="module-contract-row"><b>Inputs</b><span>${c.inputs}</span></div>
+          <div class="module-contract-row"><b>Outputs</b><span>${c.outputs}</span></div>
+          <div class="module-contract-row"><b>Failure Behaviour</b><span>${c.failure}</span></div>
+        </div>
+        <div class="module-sub-label" style="color:var(--green)">current implementation</div>
+        <p style="font-size:12.5px;color:var(--text-dim);margin-bottom:10px;">${c.current.length ? c.current.join(' · ') : 'Nothing shipped yet for this module — see Article XIV, Project Maturity.'}</p>
+        <div class="module-sub-label" style="color:var(--amber)">planned behaviour</div>
+        <p style="font-size:12.5px;color:var(--text-dim);margin-bottom:10px;">${c.planned.join(' · ')}</p>
+        <div class="module-sub-label" style="color:var(--violet)">future extensions</div>
+        <p style="font-size:12.5px;color:var(--text-dim);margin-bottom:14px;">${c.future.join(' · ')}</p>` : '';
   el.innerHTML = `
     <div class="module-head">
       <div class="module-pid">PID ${m.pid}</div>
@@ -545,8 +1670,9 @@ modules.forEach(m=>{
         <p>${m.desc}</p>
         <div class="module-why">${m.why}</div>
         <div class="module-feats">${m.feats.map(f=>`<span>${f}</span>`).join('')}</div>
-        <div class="module-sub-label">tables</div>
-        <div class="module-tables">${m.tables}</div>
+        ${contractHTML}
+        <div class="module-sub-label">ai usage</div>
+        <p style="font-size:12.5px;color:var(--text-dim);margin-bottom:14px;">${m.ai}</p>
         <div class="module-sub-label">example exchange</div>
         ${m.cmds.map(c=>`<div class="module-cmd"><span class="you">you: ${c.u}</span><br>bot: ${c.b}</div>`).join('')}
       </div>
@@ -562,119 +1688,274 @@ document.querySelectorAll('.module-head').forEach(h=>{
   });
 });
 
-/* ===== WORKFLOWS DATA ===== */
-const flows = [
-  {name:"Morning Brief", desc:"Runs daily on a schedule — no user action needed.", nodes:[
-    {k:"trigger",v:"Cron — 7:00 AM daily"},
-    {k:"fetch",v:"Supabase: today's tasks, events, goals"},
-    {k:"process",v:"Gemini: prioritize + reasoning"},
-    {k:"format",v:"Build digest message"},
-    {k:"deliver",v:"Telegram: send to user"},
-  ]},
-  {name:"PDF → Quiz", desc:"Triggered by a file upload in Telegram.", nodes:[
-    {k:"trigger",v:"Telegram: /uploadpdf + file"},
-    {k:"store",v:"Supabase Storage: save PDF"},
-    {k:"process",v:"Gemini: extract + summarize + quiz"},
-    {k:"store",v:"Supabase: structured notes + quiz"},
-    {k:"deliver",v:"Telegram: confirm, ready to /quiz"},
-  ]},
-  {name:"Knowledge Save", desc:"Triggered by sharing any link or file.", nodes:[
-    {k:"trigger",v:"Telegram: link or file shared"},
-    {k:"detect",v:"Identify type — article / video / repo"},
-    {k:"process",v:"Gemini: summarize + auto-tag"},
-    {k:"store",v:"Supabase: save with search index"},
-    {k:"deliver",v:"Telegram: confirm saved"},
-  ]},
-  {name:"Habit Check-in", desc:"Inline button tap, no typing required.", nodes:[
-    {k:"trigger",v:"Telegram: inline button tap"},
-    {k:"upsert",v:"Supabase: log today's habit entry"},
-    {k:"calculate",v:"Compute current streak"},
-    {k:"deliver",v:"Telegram: confirm + streak count"},
-  ]},
-  {name:"Expense Logging", desc:"Natural language parsed into structured data.", nodes:[
-    {k:"trigger",v:"Telegram: free-text expense message"},
-    {k:"process",v:"Gemini: parse amount + category"},
-    {k:"store",v:"Supabase: insert expense row"},
-    {k:"check",v:"Compare against monthly budget"},
-    {k:"deliver",v:"Telegram: confirm, alert if over threshold"},
-  ]},
-  {name:"Weekly Analytics", desc:"The capstone workflow — reads from every other module.", nodes:[
-    {k:"trigger",v:"Cron — Sunday 8:00 PM"},
-    {k:"aggregate",v:"Supabase: pull from all module tables"},
-    {k:"process",v:"Gemini: score + generate recommendations"},
-    {k:"store",v:"Supabase: save weekly_scores row"},
-    {k:"deliver",v:"Telegram: send full weekly digest"},
-  ]},
+/* ===== DATABASE DICTIONARY DATA — derived from Article X (schema) + Article XI (ownership tree) ===== */
+const dictionary = [
+  {t:"users",purpose:"Stores every registered Telegram user. Root entity — every other table's FK chain terminates here (Article XI).",
+   columns:"id, telegram_id, name, timezone",relationships:"Referenced by every user-owned table via user_id.",
+   indexesCurrent:"Primary key (id)",indexesFuture:"Index on telegram_id — the lookup Article XVI's Design→Database step will need once user count grows past a handful.",
+   futureColumns:"timezone (used, not yet added) · locale · preferences",usedBy:"CoreOS (owner) · every module, transitively, via user_id",live:true},
+  {t:"tasks",purpose:"A user's tasks — the core CoreOS loop.",columns:"id, user_id, title, priority, status, due_date",
+   relationships:"user_id → users.id",indexesCurrent:"Primary key (id) — table not yet created",indexesFuture:"user_id + due_date composite, for the Morning Brief query",
+   futureColumns:"recurrence rule · parent_task_id (sub-tasks)",usedBy:"CoreOS (owner) · AnalyticsOS (read)",live:false},
+  {t:"goals",purpose:"Longer-horizon goals tracked alongside tasks.",columns:"id, user_id, title, target_date, progress",
+   relationships:"user_id → users.id",indexesCurrent:"Primary key (id) — table not yet created",indexesFuture:"TBD",
+   futureColumns:"linked_task_ids[]",usedBy:"CoreOS (owner)",live:false},
+  {t:"events",purpose:"Calendar state owned by CoreOS — not the same table as events_log (Article XII).",columns:"id, user_id, title, start_time, end_time, source",
+   relationships:"user_id → users.id · task_id → tasks.id (nullable)",indexesCurrent:"Primary key (id) — table not yet created",indexesFuture:"user_id + start_time, for calendar-range queries",
+   futureColumns:"recurrence rule",usedBy:"CoreOS (owner) · Google Calendar sync (Article II)",live:false},
+  {t:"documents",purpose:"Uploaded course PDFs and their generated summary.",columns:"id, user_id, title, subject, file_url, summary",
+   relationships:"user_id → users.id",indexesCurrent:"Primary key (id) — table not yet created",indexesFuture:"TBD",
+   futureColumns:"page_count · ocr_status",usedBy:"StudyOS (owner)",live:false},
+  {t:"quiz_questions",purpose:"Quiz questions generated from a document's summary.",columns:"id, document_id, question, answer, difficulty",
+   relationships:"document_id → documents.id",indexesCurrent:"Primary key (id) — table not yet created",indexesFuture:"document_id",
+   futureColumns:"last_reviewed_at (for spaced repetition)",usedBy:"StudyOS (owner)",live:false},
+  {t:"grades",purpose:"Per-subject grades for GPA tracking.",columns:"id, user_id, subject, grade, credits",
+   relationships:"user_id → users.id",indexesCurrent:"Primary key (id) — table not yet created",indexesFuture:"TBD",
+   futureColumns:"semester",usedBy:"StudyOS (owner)",live:false},
+  {t:"knowledge_items",purpose:"Every saved link, file, or note — the Knowledge Vault's only table.",columns:"id, user_id, type, title, url, summary, tags[]",
+   relationships:"user_id → users.id",indexesCurrent:"Primary key (id) — table not yet created",indexesFuture:"Postgres full-text index on title + summary, for /search",
+   futureColumns:"source_module (if captured from another module)",usedBy:"Knowledge Vault (owner)",live:false},
+  {t:"daily_logs",purpose:"One-line daily check-ins, stored verbatim.",columns:"id, user_id, date, task, issue, learning",
+   relationships:"user_id → users.id",indexesCurrent:"Primary key (id) — table not yet created",indexesFuture:"user_id + date",
+   futureColumns:"linked_task_id · linked_project_id",usedBy:"ProjectOS (owner)",live:false},
+  {t:"reports",purpose:"Generated weekly/period summaries aggregated from daily_logs.",columns:"id, user_id, period, content, generated_at",
+   relationships:"user_id → users.id",indexesCurrent:"Primary key (id) — table not yet created",indexesFuture:"TBD",
+   futureColumns:"none identified yet",usedBy:"ProjectOS (owner)",live:false},
+  {t:"applications",purpose:"Job/internship applications and their stage.",columns:"id, user_id, company, role, stage, applied_date, deadline",
+   relationships:"user_id → users.id",indexesCurrent:"Primary key (id) — table not yet created",indexesFuture:"user_id + deadline, for reminder queries",
+   futureColumns:"contact_email · notes",usedBy:"CareerOS (owner)",live:false},
+  {t:"resume_analysis",purpose:"Resume-vs-job-description match results.",columns:"id, user_id, job_id, match_score, missing_skills[]",
+   relationships:"user_id → users.id · job_id → applications.id",indexesCurrent:"Primary key (id) — table not yet created",indexesFuture:"job_id",
+   futureColumns:"none identified yet",usedBy:"CareerOS (owner)",live:false},
+  {t:"expenses",purpose:"Logged expenses, auto-categorized.",columns:"id, user_id, amount, category, note, date",
+   relationships:"user_id → users.id",indexesCurrent:"Primary key (id) — table not yet created",indexesFuture:"user_id + date, for weekly-summary queries",
+   futureColumns:"recurring_expense_id",usedBy:"FinanceOS (owner)",live:false},
+  {t:"budgets",purpose:"Per-category monthly spending limits.",columns:"id, user_id, category, monthly_limit",
+   relationships:"user_id → users.id",indexesCurrent:"Primary key (id) — table not yet created",indexesFuture:"TBD",
+   futureColumns:"none identified yet",usedBy:"FinanceOS (owner)",live:false},
+  {t:"metrics_daily",purpose:"Computed daily metrics aggregated from other modules' tables.",columns:"id, user_id, date, study_hours, coding_hours, tasks_done",
+   relationships:"user_id → users.id — computed, not a writer to any other table (Article XI)",indexesCurrent:"Primary key (id) — table not yet created",indexesFuture:"user_id + date",
+   futureColumns:"none identified yet",usedBy:"AnalyticsOS (owner, read-only against other tables)",live:false},
+  {t:"weekly_scores",purpose:"Computed weekly productivity score and recommendation text.",columns:"id, user_id, week, productivity_score, recommendation",
+   relationships:"user_id → users.id",indexesCurrent:"Primary key (id) — table not yet created",indexesFuture:"user_id + week",
+   futureColumns:"none identified yet",usedBy:"AnalyticsOS (owner)",live:false},
+  {t:"events_log",purpose:"Append-only cross-module activity trail. Not the same table as events (Article XII).",columns:"id, user_id, module, event_type, payload (jsonb), created_at",
+   relationships:"user_id → users.id",indexesCurrent:"Primary key (id) — table not yet created",indexesFuture:"user_id + created_at · module + event_type",
+   futureColumns:"none identified yet",usedBy:"Every module (writer) · AnalyticsOS (reader, Phase 09) · Morning Brief (reader, future)",live:false},
 ];
-const tabsEl = document.getElementById('flow-tabs');
-const panelsEl = document.getElementById('flow-panels');
-const arrowSVG = `<svg viewBox="0 0 36 12" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="0" y1="6" x2="30" y2="6" stroke="currentColor" stroke-width="1.5"/><path d="M24 1L30 6L24 11" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>`;
-flows.forEach((f,i)=>{
-  const tab = document.createElement('div');
-  tab.className = 'flow-tab' + (i===0?' active':'');
-  tab.textContent = f.name;
-  tab.onclick = ()=>{
-    document.querySelectorAll('.flow-tab').forEach(t=>t.classList.remove('active'));
-    document.querySelectorAll('.flow-panel').forEach(p=>p.classList.remove('active'));
-    tab.classList.add('active');
-    document.getElementById('panel-'+i).classList.add('active');
-  };
-  tabsEl.appendChild(tab);
-
-  const panel = document.createElement('div');
-  panel.className = 'flow-panel' + (i===0?' active':'');
-  panel.id = 'panel-'+i;
-  let chain = `<div class="flow-desc">${f.desc}</div><div class="flow-chain">`;
-  f.nodes.forEach((n,j)=>{
-    chain += `<div class="flow-node"><div class="k">${n.k}</div><div class="v">${n.v}</div></div>`;
-    if(j < f.nodes.length-1){
-      chain += `<div class="flow-arrow">${arrowSVG}<div class="pulse" style="animation-delay:${j*0.3}s"></div></div>`;
-    }
-  });
-  chain += '</div>';
-  panel.innerHTML = chain;
-  panelsEl.appendChild(panel);
+const dictList = document.getElementById('dict-list');
+dictionary.forEach(d=>{
+  const el = document.createElement('div');
+  el.className = 'dict-card reveal';
+  el.innerHTML = `
+    <div class="dict-card-head"><code>${d.t}</code><span class="stat ${d.live?'live':'planned'}" style="margin-left:auto;">${d.live?'live':'planned'}</span></div>
+    <div class="dict-row"><b>Purpose</b><span>${d.purpose}</span></div>
+    <div class="dict-row"><b>Columns</b><span class="mono">${d.columns}</span></div>
+    <div class="dict-row"><b>Relationships</b><span>${d.relationships}</span></div>
+    <div class="dict-row"><b>Indexes — current</b><span>${d.indexesCurrent}</span></div>
+    <div class="dict-row"><b>Indexes — future</b><span class="future">${d.indexesFuture}</span></div>
+    <div class="dict-row"><b>Future columns</b><span class="future">${d.futureColumns}</span></div>
+    <div class="dict-row"><b>Used by</b><span>${d.usedBy}</span></div>`;
+  dictList.appendChild(el);
 });
+observeAll('#dict-list .dict-card');
 
-/* ===== ROADMAP DATA ===== */
+/* ===== EVENT REGISTRY DATA — contract only, payloads TBD until owning module ships (Article XII) ===== */
+const events = [
+  {name:"user.registered",producer:"001-Gateway",consumers:"none yet",payload:"TBD (implemented during 001-Gateway → events_log wiring)"},
+  {name:"task.created",producer:"CoreOS",consumers:"AnalyticsOS (Phase 09)",payload:"TBD (implemented during CoreOS)"},
+  {name:"task.completed",producer:"CoreOS",consumers:"AnalyticsOS (Phase 09)",payload:"TBD (implemented during CoreOS)"},
+  {name:"calendar.synced",producer:"CoreOS",consumers:"AnalyticsOS (Phase 09)",payload:"TBD (implemented during CoreOS)"},
+  {name:"document.uploaded",producer:"StudyOS",consumers:"AnalyticsOS (Phase 09)",payload:"TBD (implemented during StudyOS)"},
+  {name:"quiz.completed",producer:"StudyOS",consumers:"AnalyticsOS (Phase 09)",payload:"TBD (implemented during StudyOS)"},
+  {name:"knowledge_item.saved",producer:"Knowledge Vault",consumers:"AnalyticsOS (Phase 09)",payload:"TBD (implemented during Knowledge Vault)"},
+  {name:"daily_log.created",producer:"ProjectOS",consumers:"AnalyticsOS (Phase 09)",payload:"TBD (implemented during ProjectOS)"},
+  {name:"application.created",producer:"CareerOS",consumers:"AnalyticsOS (Phase 09)",payload:"TBD (implemented during CareerOS)"},
+  {name:"resume.analyzed",producer:"CareerOS",consumers:"AnalyticsOS (Phase 09)",payload:"TBD (implemented during CareerOS)"},
+  {name:"expense.logged",producer:"FinanceOS",consumers:"AnalyticsOS (Phase 09)",payload:"TBD (implemented during FinanceOS)"},
+  {name:"budget.exceeded",producer:"FinanceOS",consumers:"AnalyticsOS (Phase 09) · Telegram reply, direct (not via consumer)",payload:"TBD (implemented during FinanceOS)"},
+];
+const eventList = document.getElementById('event-list');
+events.forEach(e=>{
+  const el = document.createElement('div');
+  el.className = 'event-card reveal';
+  el.innerHTML = `
+    <div class="event-card-head"><code>${e.name}</code></div>
+    <div class="event-fields">
+      <div><b>Producer</b><span>${e.producer}</span></div>
+      <div><b>Consumers</b><span>${e.consumers}</span></div>
+      <div><b>Payload</b><span class="tbd">${e.payload}</span></div>
+      <div><b>Retry</b><span>Uses the global retry policy (Article XIX).</span></div>
+    </div>`;
+  eventList.appendChild(el);
+});
+observeAll('#event-list .event-card');
+
+/* ===== TELEGRAM COMMAND SPEC DATA — references, not duplicated logic ===== */
+const commands = [
+  {cmd:"/start",module:"001-Gateway",desc:"Implicit registration check — live today."},
+  {cmd:"/addtask",module:"CoreOS"},
+  {cmd:"/tasks",module:"CoreOS"},
+  {cmd:"/done",module:"CoreOS"},
+  {cmd:"/delete",module:"CoreOS"},
+  {cmd:"/summary",module:"CoreOS",desc:"Morning Brief, on demand."},
+  {cmd:"/uploadpdf",module:"StudyOS"},
+  {cmd:"/quiz",module:"StudyOS"},
+  {cmd:"/revise",module:"StudyOS"},
+  {cmd:"/search",module:"Knowledge Vault"},
+  {cmd:"/report",module:"ProjectOS"},
+  {cmd:"/apply",module:"CareerOS"},
+  {cmd:"/matchresume",module:"CareerOS"},
+  {cmd:"/budget",module:"FinanceOS"},
+  {cmd:"/weekly",module:"AnalyticsOS"},
+];
+const cmdList = document.getElementById('cmd-list');
+commands.forEach(c=>{
+  const el = document.createElement('div');
+  el.className = 'cmd-card reveal';
+  el.innerHTML = `
+    <div class="cmd-card-head"><code>${c.cmd}</code><span class="module-tag">${c.module}</span></div>
+    <div class="cmd-fields">
+      <div><b>Input</b>Telegram message matching this literal command, or its natural-language equivalent (Article VIII, Rule 1).</div>
+      <div><b>Validation</b>Defined by the owning module (${c.module}) — see its Module Contract, Article XIV.</div>
+      <div><b>Workflow</b>See ${c.module}'s Module Contract, Article XIV.</div>
+      <div><b>Response</b>${c.desc ? c.desc : "See " + c.module + "'s Module Contract, Article XIV."}</div>
+      <div><b>Database changes</b>See ${c.module}'s Module Contract → Database, Article XIV.</div>
+      <div><b>Events emitted</b>See Event Registry, Article XII.</div>
+    </div>`;
+  cmdList.appendChild(el);
+});
+observeAll('#cmd-list .cmd-card');
+
+/* ===== PROJECT MATURITY LEGEND ===== */
+const maturityStates = [
+  {name:"Implemented",color:"var(--green)"},
+  {name:"Stable",color:"var(--green)"},
+  {name:"In Development",color:"var(--amber)"},
+  {name:"Planned",color:"var(--text-dim)"},
+  {name:"Research",color:"var(--violet)"},
+  {name:"Deprecated",color:"var(--red)"},
+];
+const maturityLegend = document.getElementById('maturity-legend');
+maturityStates.forEach(s=>{
+  const el = document.createElement('div');
+  el.className = 'item';
+  el.innerHTML = `<span class="dot" style="background:${s.color}"></span>${s.name}`;
+  maturityLegend.appendChild(el);
+});
+observeAll('#maturity-legend .item');
+
+/* ===== ENGINEERING PRINCIPLES DATA (Article XXII) ===== */
+const engPrinciples = [
+  {n:"01",title:"Supabase is the single source of truth.",why:"Two writers to the same fact eventually disagree, and there is no way to know which one is right after the fact.",good:"Google Calendar mirrors Supabase.",bad:"Writing a task independently to Supabase and Calendar."},
+  {n:"02",title:"Never duplicate data.",why:"Duplicate state creates synchronization bugs the moment one copy updates and the other doesn't.",good:"tasks.due_date is the only stored due date; Calendar reads it.",bad:"Storing due_date separately in both tasks and events."},
+  {n:"03",title:"Never trust AI output without validation.",why:"Gemini can return malformed JSON, a low-confidence guess, or hallucinate a field. Unvalidated AI output writing straight to Supabase is an unvalidated user input, just from a different source.",good:"Parse Gemini's JSON, check required fields exist, then write.",bad:"Passing Gemini's raw response directly into a Supabase insert."},
+  {n:"04",title:"Every workflow is idempotent.",why:"Telegram can and does deliver the same update twice. A workflow that isn't safe to re-run creates duplicate users, tasks, or expenses.",good:"Check for an existing row by telegram_update_id before inserting.",bad:"Insert-on-receipt with no duplicate check."},
+  {n:"05",title:"Every database change has a migration.",why:"A schema change that only exists in the running Supabase instance is invisible to git history and unreproducible by anyone else.",good:"A new file under database/migrations/ for every ALTER or CREATE.",bad:"Adding a column through the Supabase UI with no migration file."},
+  {n:"06",title:"Every feature is observable.",why:"A workflow that fails silently in production is indistinguishable from one that's working, until a user notices something's missing.",good:"Every workflow logs success/failure/duration (Article XXII).",bad:"A workflow with no logging that only reveals failure when a user complains."},
+  {n:"07",title:"No silent failures.",why:"Silence is the one failure mode a user can't route around — see Article XIX, Rule 1.",good:"\"I couldn't create your task because Calendar is unavailable.\"",bad:"The command does nothing and the user has no idea it failed."},
+  {n:"08",title:"Every PR updates documentation.",why:"Documentation that lags the code is worse than no documentation — it actively misleads the next reader.",good:"README + CHANGELOG updated in the same PR as the feature (Article XVI, steps 6–7).",bad:"\"I'll document it later\" merged to main."},
+  {n:"09",title:"One responsibility per workflow.",why:"A workflow that does Telegram → Everything can't be tested, reused, or reasoned about in isolation.",good:"Gateway routes. Router dispatches. Task Engine owns tasks.",bad:"One workflow that receives the Telegram update, parses intent, writes the DB, and syncs Calendar."},
+  {n:"10",title:"Configuration lives outside code.",why:"A hardcoded secret or URL in a workflow JSON export becomes a committed secret the moment that export is pushed.",good:"Bot token in .env / n8n Credentials (Article III, Rule 5).",bad:"Bot token pasted directly into an HTTP Request node."},
+  {n:"11",title:"If it isn't documented, it doesn't exist.",why:"An undocumented decision has no way to be defended, reversed deliberately, or explained to the next contributor — it just looks arbitrary.",good:"Every architectural choice gets an ADR (Article IV) before or alongside the code.",bad:"A design decision that only lives in one person's memory of a conversation."},
+  {n:"12",title:"Deterministic logic before AI.",why:"AI is slower, costs money per call, and is non-deterministic. Anywhere a rule fully specifies the answer, a rule should give it.",good:"Budget threshold math is plain SQL (Article XIII).",bad:"Asking Gemini whether a number is over a budget limit."},
+  {n:"13",title:"AI never stores state.",why:"If the model is the record of what's true, the record changes depending on which model version answered — see ADR 006.",good:"Gemini classifies intent; Supabase stores the resulting task row.",bad:"Relying on conversation history instead of a database row to know a task exists."},
+  {n:"14",title:"Published tags are immutable.",why:"A renamed or reused tag breaks the link between a version number and the exact code that shipped under it — see Article VII, Rule 3.",good:"A bad v0.4.0 is fixed by shipping v0.4.1, not by re-tagging v0.4.0.",bad:"Deleting and re-pushing a tag to \"fix\" what it points to."},
+  {n:"15",title:"Infrastructure never dictates architecture.",why:"A module should be designed the way the problem needs, not reshaped around whatever's cheapest or easiest to host this month — see Article XVII, Principle 05.",good:"Cron workflows are designed correctly now; the Quick Tunnel limitation just delays when they can run unattended.",bad:"Avoiding a scheduled workflow's correct design because the current tunnel can't run it yet."},
+];
+const eprincipleList = document.getElementById('eprinciple-list');
+engPrinciples.forEach(p=>{
+  const el = document.createElement('div');
+  el.className = 'eprinciple reveal';
+  el.innerHTML = `
+    <div class="eprinciple-head"><span class="enum">${p.n}</span><h4>${p.title}</h4></div>
+    <div class="eprinciple-why"><b style="color:var(--text-faint);font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;">Why —</b> ${p.why}</div>
+    <div class="eprinciple-ex">
+      <div class="good"><b>Good</b>${p.good}</div>
+      <div class="bad"><b>Anti-pattern</b>${p.bad}</div>
+    </div>`;
+  eprincipleList.appendChild(el);
+});
+observeAll('#eprinciple-list .eprinciple');
+
+/* ===== ROADMAP DATA — infra migration moved to the end, per project decision ===== */
 const roadmap = [
-  {n:"01",name:"Foundation",tag:"infra",goal:"Stand up the core system every other module depends on.",stack:"DigitalOcean · Docker · n8n · Supabase · Telegram API",
-   items:["Provision DigitalOcean droplet + Docker","Deploy n8n + Supabase connection","Create Telegram bot + webhook","Build users / tasks / goals / events tables"]},
-  {n:"02",name:"Core Loop",tag:"daily driver",goal:"Make it something you actually check every morning.",stack:"n8n cron · Gemini API",
-   items:["/addtask, /tasks, /summary commands","Morning Brief cron workflow","Goal tracking CRUD","Gemini prioritization reasoning"]},
-  {n:"03",name:"StudyOS",tag:"academic",goal:"Turn course material into an active study pipeline.",stack:"Supabase Storage · Gemini extraction",
+  {n:"01",name:"Foundation",tag:"v0.1.0 + v0.2.0",shipped:true,goal:"Stand up the core system every other module depends on.",stack:"Docker · n8n · Supabase · Telegram API · Cloudflare Quick Tunnel",
+   items:["Docker + n8n running locally","Supabase project + users table","Telegram bot + Quick Tunnel webhook","Registration + existing-user flow"],
+   full:{why:"Nothing else can be built — no database, no bot, no webhook — until this exists. It's infrastructure, not a feature.",
+     db:"users (id, telegram_id, name, timezone) — created and live.",
+     workflow:"001 · Telegram Trigger → user lookup → create-or-welcome.",
+     telegram:"/start (implicit — any message triggers registration check)",
+     testing:"New user → registration flow. Existing user → welcome-back flow. Empty Supabase project → first row inserts cleanly.",
+     dod:"A message sent to the bot from a fresh Telegram account creates a row in users and replies with a welcome message; a second message from the same account replies with a welcome-back message.",
+     deps:"None — this is the root of the dependency graph.",
+     unlocks:"Every other module — this is the account system they all key off of.",
+     merge:"Full Article III checklist, since this shipped to main.",
+     rollback:"Standard rollback strategy — see box above."}},
+  {n:"02",name:"The Router",tag:"target v0.3.0",shipped:false,goal:"Collapse the Telegram Trigger into a single router before a second command exists.",stack:"n8n Switch/Router · Gemini classification",
+   items:["Refactor Telegram Trigger into 001-Gateway","Literal-command switch branch","Gemini intent-classification branch","Shared intent-key contract for Execute Workflow"],
+   full:{why:"Telegram allows exactly one webhook (ADR 004). Every command from here on has to pass through one place, or every future module needs its own migration to retrofit this.",
+     db:"No schema changes — this phase is pure routing logic.",
+     workflow:"001-Gateway (refactored) → 002-Router: starts-with-\"/\" switch → literal branch or Gemini intent branch → Execute Workflow by intent key.",
+     telegram:"No new user-facing commands yet — this phase is the plumbing, not a feature. /start still resolves through the new path unchanged.",
+     testing:"Literal command → correct branch, no AI call. Natural-language message → Gemini branch → structured JSON. Unrecognized command → help-text reply, never silence.",
+     dod:"Both a literal command and its natural-language equivalent resolve to the identical intent key, and an unrecognized message always produces a reply.",
+     deps:"Phase 01 (needs a working webhook + user lookup to route around).",
+     unlocks:"Every module after this one — Phase 03 onward assumes the Router exists and never touches the Telegram Trigger directly.",
+     merge:"Full Article III checklist — required before this reaches main.",
+     rollback:"Standard rollback strategy — see box above. In particular: restore the pre-Router 001 export, since the Router replaces it in place."}},
+  {n:"03",name:"Core Loop",tag:"target v0.4.0",shipped:false,goal:"Make it something you actually check every morning.",stack:"n8n cron · Gemini API · Google Calendar",
+   items:["tasks table + /addtask /tasks /done /delete","Google Calendar sync","Morning Brief cron workflow","Gemini prioritization reasoning"]},
+  {n:"04",name:"StudyOS",tag:"target v0.5.0",shipped:false,goal:"Turn course material into an active study pipeline.",stack:"Supabase Storage · Gemini extraction",
    items:["/uploadpdf ingestion + storage","Gemini summarization pipeline","/quiz generation + delivery","GPA / exam countdown tracker"]},
-  {n:"04",name:"Knowledge Vault",tag:"second brain",goal:"Never lose something you learned again.",stack:"Gemini tagging · Postgres full-text search",
+  {n:"05",name:"Knowledge Vault",tag:"target v0.6.0",shipped:false,goal:"Never lose something you learned again.",stack:"Gemini tagging · Postgres full-text search",
    items:["Multi-type link/file capture","Auto-tag + summarize pipeline","/search across all saved items"]},
-  {n:"05",name:"ProjectOS",tag:"documentation",goal:"Turn daily check-ins into automatic reports.",stack:"n8n scheduled aggregation · Gemini",
+  {n:"06",name:"ProjectOS",tag:"target v0.7.0",shipped:false,goal:"Turn daily check-ins into automatic reports.",stack:"n8n scheduled aggregation · Gemini",
    items:["Daily check-in prompt workflow","Structured log storage","Auto weekly report generation"]},
-  {n:"06",name:"CareerOS",tag:"job hunt",goal:"Make internship hunting data-driven.",stack:"Gemini resume comparison",
+  {n:"07",name:"CareerOS",tag:"target v0.8.0",shipped:false,goal:"Make internship hunting data-driven.",stack:"Gemini resume comparison",
    items:["Application + interview tracker","Resume vs JD gap analysis","Deadline reminder workflow"]},
-  {n:"07",name:"AnalyticsOS",tag:"capstone",goal:"Connect every module into one weekly signal.",stack:"Cross-table Supabase queries · Gemini scoring",
+  {n:"08",name:"FinanceOS",tag:"target v0.9.0",shipped:false,goal:"Smallest module, fastest daily-use win.",stack:"Gemini expense parsing",
+   items:["Natural-language expense logging","Auto-categorization","Weekly summary + budget alerts"]},
+  {n:"09",name:"AnalyticsOS",tag:"target v0.10.0",shipped:false,goal:"Connect every module into one weekly signal.",stack:"Cross-table Supabase queries · Gemini scoring",
    items:["Cross-module data aggregation","Productivity score calculation","Pattern-based recommendations"]},
-  {n:"08",name:"Dashboard + Polish",tag:"optional",goal:"Add a visual layer and harden the system.",stack:"React · Tailwind · Supabase Auth",
-   items:["React dashboard reading same Supabase data","Supabase Auth login","Error handling + retry logic in n8n","README + architecture diagram for resume"]},
+  {n:"10",name:"Deploy & Harden",tag:"target v1.0.0",shipped:false,goal:"Move off the laptop only once the workflows are proven — this phase closes out the MVP checklist in Article VII.",stack:"Named Cloudflare Tunnel or DigitalOcean · Oracle Always Free · React",
+   items:["Named Tunnel or DigitalOcean droplet","Migrate to Oracle Always Free (permanent)","Error handling + retry logic across all workflows","React dashboard on same Supabase data","README + architecture diagram"]},
 ];
 const roadmapList = document.getElementById('roadmap-list');
 roadmap.forEach((p,i)=>{
   const el = document.createElement('div');
-  el.className = 'phase reveal';
+  el.className = 'phase reveal' + (p.shipped?' done':'');
+  const fullBlock = p.full ? `
+      <div class="module-sub-label" style="margin-top:16px;">why this sprint exists</div>
+      <p style="font-size:12.5px;color:var(--text-dim);margin-bottom:10px;">${p.full.why}</p>
+      <table class="compare" style="margin-bottom:12px;font-size:12px;">
+        <tr><td style="width:140px;"><b>Database</b></td><td>${p.full.db}</td></tr>
+        <tr><td><b>Workflow</b></td><td>${p.full.workflow}</td></tr>
+        <tr><td><b>Telegram</b></td><td class="mono">${p.full.telegram}</td></tr>
+        <tr><td><b>Testing</b></td><td>${p.full.testing}</td></tr>
+        <tr><td><b>Definition of done</b></td><td>${p.full.dod}</td></tr>
+        <tr><td><b>Dependencies</b></td><td>${p.full.deps}</td></tr>
+        <tr><td><b>Future unlocks</b></td><td>${p.full.unlocks}</td></tr>
+        <tr><td><b>Merge requirements</b></td><td>${p.full.merge}</td></tr>
+        <tr><td><b>Rollback strategy</b></td><td>${p.full.rollback}</td></tr>
+      </table>` : '';
   el.innerHTML = `
     <div class="phase-rail">
       <div class="phase-dot"></div>
       ${i<roadmap.length-1?'<div class="phase-line"></div>':''}
     </div>
-    <div class="phase-card">
+    <div class="phase-card${p.shipped?' shipped':''}">
       <div class="phase-card-head">
         <h3><span class="num">${p.n}</span>${p.name}</h3>
-        <div class="phase-tag">${p.tag}</div>
+        <div class="phase-tag${p.shipped?' shipped':''}">${p.tag}</div>
       </div>
       <div class="phase-goal">${p.goal}</div>
       <div class="phase-stack"><b>uses:</b> ${p.stack}</div>
       <div class="checklist">
-        ${p.items.map((it,j)=>`<div class="check-item" data-phase="${i}" data-item="${j}"><div class="check-box"></div><span class="label">${it}</span></div>`).join('')}
+        ${p.items.map((it,j)=>`<div class="check-item${p.shipped?' checked':''}" data-phase="${i}" data-item="${j}"><div class="check-box"></div><span class="label">${it}</span></div>`).join('')}
       </div>
-      <div class="phase-progress">0 / ${p.items.length} complete</div>
+      <div class="phase-progress">${p.shipped?p.items.length:0} / ${p.items.length} complete</div>
+      ${fullBlock}
     </div>`;
   roadmapList.appendChild(el);
 });
@@ -687,52 +1968,57 @@ document.addEventListener('click', (e)=>{
   const total = phaseEl.querySelectorAll('.check-item').length;
   const done = phaseEl.querySelectorAll('.check-item.checked').length;
   phaseEl.classList.toggle('done', done===total);
+  phaseEl.querySelector('.phase-card').classList.toggle('shipped', done===total);
   phaseEl.querySelector('.phase-progress').textContent = `${done} / ${total} complete`;
 });
 
-/* ===== EXTENSIONS DATA ===== */
-const exts = [
-  {tag:"ML / AIML",title:"Train a real model",desc:"A small classifier on your own task data — predict completion likelihood or ideal time-of-day. Shifts you from AI consumer to AI builder."},
-  {tag:"DevOps",title:"CI/CD + monitoring",desc:"GitHub Actions auto-deploy, Prometheus + Grafana watching your droplet and n8n execution health."},
-  {tag:"Data Engineering",title:"Real ETL + BI",desc:"Formalize AnalyticsOS into proper ETL workflows, add Metabase for dashboards instead of just Telegram summaries."},
-  {tag:"Mobile",title:"Companion app",desc:"React Native app talking to the same Supabase backend, with push notifications alongside Telegram."},
-  {tag:"Security",title:"Auth + hardening",desc:"JWT-based auth on the dashboard, rate-limited webhooks, proper secrets rotation discipline."},
-  {tag:"Systems Design",title:"Design for scale",desc:"Queue-based processing for heavy AI tasks instead of synchronous calls — good interview talking points even at solo scale."},
+/* ===== DECISION LOG DATA (Article XXIII) — condensed chronological version log ===== */
+const decisionLog = [
+  {tag:"v0.1.0",desc:"Created repository. Docker + self-hosted n8n chosen as runtime. Foundation shipped.",future:false},
+  {tag:"v0.2.0",desc:"Telegram Gateway shipped — registration, existing-user detection, welcome flows.",future:false},
+  {tag:"v0.3.0",desc:"Router shipped — literal-command and Gemini-intent branches merged into one intent contract.",future:true},
+  {tag:"v0.4.0",desc:"Core Loop shipped — tasks, Calendar sync, Morning Brief.",future:true},
+  {tag:"v0.5.0",desc:"StudyOS shipped — PDF upload, summaries, quiz generation.",future:true},
+  {tag:"v0.6.0",desc:"Knowledge Vault shipped — save links, tagging, search.",future:true},
+  {tag:"v0.7.0",desc:"ProjectOS shipped — daily check-ins, auto reports.",future:true},
+  {tag:"v0.8.0",desc:"CareerOS shipped — application tracker, resume gap analysis.",future:true},
+  {tag:"v0.9.0",desc:"FinanceOS shipped — expense logging, budget alerts.",future:true},
+  {tag:"v0.10.0",desc:"AnalyticsOS shipped — weekly digest, cross-module scoring.",future:true},
+  {tag:"v1.0.0",desc:"Deploy & Harden complete — permanent hosting, RLS, auth, React dashboard. First complete MVP.",future:true},
 ];
-const extGrid = document.getElementById('ext-grid');
-exts.forEach(x=>{
+const declogEl = document.getElementById('declog');
+decisionLog.forEach(d=>{
   const el = document.createElement('div');
-  el.className = 'ext-card reveal';
-  el.innerHTML = `<div class="tag">${x.tag}</div><h4>${x.title}</h4><p>${x.desc}</p>`;
-  extGrid.appendChild(el);
+  el.className = 'declog-row';
+  el.innerHTML = `<div class="dtag${d.future?' future':''}">${d.tag}</div><span>${d.desc}${d.future?' <i style="color:var(--text-faint)">— projected from the roadmap, Article XXI, not a committed date</i>':''}</span>`;
+  declogEl.appendChild(el);
 });
-observeAll('#ext-grid .ext-card');
 
-/* ===== FAQ DATA ===== */
-const faqs = [
-  {q:"What if Oracle Cloud capacity signup fails?",a:"Retry over a few days, try a different availability domain, or fall back to Google Cloud's e2-micro (also free forever, just 1GB RAM instead of 12GB). Don't let this block starting — build on DigitalOcean first."},
-  {q:"What happens if Gemini's free tier rate limits are hit?",a:"Cache responses where possible (e.g. don't re-summarize the same PDF twice), space out heavy workflows, or fall back to a small self-hosted model via Ollama for non-critical parsing tasks."},
-  {q:"Is my data private?",a:"Yes — Supabase supports row-level security scoped to your user ID, and this is a single-user system by design. If you open it to others later, RLS policies need to be revisited."},
-  {q:"What happens after graduation?",a:"Nothing breaks — it's your own infrastructure. Keep using it as a personal tool, or open-source the repo as a portfolio piece with a live demo link."},
-  {q:"Do I need to build all 7 modules before it's useful?",a:"No — Core OS alone (Phase 1–2) is already a usable daily tool. Everything after that adds value incrementally; there's no point where the system is 'incomplete' and unusable."},
-  {q:"Why Telegram instead of a mobile app from day one?",a:"Zero app-store friction, free API, built-in push notifications, and it's already installed on your phone — the fastest path to a daily-use interface. The dashboard/app comes later once the core logic is proven."},
+/* ===== INFRA STACK DATA ===== */
+const stack = [
+  {cls:"c-green",layer:"Local — now",name:"Docker + n8n",desc:"Self-hosted workflow engine, running as a container on your own machine for the entire build.",alt:"Version: latest stable"},
+  {cls:"c-green",layer:"Local — now",name:"Cloudflare Quick Tunnel",desc:"Free, dev-only public URL for the Telegram webhook. Restarts each session, updated manually.",alt:"Replaced in Phase 10"},
+  {cls:"c-green",layer:"Database — now",name:"Supabase",desc:"Postgres with built-in auth, storage, and row-level security. Free tier is plenty for one user.",alt:"Fallback: self-hosted Postgres"},
+  {cls:"c-cyan",layer:"Intelligence — Phase 03+",name:"Gemini API",desc:"Prioritization reasoning, PDF summarization, quiz generation, resume gap analysis.",alt:"Fallback: local Ollama model"},
+  {cls:"c-amber",layer:"Interface — now",name:"Telegram Bot API",desc:"The only way you talk to LifeOS — one webhook, routed through the Gateway.",alt:""},
+  {cls:"c-violet",layer:"Hosting — Phase 10",name:"DigitalOcean or Named Tunnel",desc:"Permanent public URL once local dev-loop is no longer sufficient.",alt:"Funded by GitHub Student credit"},
+  {cls:"c-violet",layer:"Hosting — Phase 10, forever",name:"Oracle Cloud Always Free",desc:"2 OCPU / 12GB Arm instance — the permanent home once the credit-funded phase ends.",alt:"Fallback: Google Cloud e2-micro"},
+  {cls:"c-cyan",layer:"Dashboard — Phase 10",name:"React + Tailwind",desc:"Visual layer added only after the backend is solid. Auth via Supabase Auth.",alt:""},
 ];
-const faqList = document.getElementById('faq-list');
-faqs.forEach(f=>{
+const stackGrid = document.getElementById('stack-grid');
+stack.forEach(s=>{
   const el = document.createElement('div');
-  el.className = 'faq-item reveal';
-  el.innerHTML = `<div class="faq-q"><span>${f.q}</span><span class="chev">▾</span></div><div class="faq-a"><div class="faq-a-inner">${f.a}</div></div>`;
-  faqList.appendChild(el);
+  el.className = `stack-card ${s.cls} reveal`;
+  el.style.background='var(--panel)';el.style.border='1px solid var(--border)';el.style.borderRadius='10px';el.style.padding='20px';el.style.position='relative';el.style.overflow='hidden';
+  const barColor = s.cls==='c-amber'?'var(--amber)':s.cls==='c-cyan'?'var(--cyan)':s.cls==='c-violet'?'var(--violet)':'var(--green)';
+  el.innerHTML = `<div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:${barColor}"></div>
+    <div style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-faint);margin-bottom:10px;">${s.layer}</div>
+    <h3 style="font-size:16px;margin-bottom:8px;color:var(--text);">${s.name}</h3>
+    <p style="font-size:13px;color:var(--text-dim);margin-bottom:${s.alt?'10px':'0'};">${s.desc}</p>
+    ${s.alt?`<div style="font-family:var(--mono);font-size:11px;color:var(--text-faint);border-top:1px dashed var(--border);padding-top:10px;">${s.alt}</div>`:''}`;
+  stackGrid.appendChild(el);
 });
-observeAll('#faq-list .faq-item');
-document.querySelectorAll('.faq-q').forEach(q=>{
-  q.addEventListener('click', ()=>{
-    const item = q.parentElement;
-    item.classList.toggle('open');
-    const a = q.nextElementSibling;
-    a.style.maxHeight = a.style.maxHeight ? null : a.scrollHeight+'px';
-  });
-});
+observeAll('#stack-grid .stack-card');
 </script>
 </body>
 </html>

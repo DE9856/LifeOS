@@ -1,0 +1,355 @@
+{
+  "name": "003 - TaskOS",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "chat_id",
+              "type": "number"
+            },
+            {
+              "name": "telegram_user_id",
+              "type": "number"
+            },
+            {
+              "name": "first_name"
+            },
+            {
+              "name": "username"
+            },
+            {
+              "name": "message_id",
+              "type": "number"
+            },
+            {
+              "name": "message"
+            },
+            {
+              "name": "command"
+            },
+            {
+              "name": "command_args"
+            },
+            {
+              "name": "module_id"
+            },
+            {
+              "name": "module_name"
+            },
+            {
+              "name": "description"
+            },
+            {
+              "name": "route"
+            },
+            {
+              "name": "is_new_user",
+              "type": "boolean"
+            },
+            {
+              "name": "platform"
+            },
+            {
+              "name": "received_at"
+            },
+            {
+              "name": "user_id"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "275880b8-cf8f-4c29-9ecd-6d22720b349c",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "db772a58-c233-4574-bec5-3303add14e8c",
+              "name": "task_title",
+              "value": "={{ $json.command_args }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "7028b541-3d0c-412f-8ace-5f5210600a70",
+      "name": "Validate Request"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "edc61cc8-052f-475d-aab5-54eca3a769c8",
+              "leftValue": "={{ $json.command_args }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        416,
+        0
+      ],
+      "id": "27e59572-38f2-4fe5-be40-f2a941643e79",
+      "name": "Task Title Present?"
+    },
+    {
+      "parameters": {
+        "tableId": "tasks",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "user_id",
+              "fieldValue": "={{ $json.user_id }}"
+            },
+            {
+              "fieldId": "title",
+              "fieldValue": "={{ $json.task_title }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        704,
+        -144
+      ],
+      "id": "57d706f6-e1a1-4086-bb49-299714fa9a83",
+      "name": "Create Task",
+      "credentials": {
+        "supabaseApi": {
+          "id": "ZH2IdOeF0pwuVjao",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $node[\"Validate Request\"].json.chat_id }}",
+        "text": "=✅ {{ $json.response_message }}\n\n📝 {{ $json.task_title_response }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1040,
+        -144
+      ],
+      "id": "ccd6b80a-f42e-4c3e-8ba2-7c7f508ebfd1",
+      "name": "Send Success Response",
+      "webhookId": "3e867ae4-2e95-449e-8147-0c22994e01d7",
+      "credentials": {
+        "telegramApi": {
+          "id": "jy3KlkySRaRQgJyf",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $node[\"Validate Request\"].json.chat_id }}",
+        "text": "❌ Please provide a task.  Example: /task Buy milk",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        624,
+        96
+      ],
+      "id": "5266b417-52cd-44a2-ae9b-e5462f3e2781",
+      "name": "Send Validation Error",
+      "webhookId": "aae67a18-e24b-47e3-8e5a-a17d0f70d923",
+      "credentials": {
+        "telegramApi": {
+          "id": "jy3KlkySRaRQgJyf",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d42276ad-ccec-4567-b5c7-fb0439765a40",
+              "name": "task_status",
+              "value": "pending",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        544,
+        -144
+      ],
+      "id": "ad02b2ac-bac0-4db6-b025-2335375e1faa",
+      "name": "Prepare Task"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8b8f8202-9528-446f-bf1f-1508734a61b3",
+              "name": "success",
+              "value": true,
+              "type": "boolean"
+            },
+            {
+              "id": "e1f98cae-1b3d-4a94-9f48-bd892fa2f10a",
+              "name": "response_message",
+              "value": "Task created Successfully",
+              "type": "string"
+            },
+            {
+              "id": "a2cc3d27-d865-49b5-b934-9511cac8d45c",
+              "name": "task_title_response",
+              "value": "={{ $json.title }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        880,
+        -144
+      ],
+      "id": "a104a45d-ba88-47cf-8993-134f989ebe7a",
+      "name": "Build Response"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Validate Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Request": {
+      "main": [
+        [
+          {
+            "node": "Task Title Present?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Task Title Present?": {
+      "main": [
+        [
+          {
+            "node": "Prepare Task",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Validation Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Task": {
+      "main": [
+        [
+          {
+            "node": "Build Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Task": {
+      "main": [
+        [
+          {
+            "node": "Create Task",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Response": {
+      "main": [
+        [
+          {
+            "node": "Send Success Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "89a6073d-13fd-45f4-ace4-6eabf2da5eb2",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cf6c16fac9beef294813451d8fba325c4b79be1ea695aafb4d5d972f96419775"
+  },
+  "nodeGroups": [],
+  "id": "VWfS2oXlHMnfjqLw",
+  "tags": []
+}
