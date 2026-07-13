@@ -1,10 +1,9 @@
 # LifeOS
 
-> **A modular AI-powered personal operating system built with n8n, Supabase, and Telegram.**
+A personal operating system for college — a Telegram-driven automation platform that manages tasks, study, knowledge, projects, finances, and career preparation through one connected pipeline instead of multiple disconnected apps.
 
-LifeOS is an event-driven automation platform that centralizes task management, personal organization, and future AI-powered productivity into a single extensible system.
-
-Instead of building isolated automation workflows, LifeOS is designed as a scalable operating system where independent modules communicate through a standardized architecture.
+> 📚 **Explore the complete documentation, architecture, roadmap, and development guides:**  
+> **https://de9856.github.io/LifeOS/**
 
 ---
 
@@ -20,17 +19,18 @@ Instead of building isolated automation workflows, LifeOS is designed as a scala
 - Modular Router
 - Command Parsing
 - Shared Request Contract
-- TaskOS (Task Creation)
+- TaskOS (CRUD)
 - Supabase Integration
 - Layered Workflow Architecture
 - Engineering Standards & Documentation
 
 ### 🚧 In Progress
 
-- FinanceOS
+- TaskOS
 
 ### 📋 Planned
 
+- FinanceOS
 - CalendarOS
 - ReminderOS
 - NotesOS
@@ -259,8 +259,8 @@ Documentation for the architecture and engineering standards can be found in the
 |---------|--------|
 | Gateway | ✅ |
 | Router | ✅ |
-| TaskOS | ✅ |
-| FinanceOS | 🚧 |
+| TaskOS | 🚧 |
+| FinanceOS | 📋 |
 | CalendarOS | 📋 |
 | ReminderOS | 📋 |
 | NotesOS | 📋 |

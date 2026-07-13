@@ -1,5 +1,5 @@
 {
-  "name": "003 - TaskOS",
+  "name": "200 - Add Task",
   "nodes": [
     {
       "parameters": {
@@ -33,16 +33,7 @@
               "name": "command_args"
             },
             {
-              "name": "module_id"
-            },
-            {
-              "name": "module_name"
-            },
-            {
               "name": "description"
-            },
-            {
-              "name": "route"
             },
             {
               "name": "is_new_user",
@@ -56,6 +47,12 @@
             },
             {
               "name": "user_id"
+            },
+            {
+              "name": "workflow_id"
+            },
+            {
+              "name": "workflow_name"
             }
           ]
         }
@@ -92,40 +89,6 @@
       ],
       "id": "7028b541-3d0c-412f-8ace-5f5210600a70",
       "name": "Validate Request"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 3
-          },
-          "conditions": [
-            {
-              "id": "edc61cc8-052f-475d-aab5-54eca3a769c8",
-              "leftValue": "={{ $json.command_args }}",
-              "rightValue": "",
-              "operator": {
-                "type": "string",
-                "operation": "notEmpty",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.3,
-      "position": [
-        416,
-        0
-      ],
-      "id": "27e59572-38f2-4fe5-be40-f2a941643e79",
-      "name": "Task Title Present?"
     },
     {
       "parameters": {
@@ -260,6 +223,40 @@
       ],
       "id": "a104a45d-ba88-47cf-8993-134f989ebe7a",
       "name": "Build Response"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "edc61cc8-052f-475d-aab5-54eca3a769c8",
+              "leftValue": "={{ $json.command_args }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        416,
+        0
+      ],
+      "id": "27e59572-38f2-4fe5-be40-f2a941643e79",
+      "name": "Task Title Present?"
     }
   ],
   "pinData": {},
@@ -280,24 +277,6 @@
         [
           {
             "node": "Task Title Present?",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Task Title Present?": {
-      "main": [
-        [
-          {
-            "node": "Prepare Task",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Send Validation Error",
             "type": "main",
             "index": 0
           }
@@ -336,6 +315,24 @@
           }
         ]
       ]
+    },
+    "Task Title Present?": {
+      "main": [
+        [
+          {
+            "node": "Prepare Task",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Validation Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": true,
@@ -344,7 +341,7 @@
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "89a6073d-13fd-45f4-ace4-6eabf2da5eb2",
+  "versionId": "9145778d-776e-4eac-832b-21e2e7a78dc0",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "cf6c16fac9beef294813451d8fba325c4b79be1ea695aafb4d5d972f96419775"

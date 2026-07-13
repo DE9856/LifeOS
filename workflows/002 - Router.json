@@ -83,7 +83,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const registry = {\n  \"/start\": {\n    moduleId: \"000\",\n    workflow: \"System\",\n    description: \"System Commands\"\n  },\n\n  \"/help\": {\n    moduleId: \"000\",\n    workflow: \"System\",\n    description: \"Help\"\n  },\n\n  \"/task\": {\n    moduleId: \"003\",\n    workflow: \"TaskOS\",\n    description: \"Task Management\"\n  },\n\n  \"/expense\": {\n    moduleId: \"004\",\n    workflow: \"FinanceOS\",\n    description: \"Expense Tracking\"\n  },\n\n  \"/calendar\": {\n    moduleId: \"005\",\n    workflow: \"CalendarOS\",\n    description: \"Calendar Management\"\n  },\n\n  \"/note\": {\n    moduleId: \"006\",\n    workflow: \"NotesOS\",\n    description: \"Notes\"\n  }\n};\n\nconst item = $input.first();\n\nconst moduleInfo = registry[item.json.command];\n\nif (moduleInfo) {\n  item.json.module_id = moduleInfo.moduleId;\n  item.json.module_name = moduleInfo.workflow;\n  item.json.description = moduleInfo.description;\n  item.json.route = moduleInfo.workflow;\n} else {\n  item.json.module_id = \"999\";\n  item.json.module_name = \"Unknown\";\n  item.json.description = \"Unknown Command\";\n  item.json.route = \"Unknown\";\n}\n\nreturn [item];"
+        "jsCode": "const registry = {\n  \"/start\": {\n    workflowId: \"000\",\n    workflowName: \"System\",\n    description: \"System Commands\"\n  },\n\n  \"/help\": {\n    workflowId: \"000\",\n    workflowName: \"Help\",\n    description: \"Help\"\n  },\n\n  \"/addtask\": {\n    workflowId: \"200\",\n    workflowName: \"Add Task\",\n    description: \"Create a new task\"\n  },\n\n  \"/tasks\": {\n    workflowId: \"201\",\n    workflowName: \"List Tasks\",\n    description: \"List all tasks\"\n  },\n\n  \"/done\": {\n    workflowId: \"202\",\n    workflowName: \"Complete Task\",\n    description: \"Mark a task as completed\"\n  },\n\n  \"/delete\": {\n    workflowId: \"203\",\n    workflowName: \"Delete Task\",\n    description: \"Delete a task\"\n  },\n\n  \"/uploadpdf\": {\n    workflowId: \"301\",\n    workflowName: \"Upload PDF\",\n    description: \"Upload study material\"\n  },\n\n  \"/expense\": {\n    workflowId: \"700\",\n    workflowName: \"Add Expense\",\n    description: \"Expense tracking\"\n  },\n\n  \"/note\": {\n    workflowId: \"401\",\n    workflowName: \"Knowledge Note\",\n    description: \"Knowledge management\"\n  }\n};\n\nconst item = $input.first();\n\nconst workflowInfo = registry[item.json.command];\n\nif (workflowInfo) {\n  item.json.workflow_id = workflowInfo.workflowId;\n  item.json.workflow_name = workflowInfo.workflowName;\n  item.json.description = workflowInfo.description;\n} else {\n  item.json.workflow_id = \"999\";\n  item.json.workflow_name = \"Unknown\";\n  item.json.description = \"Unknown Command\";\n}\n\nreturn [item];"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -92,42 +92,318 @@
         0
       ],
       "id": "21d7cdbf-818c-49c2-92c9-aaf26dd6a66f",
-      "name": "Module Registry"
+      "name": "Workflow Registry"
     },
     {
       "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "loose",
-            "version": 3
-          },
-          "conditions": [
+        "rules": {
+          "values": [
             {
-              "id": "e307520a-1405-479c-806a-fcf610987a45",
-              "leftValue": "={{ $json.route }}",
-              "rightValue": "TaskOS",
-              "operator": {
-                "type": "string",
-                "operation": "equals",
-                "name": "filter.operator.equals"
-              }
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.workflow_id }}",
+                    "rightValue": "200",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "2283c4a7-d51f-4b93-b056-628a10f375b2"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "200 - Add Task"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "4e071bd9-0a46-4375-9b0c-9bedc5e709a8",
+                    "leftValue": "={{ $json.workflow_id }}",
+                    "rightValue": "201",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "201 - List Tasks"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "6bdfd22f-fb3f-402c-818f-39fa709c1eac",
+                    "leftValue": "={{ $json.workflow_id }}",
+                    "rightValue": "202",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "202 - Complete Task"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "ab1f9c1a-c74e-4aad-a248-48bdead75993",
+                    "leftValue": "={{ $json.workflow_id }}",
+                    "rightValue": "203",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "203 - Delete Task"
             }
-          ],
-          "combinator": "and"
+          ]
         },
-        "looseTypeValidation": true,
         "options": {}
       },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.3,
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
       "position": [
         624,
         0
       ],
-      "id": "7e4e4538-1fd8-4ba2-8519-456067f16689",
-      "name": "Route to TaskOS?"
+      "id": "1d8c3378-4474-401f-88c2-3d068fe39231",
+      "name": "Workflow Switch"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "AEjHWCLCiKjfYsxc",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/AEjHWCLCiKjfYsxc",
+          "cachedResultName": "201 - List Tasks"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "is_new_user": "={{ $json.is_new_user }}",
+            "chat_id": "={{ $json.chat_id }}",
+            "telegram_user_id": "={{ $json.telegram_user_id }}",
+            "message_id": "={{ $json.message_id }}",
+            "first_name": "={{ $json.first_name }}",
+            "username": "={{ $json.username }}",
+            "message": "={{ $json.message }}",
+            "command": "={{ $json.command }}",
+            "command_args": "={{ $json.command_args }}",
+            "description": "={{ $json.description }}",
+            "platform": "={{ $json.platform }}",
+            "received_at": "={{ $json.received_at }}",
+            "user_id": "={{ $json.user_id }}",
+            "workflow_id": "={{ $json.workflow_id }}",
+            "workflow_name": "={{ $json.workflow_name }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "chat_id",
+              "displayName": "chat_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "telegram_user_id",
+              "displayName": "telegram_user_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "first_name",
+              "displayName": "first_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "username",
+              "displayName": "username",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "message_id",
+              "displayName": "message_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "command",
+              "displayName": "command",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "command_args",
+              "displayName": "command_args",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "is_new_user",
+              "displayName": "is_new_user",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "boolean",
+              "removed": false
+            },
+            {
+              "id": "platform",
+              "displayName": "platform",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "received_at",
+              "displayName": "received_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "user_id",
+              "displayName": "user_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "workflow_id",
+              "displayName": "workflow_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "workflow_name",
+              "displayName": "workflow_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "description",
+              "displayName": "description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        816,
+        -32
+      ],
+      "id": "da6b0197-84f7-478f-927a-bfb1394ea9be",
+      "name": "Call '201 - List Tasks'"
     },
     {
       "parameters": {
@@ -136,7 +412,7 @@
           "value": "VWfS2oXlHMnfjqLw",
           "mode": "list",
           "cachedResultUrl": "/workflow/VWfS2oXlHMnfjqLw",
-          "cachedResultName": "003 - TaskOS"
+          "cachedResultName": "200 - Add Task"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -148,15 +424,14 @@
             "username": "={{ $json.username }}",
             "message": "={{ $json.message }}",
             "command": "={{ $json.command }}",
-            "module_id": "={{ $json.module_id }}",
-            "module_name": "={{ $json.module_name }}",
             "description": "={{ $json.description }}",
-            "route": "={{ $json.route }}",
             "is_new_user": "={{ $json.is_new_user }}",
             "platform": "={{ $json.platform }}",
             "received_at": "={{ $json.received_at }}",
             "command_args": "={{ $json.command_args }}",
-            "user_id": "={{ $json.user_id }}"
+            "user_id": "={{ $json.user_id }}",
+            "workflow_id": "={{ $json.workflow_id }}",
+            "workflow_name": "={{ $json.workflow_name }}"
           },
           "matchingColumns": [
             "chat_id"
@@ -243,38 +518,8 @@
               "removed": false
             },
             {
-              "id": "module_id",
-              "displayName": "module_id",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "canBeUsedToMatch": true,
-              "type": "string",
-              "removed": false
-            },
-            {
-              "id": "module_name",
-              "displayName": "module_name",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "canBeUsedToMatch": true,
-              "type": "string",
-              "removed": false
-            },
-            {
               "id": "description",
               "displayName": "description",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "canBeUsedToMatch": true,
-              "type": "string",
-              "removed": false
-            },
-            {
-              "id": "route",
-              "displayName": "route",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -321,6 +566,26 @@
               "canBeUsedToMatch": true,
               "type": "string",
               "removed": false
+            },
+            {
+              "id": "workflow_id",
+              "displayName": "workflow_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "workflow_name",
+              "displayName": "workflow_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
             }
           ],
           "attemptToConvertTypes": false,
@@ -332,10 +597,400 @@
       "typeVersion": 1.3,
       "position": [
         832,
-        -96
+        -192
       ],
       "id": "e79ce17e-9597-4c74-af32-35b2bdb6770b",
-      "name": "Call TaskOS"
+      "name": "Call 200 - Add Task"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "xszxcxsskQo8oskc",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/xszxcxsskQo8oskc",
+          "cachedResultName": "202 - Complete Task"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "is_new_user": "={{ $json.is_new_user }}",
+            "chat_id": "={{ $json.chat_id }}",
+            "telegram_user_id": "={{ $json.telegram_user_id }}",
+            "message_id": "={{ $json.message_id }}",
+            "first_name": "={{ $json.first_name }}",
+            "username": "={{ $json.username }}",
+            "message": "={{ $json.message }}",
+            "command": "={{ $json.command }}",
+            "command_args": "={{ $json.command_args }}",
+            "description": "={{ $json.description }}",
+            "platform": "={{ $json.platform }}",
+            "received_at": "={{ $json.received_at }}",
+            "user_id": "={{ $json.user_id }}",
+            "workflow_id": "={{ $json.workflow_id }}",
+            "workflow_name": "={{ $json.workflow_name }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "chat_id",
+              "displayName": "chat_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "telegram_user_id",
+              "displayName": "telegram_user_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "first_name",
+              "displayName": "first_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "username",
+              "displayName": "username",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "message_id",
+              "displayName": "message_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "command",
+              "displayName": "command",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "command_args",
+              "displayName": "command_args",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "is_new_user",
+              "displayName": "is_new_user",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "boolean",
+              "removed": false
+            },
+            {
+              "id": "platform",
+              "displayName": "platform",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "received_at",
+              "displayName": "received_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "user_id",
+              "displayName": "user_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "workflow_id",
+              "displayName": "workflow_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "workflow_name",
+              "displayName": "workflow_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "description",
+              "displayName": "description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        816,
+        128
+      ],
+      "id": "75dad9b7-6af1-487e-a85d-d323ca3080ae",
+      "name": "Call '202 - Complete Task'"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "2M6PKeof0ea0zWHV",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/2M6PKeof0ea0zWHV",
+          "cachedResultName": "203 - Delete Task"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "is_new_user": "={{ $json.is_new_user }}",
+            "chat_id": "={{ $json.chat_id }}",
+            "telegram_user_id": "={{ $json.telegram_user_id }}",
+            "message_id": "={{ $json.message_id }}",
+            "first_name": "={{ $json.first_name }}",
+            "username": "={{ $json.username }}",
+            "message": "={{ $json.message }}",
+            "command": "={{ $json.command }}",
+            "command_args": "={{ $json.command_args }}",
+            "description": "={{ $json.description }}",
+            "platform": "={{ $json.platform }}",
+            "received_at": "={{ $json.received_at }}",
+            "user_id": "={{ $json.user_id }}",
+            "workflow_id": "={{ $json.workflow_id }}",
+            "workflow_name": "={{ $json.workflow_name }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "chat_id",
+              "displayName": "chat_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "telegram_user_id",
+              "displayName": "telegram_user_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "first_name",
+              "displayName": "first_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "username",
+              "displayName": "username",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "message_id",
+              "displayName": "message_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "command",
+              "displayName": "command",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "command_args",
+              "displayName": "command_args",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "is_new_user",
+              "displayName": "is_new_user",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "boolean",
+              "removed": false
+            },
+            {
+              "id": "platform",
+              "displayName": "platform",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "received_at",
+              "displayName": "received_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "user_id",
+              "displayName": "user_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "workflow_id",
+              "displayName": "workflow_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "workflow_name",
+              "displayName": "workflow_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "description",
+              "displayName": "description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        816,
+        304
+      ],
+      "id": "8f63d7b4-a312-4395-aa71-b540300f9132",
+      "name": "Call '203 - Delete Task'"
     }
   ],
   "pinData": {},
@@ -355,29 +1010,50 @@
       "main": [
         [
           {
-            "node": "Module Registry",
+            "node": "Workflow Registry",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Module Registry": {
+    "Workflow Registry": {
       "main": [
         [
           {
-            "node": "Route to TaskOS?",
+            "node": "Workflow Switch",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Route to TaskOS?": {
+    "Workflow Switch": {
       "main": [
         [
           {
-            "node": "Call TaskOS",
+            "node": "Call 200 - Add Task",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call '201 - List Tasks'",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call '202 - Complete Task'",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call '203 - Delete Task'",
             "type": "main",
             "index": 0
           }
@@ -391,7 +1067,7 @@
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "009c4751-60ef-4279-bf36-ddf0a1a27492",
+  "versionId": "9e4297e8-86b7-4ef8-ab73-d3570a05ae88",
   "meta": {
     "instanceId": "cf6c16fac9beef294813451d8fba325c4b79be1ea695aafb4d5d972f96419775"
   },
