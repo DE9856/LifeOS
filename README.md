@@ -19,17 +19,18 @@ A personal operating system for college — a Telegram-driven automation platfor
 - Modular Router
 - Command Parsing
 - Shared Request Contract
-- TaskOS (Task Creation)
+- TaskOS (CRUD)
 - Supabase Integration
 - Layered Workflow Architecture
 - Engineering Standards & Documentation
 
 ### 🚧 In Progress
 
-- FinanceOS
+- TaskOS
 
 ### 📋 Planned
 
+- FinanceOS
 - CalendarOS
 - ReminderOS
 - NotesOS
@@ -258,8 +259,8 @@ Documentation for the architecture and engineering standards can be found in the
 |---------|--------|
 | Gateway | ✅ |
 | Router | ✅ |
-| TaskOS | ✅ |
-| FinanceOS | 🚧 |
+| TaskOS | 🚧 |
+| FinanceOS | 📋 |
 | CalendarOS | 📋 |
 | ReminderOS | 📋 |
 | NotesOS | 📋 |

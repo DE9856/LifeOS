@@ -37,7 +37,7 @@
 
 ---
 
-## v0.3.0 – LifeOS Core Architecture & TaskOS MVP
+## v0.3.0 – LifeOS Core Architecture & TaskOS Foundation
 
 ### Added
 
@@ -53,15 +53,15 @@
 - Modular Router architecture
 - Command extraction
 - Command argument extraction
-- Centralized Module Registry
-- Dynamic module routing
-- Module metadata (`module_id`, `module_name`, `route`, `description`)
+- Centralized Workflow Registry
+- Dynamic workflow routing
+- Workflow metadata (`workflow_id`, `workflow_name`, `description`)
 
 #### TaskOS
 
 - Dedicated TaskOS module
 - Request validation layer
-- Business Logic layer (`Prepare Task`)
+- Business Logic layer
 - Task creation workflow
 - Supabase task persistence
 - Standard task preparation pipeline
@@ -71,31 +71,26 @@
 #### Database
 
 - End-to-end task persistence
-- Shared internal `user_id` across all modules
+- Shared internal `user_id`
 - Canonical task creation pipeline
 
 #### Engineering Standards
 
-- Standard workflow naming convention
-- Standard node naming convention
-- Layered module architecture
-- Standard request contract
-- Standard response structure
-- Canonical module data model
-- Shared module development template
-- LifeOS Engineering Standards
 - LifeOS Project Constitution
+- Workflow naming convention
+- Node naming convention
+- Layered workflow architecture
+- Standard request contract
+- Standard response contract
+- Canonical workflow template
 
 ### Improved
 
-- Separation of concerns between Gateway, Router, and modules
-- Modular workflow architecture
-- Consistent data flow across workflows
-- Internal data normalization
-- User identity propagation
-- Workflow readability and maintainability
-- Module scalability for future expansion
-- Overall system architecture
+- Separation of concerns between Gateway, Router and workflows
+- Consistent data flow
+- Internal identity propagation
+- Workflow readability
+- Module scalability
 
 ### Architecture
 
@@ -109,7 +104,7 @@ Telegram
 002 - Router
     │
     ▼
-003 - TaskOS
+TaskOS
     │
     ▼
 Supabase
@@ -119,10 +114,88 @@ Supabase
 
 ✅ Modular LifeOS architecture established
 
-✅ First end-to-end feature complete
-
-✅ TaskOS MVP operational
+✅ Task creation operational
 
 ✅ Engineering standards established
 
-🚀 Foundation prepared for FinanceOS, CalendarOS, NotesOS, ReminderOS, MemoryOS, and AI modules
+---
+
+## v0.4.0 – TaskOS CRUD
+
+### Added
+
+#### Task Management
+
+- List Tasks workflow (`201`)
+- Complete Task workflow (`202`)
+- Delete Task workflow (`203`)
+- Task lookup by list index
+- Task number validation
+- Empty task list handling
+- Out-of-range task detection
+- Invalid input validation
+- Decimal input rejection
+- User-friendly error responses
+
+#### Router
+
+- `/tasks`
+- `/done`
+- `/delete`
+
+command routing
+
+#### Workflow Improvements
+
+- Shared validation pipeline
+- Shared task lookup logic
+- Standardized success responses
+- Standardized error responses
+- Consistent workflow contracts
+- Reusable task validation architecture
+
+### Improved
+
+- Task workflow consistency
+- Error handling across TaskOS
+- Telegram response formatting
+- Workflow maintainability
+- CRUD workflow reuse
+- Overall TaskOS reliability
+
+### Architecture
+
+```text
+Telegram
+      │
+      ▼
+001 - Gateway
+      │
+      ▼
+002 - Router
+      │
+      ▼
+ ┌─────────────┐
+ │   TaskOS    │
+ ├─────────────┤
+ │200 Add      │
+ │201 List     │
+ │202 Complete │
+ │203 Delete   │
+ └─────────────┘
+      │
+      ▼
+Supabase
+```
+
+### Status
+
+✅ TaskOS CRUD complete
+
+✅ Full task lifecycle implemented
+
+✅ Input validation standardized
+
+✅ Production-ready task management foundation established
+
+🚀 Ready for advanced TaskOS features (Edit, Priority, Due Dates, Categories, Search)

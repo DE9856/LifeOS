@@ -1,0 +1,291 @@
+{
+  "name": "201 - List Tasks",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "chat_id",
+              "type": "number"
+            },
+            {
+              "name": "telegram_user_id",
+              "type": "number"
+            },
+            {
+              "name": "first_name"
+            },
+            {
+              "name": "username"
+            },
+            {
+              "name": "message_id",
+              "type": "number"
+            },
+            {
+              "name": "message"
+            },
+            {
+              "name": "command"
+            },
+            {
+              "name": "command_args"
+            },
+            {
+              "name": "is_new_user",
+              "type": "boolean"
+            },
+            {
+              "name": "platform"
+            },
+            {
+              "name": "received_at"
+            },
+            {
+              "name": "user_id"
+            },
+            {
+              "name": "workflow_id"
+            },
+            {
+              "name": "workflow_name"
+            },
+            {
+              "name": "description"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "1d2796ae-8146-408e-8189-171e2d7dd822",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat_id }}",
+        "text": "={{ $json.message }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        832,
+        0
+      ],
+      "id": "d0b2b105-dc92-49a8-b277-0f90d42284cc",
+      "name": "Send a text message",
+      "webhookId": "5690603d-2b13-4585-9724-9ae8873ba33f",
+      "credentials": {
+        "telegramApi": {
+          "id": "jy3KlkySRaRQgJyf",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const tasks = $input.all();\n\nif (tasks.length === 0) {\n  return [\n    {\n      json: {\n        message: \"🎉 You have no pending tasks.\"\n      }\n    }\n  ];\n}\n\nlet message = \"📝 *Your Tasks*\\n\\n\";\n\ntasks.forEach((task, index) => {\n  const priority = task.json.priority || \"Medium\";\n\n  let emoji = \"🟡\";\n\n  switch (priority) {\n    case \"Critical\":\n      emoji = \"🚨\";\n      break;\n    case \"High\":\n      emoji = \"🔴\";\n      break;\n    case \"Medium\":\n      emoji = \"🟡\";\n      break;\n    case \"Low\":\n      emoji = \"🟢\";\n      break;\n  }\n\n  message += `${index + 1}. ${task.json.title}\\n`;\n  message += `   ${emoji} ${priority}`;\n\n  if (task.json.due_date) {\n    message += ` | 📅 ${task.json.due_date}`;\n  }\n\n  message += \"\\n\\n\";\n});\n\nmessage += `📌 Total Pending Tasks: ${tasks.length}`;\n\nconst triggerData = $(\"When Executed by Another Workflow\").first().json;\n\nreturn [\n  {\n    json: {\n      ...triggerData,\n      message,\n    },\n  },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        608,
+        -16
+      ],
+      "id": "784372d2-dc45-435a-9c37-2acc06ed2196",
+      "name": "Format Task List"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "tasks",
+        "orderBy": "created_at.asc",
+        "filterType": "=manual",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "user_id",
+              "condition": "eq",
+              "keyValue": "={{ $json.user_id }}"
+            },
+            {
+              "keyName": "status",
+              "condition": "eq",
+              "keyValue": "Pending"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "3117abab-9bf4-4f03-b411-8e16e247a03a",
+      "name": "Get Pending Tasks",
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "ZH2IdOeF0pwuVjao",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "aee7c848-d59d-434f-b293-99483afd26ff",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        416,
+        0
+      ],
+      "id": "b558aece-e091-4bb3-bf8c-067f7e09a3a0",
+      "name": "Any Tasks?"
+    },
+    {
+      "parameters": {
+        "jsCode": "const request = $('When Executed by Another Workflow').first().json;\n\nreturn [{\n  json: {\n    ...request,\n    message: `📭 You don't have any pending tasks.\n\nUse\n/addtask <task>\nto create your first task.`\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        608,
+        160
+      ],
+      "id": "fe12d267-1972-46d9-a0fb-edb595c88215",
+      "name": "Prepare Empty Task Message"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat_id }}",
+        "text": "={{ $json.message }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        816,
+        160
+      ],
+      "id": "e74880f5-414e-4f61-b8f3-5cb3bae28934",
+      "name": "Send a text message1",
+      "webhookId": "3f26f9da-f571-49e9-b671-2b37b2fffb5f",
+      "credentials": {
+        "telegramApi": {
+          "id": "jy3KlkySRaRQgJyf",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Get Pending Tasks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Task List": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Pending Tasks": {
+      "main": [
+        [
+          {
+            "node": "Any Tasks?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Any Tasks?": {
+      "main": [
+        [
+          {
+            "node": "Format Task List",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Empty Task Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Empty Task Message": {
+      "main": [
+        [
+          {
+            "node": "Send a text message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "696c5a76-b769-45b3-b22c-706897408112",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cf6c16fac9beef294813451d8fba325c4b79be1ea695aafb4d5d972f96419775"
+  },
+  "nodeGroups": [],
+  "id": "AEjHWCLCiKjfYsxc",
+  "tags": []
+}

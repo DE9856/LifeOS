@@ -1,5 +1,5 @@
 {
-  "name": "001 - Gateway",
+  "name": "001 - Telegram Gateway",
   "nodes": [
     {
       "parameters": {

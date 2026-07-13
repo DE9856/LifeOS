@@ -424,11 +424,11 @@
       <div class="sysinfo-head"><div class="dots"><span></span><span></span><span></span></div>document.meta</div>
       <div class="sysinfo-body">
         <div class="sysinfo-row"><b>constitution</b><span class="val">v1.4</span></div>
-        <div class="sysinfo-row"><b>project version</b><span class="val">v0.2.0 — Telegram Gateway</span></div>
-        <div class="sysinfo-row"><b>next target</b><span class="val amber">v0.3.0 — The Router</span></div>
-        <div class="sysinfo-row"><b>modules shipped</b><span class="val amber">1 of 7 (partial)</span></div>
-        <div class="sysinfo-row"><b>tables live</b><span class="val amber">1 of 16</span></div>
-        <div class="sysinfo-row"><b>current phase</b><span class="val">02 — The Router</span></div>
+        <div class="sysinfo-row"><b>project version</b><span class="val">v0.4.0 — TaskOS CRUD</span></div>
+        <div class="sysinfo-row"><b>next target</b><span class="val amber">v0.5.0 — Advanced TaskOS</span></div>
+        <div class="sysinfo-row"><b>modules shipped</b><span class="val amber">1 of 7 (partial — CoreOS task engine live, goals/calendar/Morning Brief still planned)</span></div>
+        <div class="sysinfo-row"><b>tables live</b><span class="val amber">2 of 16</span></div>
+        <div class="sysinfo-row"><b>current phase</b><span class="val">03 — TaskOS Advanced (Edit, Priority, Due Date, Search, Categories, Clear)</span></div>
         <div class="sysinfo-row"><b>binding on</b><span class="val">every future sprint</span></div>
         <div class="sysinfo-row"><b>amend by</b><span class="val">PR, same commit as code</span></div>
       </div>
@@ -541,7 +541,7 @@
     <div class="pipe-step">Laptop</div><div class="pipe-arrow">→</div>
     <div class="pipe-step">Docker</div><div class="pipe-arrow">→</div>
     <div class="pipe-step">Cloudflare Tunnel</div><div class="pipe-arrow">→</div>
-    <div class="pipe-step">Oracle VPS (Phase 10)</div><div class="pipe-arrow">→</div>
+    <div class="pipe-step">Oracle VPS (Phase 14)</div><div class="pipe-arrow">→</div>
     <div class="pipe-step">Production</div>
   </div>
 </section>
@@ -577,7 +577,7 @@
       <div class="adr-field"><b>Reason</b><p>Rapid development, cross-platform by default, native push notifications, and zero app-store install friction — a chat interface was reachable on day one.</p></div>
       <div class="adr-field"><b>Trade-offs</b><p>UI is constrained to text/buttons; no custom native screens; every module is bottlenecked through one webhook (see ADR 004).</p></div>
       <div class="adr-field"><b>Alternatives considered</b><ul><li>Native iOS/Android app</li><li>Web app (PWA)</li><li>WhatsApp Business API</li></ul></div>
-      <div class="adr-field"><b>Future impact</b><p>The Phase 10 React dashboard is additive, not a replacement — Telegram stays the primary interface.</p></div>
+      <div class="adr-field"><b>Future impact</b><p>The Phase 14 React dashboard is additive, not a replacement — Telegram stays the primary interface.</p></div>
     </div>
   </div>
 
@@ -597,7 +597,7 @@
       <div class="adr-field"><b>Reason</b><p>Calendar's data model (events with start/end times) can't represent a task, a grade, or an expense. Making it the database would force every other module to be reshaped around Calendar's constraints instead of its own.</p></div>
       <div class="adr-field"><b>Trade-offs</b><p>Requires a sync workflow and accepts the possibility of drift if a user edits an event directly in Google Calendar.</p></div>
       <div class="adr-field"><b>Alternatives considered</b><ul><li>Google Calendar as primary store for events</li><li>Two-way real-time sync</li></ul></div>
-      <div class="adr-field"><b>Future impact</b><p>Conflict resolution rule: Supabase always wins. A Calendar-side edit is either pulled back in explicitly or overwritten on the next sync — this still needs to be formalized before Phase 03 ships.</p></div>
+      <div class="adr-field"><b>Future impact</b><p>Conflict resolution rule: Supabase always wins. A Calendar-side edit is either pulled back in explicitly or overwritten on the next sync — this still needs to be formalized before Phase 07 (Core Loop) ships.</p></div>
     </div>
   </div>
 
@@ -656,7 +656,7 @@
 │   ├── <span class="dir">diagrams/</span>
 │   ├── <span class="dir">screenshots/</span>
 │   └── <span class="dir">decisions/</span>            <span class="cmt"># one file per architectural decision</span>
-├── <span class="dir">dashboard/</span>                <span class="cmt"># future React app — Phase 10</span>
+├── <span class="dir">dashboard/</span>                <span class="cmt"># future React app — Phase 14</span>
 ├── <span class="file">README.md</span>
 ├── <span class="file">CHANGELOG.md</span>
 ├── <span class="file">LICENSE</span>
@@ -961,8 +961,9 @@
   <table class="compare maturity-table">
     <tr><th>Module / workflow</th><th>Maturity</th><th>Basis</th></tr>
     <tr><td><b>001-Gateway</b> (registration + welcome)</td><td class="mono" style="color:var(--green)">Stable</td><td>Live in Supabase + n8n today — see Article XX.</td></tr>
-    <tr><td><b>002-Router</b></td><td class="mono" style="color:var(--amber)">In Development</td><td>Target v0.3.0, Phase 02 — see Article VIII, Article XXI.</td></tr>
-    <tr><td><b>CoreOS</b> — tasks, goals, calendar, Morning Brief</td><td class="mono" style="color:var(--text-dim)">Planned</td><td>Ratified schema (Article X), no workflow yet. Target Phase 03.</td></tr>
+    <tr><td><b>002-Router</b></td><td class="mono" style="color:var(--green)">Stable</td><td>Shipped v0.3.0 — command extraction, Workflow Registry, and dynamic Execute Workflow routing to 2XX-TaskOS. See Article VIII, Article XXI.</td></tr>
+    <tr><td><b>CoreOS — task engine</b> (200–203)</td><td class="mono" style="color:var(--green)">Stable</td><td>Shipped v0.4.0 — Add / List / Complete / Delete Task live in Supabase + n8n. See Article XXI.</td></tr>
+    <tr><td><b>CoreOS</b> — goals, calendar, Morning Brief</td><td class="mono" style="color:var(--text-dim)">Planned</td><td>Ratified schema (Article X), no workflow yet. Target Phase 07 (Core Loop).</td></tr>
     <tr><td><b>StudyOS</b></td><td class="mono" style="color:var(--violet)">Research</td><td>Module spec exists (Article XVI); PDF/quiz pipeline not designed in detail yet.</td></tr>
     <tr><td><b>Knowledge Vault</b></td><td class="mono" style="color:var(--text-dim)">Planned</td><td>Module spec exists; depends on CoreOS shipping first.</td></tr>
     <tr><td><b>ProjectOS</b></td><td class="mono" style="color:var(--text-dim)">Planned</td><td>Module spec exists; not started.</td></tr>
@@ -1105,7 +1106,7 @@
 <section id="security">
   <div class="eyebrow">Article XX</div>
   <h2>Security</h2>
-  <p class="lede">What's actually protecting LifeOS today, versus what's scheduled — tied to Phase 10, Deploy &amp; Harden (Article XXI), not left aspirational.</p>
+  <p class="lede">What's actually protecting LifeOS today, versus what's scheduled — tied to Phase 14, Deploy &amp; Harden (Article XXI), not left aspirational.</p>
 
   <h3 style="font-size:13px;color:var(--text-dim);margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em;">Current — Phase 01 onward</h3>
   <table class="compare" style="margin-bottom:28px;">
@@ -1117,9 +1118,9 @@
   </table>
   <p class="lede" style="font-size:13px;margin-bottom:28px;">Rule 5 (Article III) applies without exception: no secret is ever committed as plaintext inside workflow JSON or source. This is the whole of the current security posture — single local user, no public auth surface yet.</p>
 
-  <h3 style="font-size:13px;color:var(--text-dim);margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em;">Scheduled — Phase 10, Deploy &amp; Harden</h3>
+  <h3 style="font-size:13px;color:var(--text-dim);margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em;">Scheduled — Phase 14, Deploy &amp; Harden</h3>
   <table class="compare">
-    <tr><th>Control</th><th>Why it waits for Phase 10</th></tr>
+    <tr><th>Control</th><th>Why it waits for Phase 14</th></tr>
     <tr><td><b>Row-Level Security (RLS)</b></td><td>Only matters once LifeOS is reachable beyond one local user on one local machine.</td></tr>
     <tr><td><b>Authentication</b></td><td>Supabase Auth, added alongside the React dashboard — Telegram's own identity is sufficient while the dashboard doesn't exist.</td></tr>
     <tr><td><b>Encryption at rest / in transit</b></td><td>Named Tunnel + Oracle VPS migration is the point where traffic leaves a trusted local network.</td></tr>
@@ -1162,23 +1163,62 @@
       <li>Cloudflare Tunnel integration for local webhook testing</li>
     </ul>
   </div>
+  <div class="milestone reveal">
+    <div class="milestone-head">
+      <h3>v0.3.0 — The Router</h3>
+      <span class="milestone-badge">✓ tagged</span>
+    </div>
+    <ul>
+      <li>Standardized Gateway contract</li>
+      <li>Shared user_id propagation</li>
+      <li>Platform metadata propagation</li>
+      <li>Command + argument extraction</li>
+      <li>Centralized Workflow Registry</li>
+      <li>Dynamic Execute Workflow routing</li>
+      <li>Workflow metadata (id, name, description)</li>
+    </ul>
+  </div>
+  <div class="milestone reveal">
+    <div class="milestone-head">
+      <h3>v0.4.0 — TaskOS CRUD</h3>
+      <span class="milestone-badge">✓ tagged</span>
+    </div>
+    <ul>
+      <li>200 — Add Task</li>
+      <li>201 — List Tasks</li>
+      <li>202 — Complete Task</li>
+      <li>203 — Delete Task</li>
+      <li>Task lookup by list index</li>
+      <li>Task number validation</li>
+      <li>Empty task list handling</li>
+      <li>Out-of-range task detection</li>
+      <li>/tasks /done /delete routing</li>
+      <li>Shared validation pipeline</li>
+      <li>Standardized error responses</li>
+    </ul>
+  </div>
   <p class="lede" style="font-size:12.5px;margin-bottom:0;">Reproduced from <code style="background:var(--panel-alt);border:1px solid var(--border);padding:1px 6px;border-radius:4px;color:var(--cyan);">CHANGELOG.md</code> — that file is still the record of truth; this is a mirror, not a replacement.</p>
 
   <h3 style="font-size:14px;color:var(--text-dim);margin:28px 0 12px;text-transform:uppercase;letter-spacing:.06em;">Known gaps — not bugs, sequencing</h3>
   <div class="gap-item reveal">
-    <h4>No Gateway/Router yet</h4>
-    <p>The current Telegram Trigger <i>is</i> the registration workflow. It needs to become 001-Gateway before a second command is added — Telegram only allows one webhook, so this can't be retrofitted per-module later without rebuilding every workflow that came before it.</p>
-    <span class="when">blocks: Phase 03 onward</span>
+    <h4>Database nodes overwrite item context</h4>
+    <p>Right now the Supabase nodes overwrite parts of the item, which is why downstream nodes in 202/203 have to explicitly re-pull <code style="color:var(--cyan)">chat_id</code> and friends back off the original trigger with <code style="color:var(--cyan)">$("Node Name")</code> lookups instead of just reading <code style="color:var(--cyan)">$json</code>. A standard context pattern (request → business logic → database → response, with the original request always carried forward) removes the need to "recover" fields at all.</p>
+    <span class="when">blocks: clean shared components (Phase 05), not TaskOS Advanced (Phase 04)</span>
+  </div>
+  <div class="gap-item reveal">
+    <h4>Validation and lookup logic duplicated across workflows</h4>
+    <p>"Validate Task Number" and "Find Task" are copy-pasted, near-identical Code nodes in both 202 and 203. They need to become shared sub-workflows before 204–209 add five more call sites for the same logic.</p>
+    <span class="when">scheduled: Phase 05 — Core Infrastructure Improvements</span>
   </div>
   <div class="gap-item reveal">
     <h4>Quick Tunnel is dev-only, by design</h4>
     <p>The Cloudflare Quick Tunnel URL changes on every restart and requires a manual <code style="color:var(--cyan)">cloudflared tunnel</code> + webhook update each session. That's fine while actively developing solo. It becomes a real problem the moment an unattended cron workflow (Morning Brief) needs to fire without a laptop open — fix before that phase, not before this one.</p>
-    <span class="when">blocks: unattended cron workflows (Phase 03), not Phase 02</span>
+    <span class="when">blocks: unattended cron workflows (Phase 07 — Core Loop), not Phase 04</span>
   </div>
   <div class="gap-item reveal">
-    <h4>Permanent hosting is a Phase 10 decision</h4>
+    <h4>Permanent hosting is a Phase 14 decision</h4>
     <p>DigitalOcean droplet / Oracle Always Free migration happens after most modules are built and validated locally — not before. Building on rented infrastructure before the workflows are stable just adds deploy friction to every iteration.</p>
-    <span class="when">scheduled: Phase 10 — Deploy &amp; Harden</span>
+    <span class="when">scheduled: Phase 14 — Deploy &amp; Harden</span>
   </div>
 
   <h3 style="font-size:14px;color:var(--text-dim);margin:28px 0 12px;text-transform:uppercase;letter-spacing:.06em;">Snapshot — where things stand right now</h3>
@@ -1186,12 +1226,12 @@
     <div class="sysinfo-head"><div class="dots"><span></span><span></span><span></span></div>project.snapshot</div>
     <div class="sysinfo-body">
       <div class="sysinfo-row"><b>current branch</b><span class="val">develop</span></div>
-      <div class="sysinfo-row"><b>current tag</b><span class="val">v0.2.0</span></div>
-      <div class="sysinfo-row"><b>current database</b><span class="val amber">1 table live (users)</span></div>
-      <div class="sysinfo-row"><b>current workflows</b><span class="val">001 — registration + welcome</span></div>
+      <div class="sysinfo-row"><b>current tag</b><span class="val">v0.4.0</span></div>
+      <div class="sysinfo-row"><b>current database</b><span class="val amber">2 tables live (users, tasks)</span></div>
+      <div class="sysinfo-row"><b>current workflows</b><span class="val">001-Gateway · 002-Router · 200-203 TaskOS CRUD</span></div>
       <div class="sysinfo-row"><b>current integrations</b><span class="val">Telegram · Supabase</span></div>
       <div class="sysinfo-row"><b>current deployment</b><span class="val">local, Cloudflare Quick Tunnel</span></div>
-      <div class="sysinfo-row"><b>next milestone</b><span class="val amber">Phase 02 — The Router</span></div>
+      <div class="sysinfo-row"><b>next milestone</b><span class="val amber">Phase 04 — TaskOS Advanced (204–209)</span></div>
     </div>
     <div class="sysinfo-foot">See Article XXIII for the full chronological decision history.</div>
   </div>
@@ -1202,7 +1242,8 @@
   <div class="eyebrow">Article XXI</div>
   <h2>Build order</h2>
   <p class="lede">Each phase depends on the infrastructure the previous one sets up. Infra migration is deliberately last, not first. Every phase's Definition of Done references Article III for merge requirements — that checklist isn't repeated per phase. Rollback Strategy is standardized across every phase (see box below) rather than written out per sprint.</p>
-  <div class="roadmap-note reveal"><b>Note:</b> phase 01 is the only phase marked shipped. Checkbox state below is local to this page view and doesn't persist — treat it as a working copy, not the record of truth (that's CHANGELOG.md). Phases 01 and 02 carry the full sprint template (why / database / workflow / Telegram / testing / DoD / dependencies / future unlocks / merge requirements / rollback); phases 03–10 use the compact goal + stack + checklist format until they're up next, at which point they get expanded the same way.</div>
+  <div class="roadmap-note reveal"><b>Note:</b> phases 01–03 are marked shipped (v0.1.0 through v0.4.0). Checkbox state below is local to this page view and doesn't persist — treat it as a working copy, not the record of truth (that's CHANGELOG.md). Phases 01–04 carry the full sprint template (why / database / workflow / Telegram / testing / DoD / dependencies / future unlocks / merge requirements / rollback) since Phase 04 is up next; phases 05 onward use the compact goal + stack + checklist format until they're up next, at which point they get expanded the same way.</div>
+  <div class="roadmap-note reveal" style="margin-top:12px;"><b>Sequencing call, post-v0.4.0:</b> with TaskOS CRUD shipped, the next move isn't FinanceOS just because it's further down this list — it's finishing TaskOS (Phase 04), since every later module reuses those patterns. Phases 04–06 below (TaskOS Advanced → Core Infrastructure → AI Gateway) are that near-term plan, inserted ahead of Core Loop and the rest of the module build order.</div>
   <div class="rule-grid" style="margin-bottom:28px;">
     <div class="rule-card">
       <div class="rule-num">↺</div>
@@ -1284,7 +1325,7 @@
     <tr><td>Update README</td><td>Every feature (step 6 of Article XVI)</td></tr>
     <tr><td>Update CHANGELOG</td><td>Every feature (step 7 of Article XVI)</td></tr>
     <tr><td>Tag a release</td><td>Every merge to <code class="mono">main</code> (Article VII, Rule 1)</td></tr>
-    <tr><td>Backup Supabase</td><td>Manual export until Phase 10, then scheduled (Article XIX)</td></tr>
+    <tr><td>Backup Supabase</td><td>Manual export until Phase 14, then scheduled (Article XIX)</td></tr>
   </table>
 
   <div class="truth-box reveal" style="border-color:var(--amber);margin-bottom:36px;">
@@ -1309,9 +1350,12 @@
     <div class="timeline-item"><div class="tyear">2026</div><p>Project started. Docker + self-hosted n8n chosen as the runtime.</p></div>
     <div class="timeline-item"><div class="tyear">2026</div><p>Telegram Bot API and Supabase connected — v0.1.0, Foundation, tagged.</p></div>
     <div class="timeline-item"><div class="tyear">2026</div><p>User registration and existing-user detection shipped — v0.2.0, Telegram Gateway, tagged.</p></div>
-    <div class="timeline-item future"><div class="tyear">next</div><p>001-Gateway refactored into the Router; literal-command and Gemini-intent branches merged into one intent contract — v0.3.0.</p></div>
-    <div class="timeline-item future"><div class="tyear">later</div><p>Task Engine, Calendar sync, Morning Brief — the daily-use core loop — v0.4.0.</p></div>
-    <div class="timeline-item future"><div class="tyear">later</div><p>StudyOS, Knowledge Vault, ProjectOS, CareerOS, FinanceOS, AnalyticsOS ship in sequence — v0.5.0 through v0.10.0.</p></div>
+    <div class="timeline-item"><div class="tyear">2026</div><p>001-Gateway refactored into the Router — command extraction, Workflow Registry, dynamic Execute Workflow routing — v0.3.0, The Router, tagged.</p></div>
+    <div class="timeline-item"><div class="tyear">2026</div><p>Add / List / Complete / Delete Task shipped, with shared validation and standardized responses — v0.4.0, TaskOS CRUD, tagged.</p></div>
+    <div class="timeline-item future"><div class="tyear">next</div><p>Edit, Priority, Due Date, Search, Categories, Clear Completed (204–209), plus a shared workflow-context pattern and reusable components — v0.5.0, TaskOS Advanced.</p></div>
+    <div class="timeline-item future"><div class="tyear">later</div><p>AI Gateway: natural-language intent parsing routes free-text messages into the existing TaskOS workflows — v0.6.0.</p></div>
+    <div class="timeline-item future"><div class="tyear">later</div><p>Core Loop: goals, Calendar sync, Morning Brief — v0.7.0.</p></div>
+    <div class="timeline-item future"><div class="tyear">later</div><p>StudyOS, Knowledge Vault, ProjectOS, CareerOS, FinanceOS, AnalyticsOS ship in sequence — v0.8.0 through v0.13.0.</p></div>
     <div class="timeline-item future"><div class="tyear">later</div><p>Deploy &amp; Harden: migration to Oracle Always Free, RLS, auth, and the React dashboard — v1.0.0, MVP complete.</p></div>
   </div>
 
@@ -1350,11 +1394,11 @@ CareerOS application deadlines compete for the same task list
     <tr><th>Service</th><th>Plan</th><th>Cost</th><th>When it's introduced</th></tr>
     <tr><td><b>Docker + n8n</b></td><td>Local, self-hosted OSS</td><td class="yes">$0</td><td>Phase 01 — now</td></tr>
     <tr><td><b>Supabase</b></td><td>Free tier</td><td class="yes">$0</td><td>Phase 01 — now</td></tr>
-    <tr><td><b>Cloudflare Quick Tunnel</b></td><td>Free, dev-only</td><td class="yes">$0</td><td>Phase 01–09 (dev)</td></tr>
+    <tr><td><b>Cloudflare Quick Tunnel</b></td><td>Free, dev-only</td><td class="yes">$0</td><td>Phase 01–13 (dev)</td></tr>
     <tr><td><b>Telegram Bot API</b></td><td>Free</td><td class="yes">$0</td><td>Phase 01 — now</td></tr>
-    <tr><td><b>Gemini API</b></td><td>Free tier</td><td class="yes">$0</td><td>Phase 03 onward</td></tr>
-    <tr><td><b>Named Cloudflare Tunnel or DigitalOcean droplet</b></td><td>Free (student credit) / OSS</td><td class="yes">$0</td><td>Phase 10 — Deploy &amp; Harden</td></tr>
-    <tr><td><b>Oracle Cloud Always Free</b></td><td>Always-free tier</td><td class="yes">$0</td><td>Phase 10, permanent home</td></tr>
+    <tr><td><b>Gemini API</b></td><td>Free tier</td><td class="yes">$0</td><td>Phase 06 onward</td></tr>
+    <tr><td><b>Named Cloudflare Tunnel or DigitalOcean droplet</b></td><td>Free (student credit) / OSS</td><td class="yes">$0</td><td>Phase 14 — Deploy &amp; Harden</td></tr>
+    <tr><td><b>Oracle Cloud Always Free</b></td><td>Always-free tier</td><td class="yes">$0</td><td>Phase 14, permanent home</td></tr>
   </table>
 </section>
 
@@ -1390,7 +1434,7 @@ CareerOS application deadlines compete for the same task list
 </section>
 
 <footer>LifeOS Engineering Constitution — amended in the same PR as the code it governs<span class="cursor-blink"></span>
-<div class="amend">constitution v1.4 · project v0.2.0 · next amendment due at v0.3.0 (The Router)</div>
+<div class="amend">constitution v1.4 · project v0.4.0 · next amendment due at v0.5.0 (TaskOS Advanced)</div>
 </footer>
 
 <script>
@@ -1472,7 +1516,7 @@ observeAll('#rule-grid .rule-card');
 const schema = [
   {name:"Core OS",color:"var(--amber)",tables:[
     {t:"users",f:"id, telegram_id, name, timezone",live:true},
-    {t:"tasks",f:"id, user_id, title, priority, status, due_date",live:false},
+    {t:"tasks",f:"id, user_id, title, priority, status, due_date",live:true},
     {t:"goals",f:"id, user_id, title, target_date, progress",live:false},
     {t:"events",f:"id, user_id, title, start_time, end_time, source",live:false},
   ]},
@@ -1516,22 +1560,22 @@ observeAll('#schema-grid .schema-card');
 
 /* ===== MODULES DATA ===== */
 const modules = [
-  {pid:"01",icon:"🗂️",bg:"rgba(255,180,84,.12)",name:"Core OS",sub:"Task, goal & calendar engine",status:"registration live",statusColor:"var(--green)",
-   desc:"The base layer everything else plugs into. Registration and user lookup are live; task capture, calendar sync, and Gemini prioritization are ratified but not yet built.",
+  {pid:"01",icon:"🗂️",bg:"rgba(255,180,84,.12)",name:"Core OS",sub:"Task, goal & calendar engine",status:"task engine live",statusColor:"var(--green)",
+   desc:"The base layer everything else plugs into. Registration, user lookup, and the full task CRUD loop (add/list/complete/delete) are live; edit/priority/due-date/search/categories are up next, and goal tracking, calendar sync, and Gemini prioritization are ratified but not yet built.",
    why:"This is the daily habit loop — if this module isn't sticky, nothing built on top of it will be used either.",
    ai:"Gemini extracts due dates and priority from natural language, and suggests a task order for the Morning Brief. It never decides what gets stored — the task row is written by deterministic logic regardless of how the request arrived.",
    deps:"The Router (Article VIII) for command dispatch. No dependency on any other module.",
    future:"Recurring tasks, sub-tasks, and a snooze/defer flow once the base loop is proven daily-sticky.",
-   tables:"users (live) · tasks · goals · events (planned)",
-   feats:["/addtask","/tasks","/done","/delete","Morning Brief","Goal tracking","Calendar sync","AI prioritization"],
-   cmds:[{u:"remind me to submit the DBMS assignment friday",b:"added → \"DBMS assignment\" · due Fri · priority: high"},
-         {u:"/summary",b:"3 tasks due today · 1 event at 4pm · suggested order: assignment → gym → reading"}],
+   tables:"users (live) · tasks (live) · goals · events (planned)",
+   feats:["/addtask","/tasks","/done","/delete","/edit (204)","/priority (205)","/duedate (206)","/search (207)","/category (208)","/clear (209)","Morning Brief","Goal tracking","Calendar sync","AI prioritization"],
+   cmds:[{u:"/addtask Buy milk",b:"✅ Task created Successfully · 📝 Buy milk"},
+         {u:"remind me to submit the DBMS assignment friday",b:"(AI Gateway, target v0.6.0) added → \"DBMS assignment\" · due Fri · priority: high"}],
    contract:{purpose:"Own the user's tasks, goals, and calendar state; be the daily-use core loop.",
-     inputs:"Telegram commands/NL messages routed with intent add_task, list_tasks, complete_task, delete_task (Router); Google Calendar webhook (planned, for drift detection).",
-     outputs:"Task rows in Supabase; Telegram replies; outbound Calendar event writes.",
+     inputs:"Telegram commands routed with intent add_task, list_tasks, complete_task, delete_task (Router, live); free-text NL messages via the AI Gateway (planned, target v0.6.0); Google Calendar webhook (planned, for drift detection).",
+     outputs:"Task rows in Supabase; Telegram replies; outbound Calendar event writes (planned).",
      failure:"Uses the global failure policy (Article XIX). Calendar write failures never block the task write — Supabase is source of truth (ADR 002/003).",
-     current:["/start registration (shared with 001-Gateway)","Existing-user detection","Welcome / welcome-back messages"],
-     planned:["tasks, goals, events tables (Article X)","/addtask /tasks /done /delete","Google Calendar sync","Morning Brief cron","Gemini due-date/priority extraction"],
+     current:["/start registration (shared with 001-Gateway)","Existing-user detection","Welcome / welcome-back messages","tasks table (Article X) — live","/addtask /tasks /done /delete — live, v0.4.0"],
+     planned:["/edit /priority /duedate /search /category /clear (204–209, target v0.5.0)","Shared workflow-context pattern + shared validation/lookup/response components (target v0.5.0)","AI Gateway natural-language routing (target v0.6.0)","goals, events tables (Article X)","Google Calendar sync","Morning Brief cron","Gemini due-date/priority extraction"],
      future:["Recurring tasks","Sub-tasks","Snooze/defer flow"]}},
   {pid:"02",icon:"📚",bg:"rgba(94,234,212,.12)",name:"StudyOS",sub:"Academic assistant",status:"planned",statusColor:"var(--text-faint)",
    desc:"Upload course PDFs and get them turned into structured study material automatically — summaries, quizzes, and revision prompts generated from your own notes.",
@@ -1694,9 +1738,9 @@ const dictionary = [
    columns:"id, telegram_id, name, timezone",relationships:"Referenced by every user-owned table via user_id.",
    indexesCurrent:"Primary key (id)",indexesFuture:"Index on telegram_id — the lookup Article XVI's Design→Database step will need once user count grows past a handful.",
    futureColumns:"timezone (used, not yet added) · locale · preferences",usedBy:"CoreOS (owner) · every module, transitively, via user_id",live:true},
-  {t:"tasks",purpose:"A user's tasks — the core CoreOS loop.",columns:"id, user_id, title, priority, status, due_date",
-   relationships:"user_id → users.id",indexesCurrent:"Primary key (id) — table not yet created",indexesFuture:"user_id + due_date composite, for the Morning Brief query",
-   futureColumns:"recurrence rule · parent_task_id (sub-tasks)",usedBy:"CoreOS (owner) · AnalyticsOS (read)",live:false},
+  {t:"tasks",purpose:"A user's tasks — the core CoreOS loop. Live since v0.4.0 (200–203); 204–209 read/write the same table without a schema change.",columns:"id, user_id, title, description, priority, status, due_date, created_at, completed_at, updated_at, estimated_minutes, category",
+   relationships:"user_id → users.id (FK, on delete cascade)",indexesCurrent:"Primary key (id)",indexesFuture:"user_id + due_date composite, for the Morning Brief query",
+   futureColumns:"recurrence rule · parent_task_id (sub-tasks)",usedBy:"CoreOS (owner) · AnalyticsOS (read)",live:true},
   {t:"goals",purpose:"Longer-horizon goals tracked alongside tasks.",columns:"id, user_id, title, target_date, progress",
    relationships:"user_id → users.id",indexesCurrent:"Primary key (id) — table not yet created",indexesFuture:"TBD",
    futureColumns:"linked_task_ids[]",usedBy:"CoreOS (owner)",live:false},
@@ -1741,7 +1785,7 @@ const dictionary = [
    futureColumns:"none identified yet",usedBy:"AnalyticsOS (owner)",live:false},
   {t:"events_log",purpose:"Append-only cross-module activity trail. Not the same table as events (Article XII).",columns:"id, user_id, module, event_type, payload (jsonb), created_at",
    relationships:"user_id → users.id",indexesCurrent:"Primary key (id) — table not yet created",indexesFuture:"user_id + created_at · module + event_type",
-   futureColumns:"none identified yet",usedBy:"Every module (writer) · AnalyticsOS (reader, Phase 09) · Morning Brief (reader, future)",live:false},
+   futureColumns:"none identified yet",usedBy:"Every module (writer) · AnalyticsOS (reader, Phase 13) · Morning Brief (reader, future)",live:false},
 ];
 const dictList = document.getElementById('dict-list');
 dictionary.forEach(d=>{
@@ -1763,17 +1807,17 @@ observeAll('#dict-list .dict-card');
 /* ===== EVENT REGISTRY DATA — contract only, payloads TBD until owning module ships (Article XII) ===== */
 const events = [
   {name:"user.registered",producer:"001-Gateway",consumers:"none yet",payload:"TBD (implemented during 001-Gateway → events_log wiring)"},
-  {name:"task.created",producer:"CoreOS",consumers:"AnalyticsOS (Phase 09)",payload:"TBD (implemented during CoreOS)"},
-  {name:"task.completed",producer:"CoreOS",consumers:"AnalyticsOS (Phase 09)",payload:"TBD (implemented during CoreOS)"},
-  {name:"calendar.synced",producer:"CoreOS",consumers:"AnalyticsOS (Phase 09)",payload:"TBD (implemented during CoreOS)"},
-  {name:"document.uploaded",producer:"StudyOS",consumers:"AnalyticsOS (Phase 09)",payload:"TBD (implemented during StudyOS)"},
-  {name:"quiz.completed",producer:"StudyOS",consumers:"AnalyticsOS (Phase 09)",payload:"TBD (implemented during StudyOS)"},
-  {name:"knowledge_item.saved",producer:"Knowledge Vault",consumers:"AnalyticsOS (Phase 09)",payload:"TBD (implemented during Knowledge Vault)"},
-  {name:"daily_log.created",producer:"ProjectOS",consumers:"AnalyticsOS (Phase 09)",payload:"TBD (implemented during ProjectOS)"},
-  {name:"application.created",producer:"CareerOS",consumers:"AnalyticsOS (Phase 09)",payload:"TBD (implemented during CareerOS)"},
-  {name:"resume.analyzed",producer:"CareerOS",consumers:"AnalyticsOS (Phase 09)",payload:"TBD (implemented during CareerOS)"},
-  {name:"expense.logged",producer:"FinanceOS",consumers:"AnalyticsOS (Phase 09)",payload:"TBD (implemented during FinanceOS)"},
-  {name:"budget.exceeded",producer:"FinanceOS",consumers:"AnalyticsOS (Phase 09) · Telegram reply, direct (not via consumer)",payload:"TBD (implemented during FinanceOS)"},
+  {name:"task.created",producer:"CoreOS",consumers:"AnalyticsOS (Phase 13)",payload:"TBD (implemented during CoreOS)"},
+  {name:"task.completed",producer:"CoreOS",consumers:"AnalyticsOS (Phase 13)",payload:"TBD (implemented during CoreOS)"},
+  {name:"calendar.synced",producer:"CoreOS",consumers:"AnalyticsOS (Phase 13)",payload:"TBD (implemented during CoreOS)"},
+  {name:"document.uploaded",producer:"StudyOS",consumers:"AnalyticsOS (Phase 13)",payload:"TBD (implemented during StudyOS)"},
+  {name:"quiz.completed",producer:"StudyOS",consumers:"AnalyticsOS (Phase 13)",payload:"TBD (implemented during StudyOS)"},
+  {name:"knowledge_item.saved",producer:"Knowledge Vault",consumers:"AnalyticsOS (Phase 13)",payload:"TBD (implemented during Knowledge Vault)"},
+  {name:"daily_log.created",producer:"ProjectOS",consumers:"AnalyticsOS (Phase 13)",payload:"TBD (implemented during ProjectOS)"},
+  {name:"application.created",producer:"CareerOS",consumers:"AnalyticsOS (Phase 13)",payload:"TBD (implemented during CareerOS)"},
+  {name:"resume.analyzed",producer:"CareerOS",consumers:"AnalyticsOS (Phase 13)",payload:"TBD (implemented during CareerOS)"},
+  {name:"expense.logged",producer:"FinanceOS",consumers:"AnalyticsOS (Phase 13)",payload:"TBD (implemented during FinanceOS)"},
+  {name:"budget.exceeded",producer:"FinanceOS",consumers:"AnalyticsOS (Phase 13) · Telegram reply, direct (not via consumer)",payload:"TBD (implemented during FinanceOS)"},
 ];
 const eventList = document.getElementById('event-list');
 events.forEach(e=>{
@@ -1892,33 +1936,81 @@ const roadmap = [
      unlocks:"Every other module — this is the account system they all key off of.",
      merge:"Full Article III checklist, since this shipped to main.",
      rollback:"Standard rollback strategy — see box above."}},
-  {n:"02",name:"The Router",tag:"target v0.3.0",shipped:false,goal:"Collapse the Telegram Trigger into a single router before a second command exists.",stack:"n8n Switch/Router · Gemini classification",
-   items:["Refactor Telegram Trigger into 001-Gateway","Literal-command switch branch","Gemini intent-classification branch","Shared intent-key contract for Execute Workflow"],
+  {n:"02",name:"The Router",tag:"v0.3.0",shipped:true,goal:"Collapse the Telegram Trigger into a single router before a second command exists.",stack:"n8n Switch/Router · Workflow Registry",
+   items:["Refactor Telegram Trigger into 001-Gateway","Command + argument extraction","Centralized Workflow Registry","Dynamic Execute Workflow routing by intent key","Workflow metadata propagation (workflow_id, workflow_name, description)"],
    full:{why:"Telegram allows exactly one webhook (ADR 004). Every command from here on has to pass through one place, or every future module needs its own migration to retrofit this.",
      db:"No schema changes — this phase is pure routing logic.",
-     workflow:"001-Gateway (refactored) → 002-Router: starts-with-\"/\" switch → literal branch or Gemini intent branch → Execute Workflow by intent key.",
-     telegram:"No new user-facing commands yet — this phase is the plumbing, not a feature. /start still resolves through the new path unchanged.",
-     testing:"Literal command → correct branch, no AI call. Natural-language message → Gemini branch → structured JSON. Unrecognized command → help-text reply, never silence.",
-     dod:"Both a literal command and its natural-language equivalent resolve to the identical intent key, and an unrecognized message always produces a reply.",
+     workflow:"001-Gateway → 002-Router: Extract Command → Workflow Registry lookup → Workflow Switch → Execute Workflow (200-Add Task / 201-List Tasks / 202-Complete Task / 203-Delete Task).",
+     telegram:"No new commands introduced by the Router itself — it's the plumbing that 200–203 route through.",
+     testing:"Literal command → correct branch, correct downstream workflow. Unrecognized command → help-text reply, never silence.",
+     dod:"A command resolves to the correct downstream workflow via the Registry, and an unrecognized message always produces a reply.",
      deps:"Phase 01 (needs a working webhook + user lookup to route around).",
      unlocks:"Every module after this one — Phase 03 onward assumes the Router exists and never touches the Telegram Trigger directly.",
-     merge:"Full Article III checklist — required before this reaches main.",
+     merge:"Full Article III checklist — shipped to main as v0.3.0.",
      rollback:"Standard rollback strategy — see box above. In particular: restore the pre-Router 001 export, since the Router replaces it in place."}},
-  {n:"03",name:"Core Loop",tag:"target v0.4.0",shipped:false,goal:"Make it something you actually check every morning.",stack:"n8n cron · Gemini API · Google Calendar",
-   items:["tasks table + /addtask /tasks /done /delete","Google Calendar sync","Morning Brief cron workflow","Gemini prioritization reasoning"]},
-  {n:"04",name:"StudyOS",tag:"target v0.5.0",shipped:false,goal:"Turn course material into an active study pipeline.",stack:"Supabase Storage · Gemini extraction",
+  {n:"03",name:"TaskOS CRUD",tag:"v0.4.0",shipped:true,goal:"Give tasks a full lifecycle — create, list, complete, delete — before adding anything more advanced.",stack:"n8n · Supabase (tasks table)",
+   items:["200 — Add Task","201 — List Tasks","202 — Complete Task","203 — Delete Task","Task lookup by list index + number validation","Standardized success/error responses"],
+   full:{why:"A task system nobody can list, complete, or delete isn't a task system yet. This is the minimum viable loop the Router was built to carry.",
+     db:"tasks (id, user_id, title, description, priority, status, due_date, created_at, completed_at, updated_at, estimated_minutes, category) — created and live, FK to users on delete cascade.",
+     workflow:"Router → 200/201/202/203, each following Validate → Business Logic → Supabase → Respond.",
+     telegram:"/addtask, /tasks, /done, /delete",
+     testing:"Empty title, out-of-range task number, non-numeric task number, decimal input → all rejected with a friendly error. Empty task list → distinct empty-state message, not a crash.",
+     dod:"A user can add, list, complete, and delete a task end-to-end through Telegram, with every invalid input producing a clear error instead of a silent failure.",
+     deps:"Phase 02 — the Router has to exist to dispatch these four workflows by intent.",
+     unlocks:"Phase 04 (Edit/Priority/Due Date/Search/Categories/Clear all build on this same tasks table and lookup pattern).",
+     merge:"Full Article III checklist — shipped to main as v0.4.0.",
+     rollback:"Standard rollback strategy — see box above."}},
+  {n:"04",name:"TaskOS Advanced",tag:"target v0.5.0",shipped:false,goal:"Finish TaskOS before expanding sideways — this is the foundation every other module reuses.",stack:"n8n · Supabase (tasks table)",
+   items:["204 — Edit Task","205 — Set Priority","206 — Set Due Date","207 — Search Tasks","208 — Task Categories","209 — Clear Completed Tasks"],
+   full:{why:"200–203 prove the loop works; 204–209 make it something worth using daily. Priority (⭐⭐⭐⭐⭐), due dates, and search are the highest-value gaps versus a plain list.",
+     db:"No new tables — reads and writes existing tasks columns (priority, due_date, category, status) that 200–203 already default but don't yet let a user set after creation.",
+     workflow:"Same shape as 202/203: Validate Task Number → Get Pending Tasks → Find Task → Business Logic (edit field / set priority / set due date / filter by category or query) → Supabase update → Respond.",
+     telegram:"/edit, /priority, /duedate, /search, /category, /clear",
+     testing:"Same validation matrix as 202/203 (missing arg, out-of-range index, invalid value) plus format checks for priority enum and due-date parsing.",
+     dod:"Each of the six commands round-trips through Telegram → Supabase → Telegram with the same error-handling standard as 200–203.",
+     deps:"Phase 03 (TaskOS CRUD) — reuses its tasks table, task-lookup-by-index pattern, and response format.",
+     unlocks:"A genuinely useful TaskOS before any new module (StudyOS, FinanceOS, etc.) gets started — see Article XVII, Principle 01.",
+     merge:"Full Article III checklist — required before this reaches main.",
+     rollback:"Standard rollback strategy — see box above."}},
+  {n:"05",name:"Core Infrastructure Improvements",tag:"target v0.5.0",shipped:false,goal:"Fix the patterns every future module would otherwise inherit, before there are more workflows built on top of them.",stack:"n8n Code nodes · sub-workflows",
+   items:["Standard workflow-context pattern (request → business logic → database → response)","Shared sub-workflow: Validate Task Number","Shared sub-workflow: Find Task by Index","Shared sub-workflow: Build Telegram Response","Standardized error responses (invalid command / not found / missing argument / internal error)"],
+   full:{why:"Database nodes currently overwrite parts of the item, which is why 202 and 203 have to explicitly re-pull chat_id, telegram_user_id, and first_name back off the trigger node instead of just reading $json. And \"Validate Task Number\" / \"Find Task\" are copy-pasted almost verbatim across 202 and 203 already — 204–209 would otherwise copy them five more times.",
+     db:"No schema changes — this phase is workflow architecture, not data.",
+     workflow:"Extract Validate Task Number and Find Task into callable sub-workflows; standardize on carrying the full original request object through every node via spread (...request) rather than re-fetching fields ad hoc.",
+     telegram:"No new commands — this phase is invisible to the end user by design.",
+     testing:"Every existing 200–209 workflow re-tested end-to-end after being repointed at the shared components, confirming identical behavior with less duplicated code.",
+     dod:"Validate Task Number and Find Task exist in exactly one place each and are called (not copy-pasted) by every workflow that needs them; every workflow's error messages match the standardized set.",
+     deps:"Phase 04 — needs 204–209 built once, so the duplication this phase removes is real and not speculative.",
+     unlocks:"Every future module (AI Gateway, FinanceOS, StudyOS, …) inherits clean shared components from day one instead of copy-pasting TaskOS's early mistakes.",
+     merge:"Full Article III checklist — required before this reaches main.",
+     rollback:"Standard rollback strategy — see box above."}},
+  {n:"06",name:"AI Gateway",tag:"target v0.6.0",shipped:false,goal:"Let a message like \"remind me to buy milk tomorrow after class\" resolve to the right workflow, instead of requiring exact slash commands.",stack:"Gemini intent classification · n8n Router",
+   items:["Natural-language intent parsing in front of 002-Router","Structured intent → command + args mapping","Route parsed intent to the correct TaskOS workflow","Fallback to literal-command parsing when confidence is low"],
+   full:{why:"This becomes a capability every future module reuses (StudyOS, FinanceOS, CareerOS all benefit from natural-language input), so it's worth building once TaskOS is solid rather than per-module later.",
+     db:"No schema changes.",
+     workflow:"002-Router gains a branch: literal \"/\" commands skip straight to the existing switch; free-text messages go through Gemini classification first, which returns an intent key and extracted arguments that map onto the same Execute Workflow contract 200–209 already expect.",
+     telegram:"No new commands — natural language becomes an additional way to trigger existing ones.",
+     testing:"A natural-language message and its literal-command equivalent resolve to the identical intent key and produce identical downstream behavior.",
+     dod:"\"I need to study DBMS tonight\" creates the same task row, with the same fields, as /addtask Study DBMS.",
+     deps:"Phases 03–05 — the AI Gateway routes into TaskOS workflows and their shared components; it doesn't replace them.",
+     unlocks:"Natural-language input for every module built after this point, without re-solving intent parsing each time.",
+     merge:"Full Article III checklist — required before this reaches main.",
+     rollback:"Standard rollback strategy — see box above."}},
+  {n:"07",name:"Core Loop",tag:"target v0.7.0",shipped:false,goal:"Make it something you actually check every morning — the parts of CoreOS that TaskOS CRUD didn't cover.",stack:"n8n cron · Gemini API · Google Calendar",
+   items:["goals table + goal tracking","Google Calendar sync","Morning Brief cron workflow","Gemini prioritization reasoning"]},
+  {n:"08",name:"StudyOS",tag:"target v0.8.0",shipped:false,goal:"Turn course material into an active study pipeline.",stack:"Supabase Storage · Gemini extraction",
    items:["/uploadpdf ingestion + storage","Gemini summarization pipeline","/quiz generation + delivery","GPA / exam countdown tracker"]},
-  {n:"05",name:"Knowledge Vault",tag:"target v0.6.0",shipped:false,goal:"Never lose something you learned again.",stack:"Gemini tagging · Postgres full-text search",
+  {n:"09",name:"Knowledge Vault",tag:"target v0.9.0",shipped:false,goal:"Never lose something you learned again.",stack:"Gemini tagging · Postgres full-text search",
    items:["Multi-type link/file capture","Auto-tag + summarize pipeline","/search across all saved items"]},
-  {n:"06",name:"ProjectOS",tag:"target v0.7.0",shipped:false,goal:"Turn daily check-ins into automatic reports.",stack:"n8n scheduled aggregation · Gemini",
+  {n:"10",name:"ProjectOS",tag:"target v0.10.0",shipped:false,goal:"Turn daily check-ins into automatic reports.",stack:"n8n scheduled aggregation · Gemini",
    items:["Daily check-in prompt workflow","Structured log storage","Auto weekly report generation"]},
-  {n:"07",name:"CareerOS",tag:"target v0.8.0",shipped:false,goal:"Make internship hunting data-driven.",stack:"Gemini resume comparison",
+  {n:"11",name:"CareerOS",tag:"target v0.11.0",shipped:false,goal:"Make internship hunting data-driven.",stack:"Gemini resume comparison",
    items:["Application + interview tracker","Resume vs JD gap analysis","Deadline reminder workflow"]},
-  {n:"08",name:"FinanceOS",tag:"target v0.9.0",shipped:false,goal:"Smallest module, fastest daily-use win.",stack:"Gemini expense parsing",
+  {n:"12",name:"FinanceOS",tag:"target v0.12.0",shipped:false,goal:"Smallest module, fastest daily-use win — deliberately sequenced after TaskOS and the AI Gateway are solid, not before.",stack:"Gemini expense parsing",
    items:["Natural-language expense logging","Auto-categorization","Weekly summary + budget alerts"]},
-  {n:"09",name:"AnalyticsOS",tag:"target v0.10.0",shipped:false,goal:"Connect every module into one weekly signal.",stack:"Cross-table Supabase queries · Gemini scoring",
+  {n:"13",name:"AnalyticsOS",tag:"target v0.13.0",shipped:false,goal:"Connect every module into one weekly signal.",stack:"Cross-table Supabase queries · Gemini scoring",
    items:["Cross-module data aggregation","Productivity score calculation","Pattern-based recommendations"]},
-  {n:"10",name:"Deploy & Harden",tag:"target v1.0.0",shipped:false,goal:"Move off the laptop only once the workflows are proven — this phase closes out the MVP checklist in Article VII.",stack:"Named Cloudflare Tunnel or DigitalOcean · Oracle Always Free · React",
+  {n:"14",name:"Deploy & Harden",tag:"target v1.0.0",shipped:false,goal:"Move off the laptop only once the workflows are proven — this phase closes out the MVP checklist in Article VII.",stack:"Named Cloudflare Tunnel or DigitalOcean · Oracle Always Free · React",
    items:["Named Tunnel or DigitalOcean droplet","Migrate to Oracle Always Free (permanent)","Error handling + retry logic across all workflows","React dashboard on same Supabase data","README + architecture diagram"]},
 ];
 const roadmapList = document.getElementById('roadmap-list');
@@ -1976,14 +2068,17 @@ document.addEventListener('click', (e)=>{
 const decisionLog = [
   {tag:"v0.1.0",desc:"Created repository. Docker + self-hosted n8n chosen as runtime. Foundation shipped.",future:false},
   {tag:"v0.2.0",desc:"Telegram Gateway shipped — registration, existing-user detection, welcome flows.",future:false},
-  {tag:"v0.3.0",desc:"Router shipped — literal-command and Gemini-intent branches merged into one intent contract.",future:true},
-  {tag:"v0.4.0",desc:"Core Loop shipped — tasks, Calendar sync, Morning Brief.",future:true},
-  {tag:"v0.5.0",desc:"StudyOS shipped — PDF upload, summaries, quiz generation.",future:true},
-  {tag:"v0.6.0",desc:"Knowledge Vault shipped — save links, tagging, search.",future:true},
-  {tag:"v0.7.0",desc:"ProjectOS shipped — daily check-ins, auto reports.",future:true},
-  {tag:"v0.8.0",desc:"CareerOS shipped — application tracker, resume gap analysis.",future:true},
-  {tag:"v0.9.0",desc:"FinanceOS shipped — expense logging, budget alerts.",future:true},
-  {tag:"v0.10.0",desc:"AnalyticsOS shipped — weekly digest, cross-module scoring.",future:true},
+  {tag:"v0.3.0",desc:"Router shipped — command extraction, Workflow Registry, dynamic Execute Workflow routing to TaskOS.",future:false},
+  {tag:"v0.4.0",desc:"TaskOS CRUD shipped — Add / List / Complete / Delete Task, shared validation pipeline, standardized responses.",future:false},
+  {tag:"v0.5.0",desc:"TaskOS Advanced shipped — Edit, Priority, Due Date, Search, Categories, Clear Completed (204–209), plus the shared Core Infrastructure Improvements (context pattern, shared components, standardized errors).",future:true},
+  {tag:"v0.6.0",desc:"AI Gateway shipped — natural-language intent parsing routes free-text messages into existing TaskOS workflows.",future:true},
+  {tag:"v0.7.0",desc:"Core Loop shipped — goals, Calendar sync, Morning Brief.",future:true},
+  {tag:"v0.8.0",desc:"StudyOS shipped — PDF upload, summaries, quiz generation.",future:true},
+  {tag:"v0.9.0",desc:"Knowledge Vault shipped — save links, tagging, search.",future:true},
+  {tag:"v0.10.0",desc:"ProjectOS shipped — daily check-ins, auto reports.",future:true},
+  {tag:"v0.11.0",desc:"CareerOS shipped — application tracker, resume gap analysis.",future:true},
+  {tag:"v0.12.0",desc:"FinanceOS shipped — expense logging, budget alerts. Deliberately sequenced after TaskOS and the AI Gateway, not right after v0.4.0.",future:true},
+  {tag:"v0.13.0",desc:"AnalyticsOS shipped — weekly digest, cross-module scoring.",future:true},
   {tag:"v1.0.0",desc:"Deploy & Harden complete — permanent hosting, RLS, auth, React dashboard. First complete MVP.",future:true},
 ];
 const declogEl = document.getElementById('declog');
@@ -1997,13 +2092,13 @@ decisionLog.forEach(d=>{
 /* ===== INFRA STACK DATA ===== */
 const stack = [
   {cls:"c-green",layer:"Local — now",name:"Docker + n8n",desc:"Self-hosted workflow engine, running as a container on your own machine for the entire build.",alt:"Version: latest stable"},
-  {cls:"c-green",layer:"Local — now",name:"Cloudflare Quick Tunnel",desc:"Free, dev-only public URL for the Telegram webhook. Restarts each session, updated manually.",alt:"Replaced in Phase 10"},
+  {cls:"c-green",layer:"Local — now",name:"Cloudflare Quick Tunnel",desc:"Free, dev-only public URL for the Telegram webhook. Restarts each session, updated manually.",alt:"Replaced in Phase 14"},
   {cls:"c-green",layer:"Database — now",name:"Supabase",desc:"Postgres with built-in auth, storage, and row-level security. Free tier is plenty for one user.",alt:"Fallback: self-hosted Postgres"},
-  {cls:"c-cyan",layer:"Intelligence — Phase 03+",name:"Gemini API",desc:"Prioritization reasoning, PDF summarization, quiz generation, resume gap analysis.",alt:"Fallback: local Ollama model"},
+  {cls:"c-cyan",layer:"Intelligence — Phase 06+",name:"Gemini API",desc:"Prioritization reasoning, PDF summarization, quiz generation, resume gap analysis.",alt:"Fallback: local Ollama model"},
   {cls:"c-amber",layer:"Interface — now",name:"Telegram Bot API",desc:"The only way you talk to LifeOS — one webhook, routed through the Gateway.",alt:""},
-  {cls:"c-violet",layer:"Hosting — Phase 10",name:"DigitalOcean or Named Tunnel",desc:"Permanent public URL once local dev-loop is no longer sufficient.",alt:"Funded by GitHub Student credit"},
-  {cls:"c-violet",layer:"Hosting — Phase 10, forever",name:"Oracle Cloud Always Free",desc:"2 OCPU / 12GB Arm instance — the permanent home once the credit-funded phase ends.",alt:"Fallback: Google Cloud e2-micro"},
-  {cls:"c-cyan",layer:"Dashboard — Phase 10",name:"React + Tailwind",desc:"Visual layer added only after the backend is solid. Auth via Supabase Auth.",alt:""},
+  {cls:"c-violet",layer:"Hosting — Phase 14",name:"DigitalOcean or Named Tunnel",desc:"Permanent public URL once local dev-loop is no longer sufficient.",alt:"Funded by GitHub Student credit"},
+  {cls:"c-violet",layer:"Hosting — Phase 14, forever",name:"Oracle Cloud Always Free",desc:"2 OCPU / 12GB Arm instance — the permanent home once the credit-funded phase ends.",alt:"Fallback: Google Cloud e2-micro"},
+  {cls:"c-cyan",layer:"Dashboard — Phase 14",name:"React + Tailwind",desc:"Visual layer added only after the backend is solid. Auth via Supabase Auth.",alt:""},
 ];
 const stackGrid = document.getElementById('stack-grid');
 stack.forEach(s=>{

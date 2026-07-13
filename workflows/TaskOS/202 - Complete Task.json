@@ -1,0 +1,466 @@
+{
+  "name": "202 - Complete Task",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "chat_id",
+              "type": "number"
+            },
+            {
+              "name": "telegram_user_id",
+              "type": "number"
+            },
+            {
+              "name": "first_name"
+            },
+            {
+              "name": "username"
+            },
+            {
+              "name": "message_id",
+              "type": "number"
+            },
+            {
+              "name": "message"
+            },
+            {
+              "name": "command"
+            },
+            {
+              "name": "command_args"
+            },
+            {
+              "name": "is_new_user",
+              "type": "boolean"
+            },
+            {
+              "name": "platform"
+            },
+            {
+              "name": "received_at"
+            },
+            {
+              "name": "user_id"
+            },
+            {
+              "name": "workflow_id"
+            },
+            {
+              "name": "workflow_name"
+            },
+            {
+              "name": "description"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -368,
+        0
+      ],
+      "id": "57c82195-7b72-4538-8301-cda38a4eeb5d",
+      "name": "Workflow Trigger"
+    },
+    {
+      "parameters": {
+        "jsCode": "const request = $input.first().json;\n\nconst input = request.command_args?.trim();\n\nif (!input || !/^\\d+$/.test(input)) {\n  return [{\n    json: {\n      ...request,\n      error: true,\n      message: `❌ Please provide a valid task number.\n\nExample:\n/done 2`\n    }\n  }];\n}\n\nconst taskNumber = Number(input);\n\nif (taskNumber <= 0) {\n  return [{\n    json: {\n      ...request,\n      error: true,\n      message: `❌ Please provide a valid task number.\n\nExample:\n/done 2`\n    }\n  }];\n}\n\nreturn [{\n  json: {\n    ...request,\n    task_index: taskNumber\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -208,
+        0
+      ],
+      "id": "cb777e98-2b02-44b7-a208-9a2d5fc075fa",
+      "name": "Validate Task Number"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "tasks",
+        "orderBy": "created_at.asc",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "user_id",
+              "condition": "eq",
+              "keyValue": "={{ $json.user_id }}"
+            },
+            {
+              "keyName": "status",
+              "condition": "eq",
+              "keyValue": "Pending"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "18dfec9d-a07d-4863-81f2-0c396da6246b",
+      "name": "Get Pending Tasks",
+      "credentials": {
+        "supabaseApi": {
+          "id": "ZH2IdOeF0pwuVjao",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const tasks = $input.all();\n\n// Original request\nconst request = $(\"Validate Task Number\").first().json;\n\nconst index = request.task_index - 1;\n\nif (index < 0 || index >= tasks.length) {\n  return [\n    {\n      json: {\n        ...request,\n        success: false,\n        error: `Task ${request.task_index} does not exist.`\n      }\n    }\n  ];\n}\n\nconst selectedTask = tasks[index].json;\n\nreturn [\n  {\n    json: {\n      // Keep ALL original request fields\n      ...request,\n\n      // Keep task details needed later\n      task_id: selectedTask.id,\n      task_title: selectedTask.title,\n\n      // Also preserve the chat info explicitly\n      chat_id: request.chat_id,\n      telegram_user_id: request.telegram_user_id,\n      first_name: request.first_name,\n      username: request.username,\n\n      success: true\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        368,
+        0
+      ],
+      "id": "eceb0a54-26eb-479d-9285-012410e591f2",
+      "name": "Find Task"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "tasks",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $json.task_id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "Completed"
+            },
+            {
+              "fieldId": "completed_at",
+              "fieldValue": "={{ $now }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        848,
+        0
+      ],
+      "id": "c9ab4981-a05e-4090-870a-b2629e6ffb86",
+      "name": "Complete Task",
+      "credentials": {
+        "supabaseApi": {
+          "id": "ZH2IdOeF0pwuVjao",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const request = $(\"Find Task\").first().json;\n\nreturn [\n  {\n    json: {\n      chat_id: request.chat_id,\n      telegram_user_id: request.telegram_user_id,\n      task_title: request.task_title,\n      message: `✅ Task completed successfully!\n\n🎉 ${request.task_title}\n\nKeep up the great work!`\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1008,
+        0
+      ],
+      "id": "3724ed49-0136-49df-9bdb-ead86559a440",
+      "name": "Prepare Success Message"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat_id }}",
+        "text": "={{ $json.message }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1152,
+        0
+      ],
+      "id": "2829b291-387c-4f0e-84f7-bdbb39ff5060",
+      "name": "Send a text message",
+      "webhookId": "ea388d04-2c6f-4358-9c16-1e963773b744",
+      "credentials": {
+        "telegramApi": {
+          "id": "jy3KlkySRaRQgJyf",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat_id }}",
+        "text": "={{ $json.message }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        144,
+        -160
+      ],
+      "id": "4c3c987d-6802-4719-9691-6628d0635a92",
+      "name": "Send a text message1",
+      "webhookId": "cdb46f93-6a5f-44f3-a1b2-a54fde169ef2",
+      "credentials": {
+        "telegramApi": {
+          "id": "jy3KlkySRaRQgJyf",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "e9b58d4d-778c-43e4-96fd-f1962d80c757",
+              "leftValue": "={{ $json.error }}",
+              "rightValue": "={{ true }}",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "8423d5c1-7b20-428c-be35-e86318e5d7fa",
+      "name": "Validation Failed?"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "73572652-dfc1-4f93-9bd7-5af9d19505a5",
+              "leftValue": "={{ $json.task_id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        576,
+        0
+      ],
+      "id": "7551dbbd-dab8-4b54-bc70-e3687cbb39ee",
+      "name": "Task Found?"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first();\n\nreturn [\n  {\n    json: {\n      ...item.json,\n      message: `❌ Task #${item.json.task_index} does not exist.\n\nUse /tasks to view your pending tasks.`\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        848,
+        192
+      ],
+      "id": "e47ee121-f8b2-41c2-8f3c-4264769555c0",
+      "name": "Prepare Task not Found Message"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chat_id }}",
+        "text": "={{ $json.message }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1008,
+        192
+      ],
+      "id": "66f0ca3b-327b-412f-83e7-32dcd84c981a",
+      "name": "Send a text message2",
+      "webhookId": "115a36e9-bbe8-42d8-b248-7bf61d525359",
+      "credentials": {
+        "telegramApi": {
+          "id": "jy3KlkySRaRQgJyf",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Workflow Trigger": {
+      "main": [
+        [
+          {
+            "node": "Validate Task Number",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Task Number": {
+      "main": [
+        [
+          {
+            "node": "Validation Failed?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Pending Tasks": {
+      "main": [
+        [
+          {
+            "node": "Find Task",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Task": {
+      "main": [
+        [
+          {
+            "node": "Task Found?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Complete Task": {
+      "main": [
+        [
+          {
+            "node": "Prepare Success Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Success Message": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validation Failed?": {
+      "main": [
+        [
+          {
+            "node": "Send a text message1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Pending Tasks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Task Found?": {
+      "main": [
+        [
+          {
+            "node": "Complete Task",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Task not Found Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Task not Found Message": {
+      "main": [
+        [
+          {
+            "node": "Send a text message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "d289c9a5-8d52-44d4-b292-5ed7e2872d4a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cf6c16fac9beef294813451d8fba325c4b79be1ea695aafb4d5d972f96419775"
+  },
+  "nodeGroups": [],
+  "id": "xszxcxsskQo8oskc",
+  "tags": []
+}
